@@ -7,12 +7,12 @@ from .models import User, UserAddress
 class CustomUserAdmin(UserAdmin):
     model = User
     fieldsets = (
-        (None, {"fields": ("email", "phone", "password")}),
-        (_("Personal info"), {
+        (_("اطلاعات حساب کاربری"), {"fields": ("email", "phone", "password")}),
+        (_("اطلاعات شخصی"), {
             "fields": ("first_name", "last_name", "date_of_birth", "national_id",
                        "gender", "image")}),
         (
-            _("Permissions"),
+            _("دسترسی ها"),
             {
                 "fields": (
                     "is_active",
@@ -25,7 +25,7 @@ class CustomUserAdmin(UserAdmin):
                 ),
             },
         ),
-        (_("Important dates"), {"fields": ("last_login", 'date_joined', 'date_modified')}),
+        (_("تاریخ های مهم"), {"fields": ("last_login", 'date_joined', 'date_modified')}),
     )
     add_fieldsets = (
         (

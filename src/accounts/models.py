@@ -23,9 +23,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         OTHER = 'O', 'Other'
 
     first_name = models.CharField(_("نام"), max_length=150, blank=True)
-    last_name = models.CharField(_("last name"), max_length=150, blank=True)  # todo: last name >> نام خانوادگی
+    last_name = models.CharField(_("نام خانوادگی"), max_length=150, blank=True)  # todo: last name >> نام خانوادگی
     email = models.EmailField(
-        _("email address"),
+        _("آدرس ایمیل"),
         unique=True,
         null=True,
         blank=True,
@@ -35,7 +35,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         },
     )
     phone = models.CharField(
-        _("phone number"),
+        _("موبایل"),
         max_length=11,
         unique=True,
         null=True,
@@ -47,6 +47,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         },
     )
     national_id = models.CharField(
+        _("کد ملی"),
         max_length=24,
         unique=True,
         null=True,
@@ -58,12 +59,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     gender = models.CharField(max_length=1, choices=Gender.choices)
     is_staff = models.BooleanField(
-        _("staff status"),
+        _("کارمند"),
         default=False,
         help_text=_("Designates whether the user can log into this admin site."),
     )
     is_active = models.BooleanField(
-        _("active"),
+        _("فعال"),
         default=True,
         help_text=_(
             "Designates whether this user should be treated as active. "
@@ -73,10 +74,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_deleted = models.BooleanField(default=False,
                                      help_text=_("Designates whether this user has deleted its account."))
-    date_of_birth = models.DateField(_("date of birth"), null=True, blank=True)
-    date_joined = models.DateTimeField(_("date joined"), auto_now_add=True)
-    date_modified = models.DateTimeField(_("date modified"), auto_now=True)
-    image = models.ImageField(upload_to=profile_image_upload_to, null=True, blank=True)
+    date_of_birth = models.DateField(_("تاریخ تولد"), null=True, blank=True)
+    date_joined = models.DateTimeField(_("تاریخ ایجاد"), auto_now_add=True)
+    date_modified = models.DateTimeField(_("تاریخ ویرایش"), auto_now=True)
+    image = models.ImageField(verbose_name=_("عکس"), upload_to=profile_image_upload_to, null=True, blank=True)
 
     objects = UserManager()
 
@@ -153,9 +154,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class UserAddress(Address):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses")
-    label = models.CharField(max_length=100, null=True, blank=True)
-    is_default = models.BooleanField(default=False)  # todo: each user should only have ONE default address
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses", verbose_name=_("آدرس ها"))
+    label = models.CharField(verbose_name=_("عنوان آدرس"), max_length=100, null=True, blank=True)
+    is_default = models.BooleanField(verbose_name=_("آدرس پیش فرض"),
+                                     default=False)  # todo: each user should only have ONE default address
 
     class Meta:
         verbose_name = _("آدرس کاربر")

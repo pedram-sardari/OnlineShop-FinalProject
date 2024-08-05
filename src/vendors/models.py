@@ -20,7 +20,10 @@ class Store(CreateUpdateDateTimeFieldMixin, models.Model):
         null=True,
         blank=True
     )
-    order_count = models.PositiveIntegerField(verbose_name=_("تعداد کل سفارشات"), default=0)
+
+    @property
+    def order_count(self):
+        """todo: implementation"""
 
     def save(self, *args, **kwargs):
         self.set_slug()

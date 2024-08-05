@@ -1,4 +1,8 @@
-migrations
+**/migrations/*.py
+!**/migrations/__init__.py
+
+src/media/*
+!src/media/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

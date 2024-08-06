@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
+from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -14,7 +15,7 @@ from .managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    def profile_image_upload_to(instance, filename):
+    def profile_image_upload_to(instance, filename):  # todo: create directory
         return f"user_images/{filename}"
 
     class Gender(models.TextChoices):
@@ -162,6 +163,19 @@ class UserAddress(Address):
     class Meta:
         verbose_name = _("آدرس کاربر")
         verbose_name_plural = _("آدرس های کاربران")
+
+    def check_default_validation(self):
+        if default_address := self.user.addresses.filter(is_default=True).first():
+            if not self.id or self.id != default_address.id:
+                raise ValidationError(
+                    _(f"The address with id '{default_address.id}' for the user '{self.user.id}' "
+                      f"already used as default!")
+                )
+
+    def save(self, *args, **kwargs):
+        if self.is_default:
+            self.check_default_validation()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.label or super().__str__()

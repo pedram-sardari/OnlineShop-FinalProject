@@ -21,21 +21,21 @@ class Store(CreateUpdateDateTimeFieldMixin, models.Model):
         blank=True
     )
 
+    class Meta:
+        verbose_name = _("فروشگاه")
+        verbose_name_plural = _("فروشگاه ها")
+
     @property
     def order_count(self):
         """todo: implementation"""
-
-    def save(self, *args, **kwargs):
-        self.set_slug()
-        super(Store, self).save(*args, **kwargs)
 
     def set_slug(self):
         if not self.id or self.slug != slugify(self.name, allow_unicode=True):
             self.slug = slugify(self.name, allow_unicode=True)
 
-    class Meta:
-        verbose_name = _("فروشگاه")
-        verbose_name_plural = _("فروشگاه ها")
+    def save(self, *args, **kwargs):
+        self.set_slug()
+        super(Store, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name

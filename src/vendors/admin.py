@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Staff, Store
+from .models import Staff, Store, Owner, Manager, Operator
 from django.utils.translation import gettext_lazy as _
 from accounts.admin import CustomUserAdmin
 
@@ -39,6 +39,21 @@ class StaffAdmin(CustomUserAdmin):
             },
         ),
     )
+
+
+@admin.register(Owner)
+class OwnerAdmin(StaffAdmin):
+    pass
+
+
+@admin.register(Manager)
+class ManagerAdmin(StaffAdmin):
+    pass
+
+
+@admin.register(Operator)
+class OperatorAdmin(StaffAdmin):
+    pass
 
 
 @admin.register(Store)

@@ -4,6 +4,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
 from website.models import Address, CreateUpdateDateTimeFieldMixin
+from .managers import OwnerStaffManager, ManagerStaffManager, OperatorStaffManager
 
 User = get_user_model()
 
@@ -28,6 +29,7 @@ class Store(CreateUpdateDateTimeFieldMixin, models.Model):
     @property
     def order_count(self):
         """todo: implementation"""
+        return '------------------------- implementation ---------------------------'
 
     def set_slug(self):
         if not self.id or self.slug != slugify(self.name, allow_unicode=True):
@@ -57,4 +59,43 @@ class Staff(User):
     def save(self, *args, **kwargs):
         self.is_staff = True
         self.is_superuser = False
+        super().save(*args, **kwargs)
+
+
+class Owner(Staff):
+    objects = OwnerStaffManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = _("مدیر فروشگاه")
+        verbose_name_plural = _("مدیران فروشگاه")
+
+    def save(self, *args, **kwargs):
+        self.role = self.Roles.OWNER
+        super(Owner, self).save(*args, **kwargs)
+
+
+class Manager(Staff):
+    objects = ManagerStaffManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = _("مدیر محصول")
+        verbose_name_plural = _("مدیران محصول")
+
+    def save(self, *args, **kwargs):
+        self.role = self.Roles.MANAGER
+        super().save(*args, **kwargs)
+
+
+class Operator(Staff):
+    objects = OperatorStaffManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = _("ناظر")
+        verbose_name_plural = _("ناظران")
+
+    def save(self, *args, **kwargs):
+        self.role = self.Roles.OPERATOR
         super().save(*args, **kwargs)

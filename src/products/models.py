@@ -34,6 +34,9 @@ class Discount(CreateUpdateDateTimeFieldMixin, models.Model):
         verbose_name = _("تخفیف")
         verbose_name_plural = _("تخفیفات")
 
+    def get_final_cash_discount(self, price=0):
+        return self.cash_discount + round((self.percentage_discount / 100) * price)
+
     def __str__(self):
         if self.cash_discount and self.percentage_discount:
             return f"{self.percentage_discount}% - {self.cash_discount} تومان "
@@ -56,6 +59,9 @@ class Coupon(models.Model):
         verbose_name = _("کوپن تخفیف")
         verbose_name_plural = _("کوپن های تخفیف")
         unique_together = ("discount", "customer")
+
+    def get_final_cash_discount(self, price):
+        return self.discount.get_final_cash_discount(price=price)
 
     def save(self, *args, **kwargs):
         if not self.code:
@@ -156,6 +162,15 @@ class Product(CreateUpdateDateTimeFieldMixin, models.Model):
         else:
             self.rating_avg = 0
         self.save()
+
+    def set_slug(self):
+        if not self.id or self.slug != slugify(self.name, allow_unicode=True):
+            self.slug = slugify(self.name, allow_unicode=True)
+
+    def save(self, *args, **kwargs):
+        self.set_slug()
+        super().save(*args, **kwargs)
+
 
     def __str__(self):
         return self.name

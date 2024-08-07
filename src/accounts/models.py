@@ -128,8 +128,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         )
         return age
 
-    def get_default_address(self):
-        return self.addresses.filter(is_default=True).first()
+    def get_default_user_address(self):
+        return self.addresses.filter(is_default=True).first() or self.addresses.all().first()
 
     def save(self, *args, **kwargs):
         """Do not change is_superuser and is_staff attributes here because they are set in subclasses"""
@@ -155,7 +155,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class UserAddress(Address):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses", verbose_name=_("آدرس ها"))
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses", verbose_name=_("کاربر"))
     label = models.CharField(verbose_name=_("عنوان آدرس"), max_length=100, null=True, blank=True)
     is_default = models.BooleanField(verbose_name=_("آدرس پیش فرض"),
                                      default=False)  # todo: each user should only have ONE default address

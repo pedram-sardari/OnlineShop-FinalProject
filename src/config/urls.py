@@ -23,6 +23,8 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
+    path('customers/', include('customers.urls')),
+    path('vendors/', include('vendors.urls')),
     path('', TemplateView.as_view(template_name='website/index.html'), name='home')
 ]
 if settings.DEBUG:

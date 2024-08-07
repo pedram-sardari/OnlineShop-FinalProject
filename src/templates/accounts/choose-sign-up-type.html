@@ -1,0 +1,15 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div style=>
+        <button type="button" class="btn btn-outline-success">
+            <a href="{% url 'owner-register' %}">ثبت نام فروشنده</a>
+        </button>
+        <button type="button" class="btn btn-outline-success">
+            <a href="{% url 'customer-register' %}">ثبت نام مشتری</a>
+        </button>
+    </div>
+
+{% endblock %}

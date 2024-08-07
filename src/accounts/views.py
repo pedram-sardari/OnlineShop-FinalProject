@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.contrib.auth.views import LoginView, LogoutView
 from .forms import LoginForm
@@ -27,5 +28,5 @@ class MyLoginView(LoginView):
         return super().form_invalid(form)
 
 
-class MyLogoutView(LogoutView):
+class MyLogoutView(LoginRequiredMixin, LogoutView):
     next_page = reverse_lazy('home')

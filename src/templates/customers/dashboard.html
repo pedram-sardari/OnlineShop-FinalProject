@@ -1,0 +1,37 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid text-center p-5">
+    <div class="row h-100">
+        <div class="col-2  border rounded-3 " style="height: 500px;">
+            <div class="list-group list-group-flush my-4">
+                {% block side-bar %}
+                <a href="{% url 'owner-register' %}" class="list-group-item list-group-item-action">ثبت نام فروشنده</a>
+                <a href="{% url 'customer-register' %} " class="list-group-item list-group-item-action">ثبت نام
+                    مشتری</a>
+                <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+                    The current link item
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">A second link item</a>
+                <a href="#" class="list-group-item list-group-item-action active">A third link item</a>
+                <a href="#" class="list-group-item list-group-item-action">A fourth link item</a>
+                {% endblock %}
+
+            </div>
+        </div>
+        <div class="col-10" style="height: 500px;">
+            <div class="row mx-4 p-3 border rounded-3 h-100">
+                {% block main-content %}
+
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+{% endblock %}

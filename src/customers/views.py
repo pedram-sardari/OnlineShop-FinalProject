@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, TemplateView
 
 from .models import Customer
 from .forms import CustomerRegisterForm
@@ -10,9 +10,10 @@ from .forms import CustomerRegisterForm
 
 class CustomerRegisterView(UserPassesTestMixin, CreateView):
     model = Customer
-    template_name = 'customers/register.html'
+    template_name = 'accounts/register.html'
     form_class = CustomerRegisterForm
     success_url = reverse_lazy('login')
+    extra_context = {'customer_register': 'active'}
 
     def test_func(self):
         return not self.request.user.is_authenticated
@@ -31,10 +32,12 @@ class CustomerRegisterView(UserPassesTestMixin, CreateView):
         return super().form_invalid(form)
 
 
-class CustomerProfileView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
-    model = Customer
-    context_object_name = 'customer'
+class CustomerProfileView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
     template_name = 'customers/customer_panel.html'
 
     def test_func(self):
         return self.request.user.is_customer
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['customer'] = self.request.user

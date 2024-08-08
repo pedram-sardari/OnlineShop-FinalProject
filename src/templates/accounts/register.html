@@ -1,0 +1,24 @@
+{% extends 'website/template_sidebar_page.html' %}
+{% load static %}
+
+
+
+{% block side-bar %}
+    <a href="{% url 'owner-register' %}" class="list-group-item list-group-item-action {{ vendor_register }}">ثبت نام
+        فروشنده
+    </a>
+    <a href="{% url 'customer-register' %} " class="list-group-item list-group-item-action {{ customer_register }}">
+        ثبت
+        نام
+        مشتری</a>
+{% endblock %}
+
+
+{% block main-content %}
+    <form action="" method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <input type="submit" value="ثبت نام">
+    </form>
+{% endblock %}
+          

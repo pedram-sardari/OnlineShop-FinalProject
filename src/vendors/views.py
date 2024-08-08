@@ -11,9 +11,10 @@ from .forms import OwnerRegisterForm
 
 class OwnerRegisterView(UserPassesTestMixin, FormView):
     model = Owner
-    template_name = 'customers/register.html'
+    template_name = 'accounts/register.html'
     form_class = OwnerRegisterForm
     success_url = reverse_lazy('login')
+    extra_context = {'vendor_register': 'active'}
 
     def test_func(self):
         return not self.request.user.is_authenticated

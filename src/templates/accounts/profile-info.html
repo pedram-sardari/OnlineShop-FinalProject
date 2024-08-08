@@ -1,0 +1,105 @@
+{% extends 'website/sidebar-mainContent.html' %}
+{% load static %}
+
+{% block main-content %}
+    <h1 class="text-center py-2">Your profile</h1>
+
+    {# resource #}
+    {# https://bootdey.com/snippets/view/profile-with-data-and-skills #}
+    <div class="container">
+        <div class="main-body mb-3">
+
+            <div class="row gutters-sm">
+                <div class="col-md-4">
+                    <div class="card" style="height: 100%">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center text-center">
+                                {% if request.user.photo %}
+                                    <img src="{{ request.user.photo.url }}" alt="profile_photo"
+                                         class="rounded-circle"
+                                         width="250">
+                                {% else %}
+                                    <img src="{% static 'accounts/images/default_profile_photo.png' %}"
+                                         alt="profile_photo" class="rounded-circle" width="250">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-8">
+                    <div class="card" style="height: 100%">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Full Name</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ request.user.first_name }} {{ request.user.last_name }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Email</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ request.user.email }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Phone</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ request.user.phone }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Address</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ request.user.address }}
+                                </div>
+                            </div>
+                            <hr>
+
+                            <!--extera_profile_data-->
+                            {% block extera_profile_data %} {% endblock %}
+                            <!--extera_profile_data-->
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Date Joined</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    {{ request.user.date_joined|date }}
+                                </div>
+                            </div>
+                            <hr>
+
+                            <!-- edit button -->
+                            <div class="row">
+                                <div class="col-sm-12">
+
+                                    {% block edit_button %}
+                                        <a class="btn btn-info " target="__blank"
+                                           href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
+                                    {% endblock %}
+
+                                </div>
+                            </div>
+                            <!-- edit button -->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock content %}

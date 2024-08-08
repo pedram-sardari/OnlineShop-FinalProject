@@ -1,8 +1,8 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DetailView
 
 from .models import Customer
 from .forms import CustomerRegisterForm
@@ -29,3 +29,12 @@ class CustomerRegisterView(UserPassesTestMixin, CreateView):
         for error, message in form.errors.items():
             messages.error(self.request, message)
         return super().form_invalid(form)
+
+
+class CustomerProfileView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+    model = Customer
+    context_object_name = 'customer'
+    template_name = 'customers/customer_panel.html'
+
+    def test_func(self):
+        return self.request.user.is_customer

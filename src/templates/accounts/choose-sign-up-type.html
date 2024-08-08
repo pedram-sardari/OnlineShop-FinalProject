@@ -3,13 +3,19 @@
 
 {% block content %}
 
-    <div style=>
-        <button type="button" class="btn btn-outline-success">
-            <a href="{% url 'owner-register' %}">ثبت نام فروشنده</a>
-        </button>
-        <button type="button" class="btn btn-outline-success">
-            <a href="{% url 'customer-register' %}">ثبت نام مشتری</a>
-        </button>
+    <div style="min-height: 500px">
+        <div class="container-fluid text-center h-100">
+            <div class="row align-items-start">
+                <div class="col-1 border-left d-flex flex-column">
+                    <button type="button" class="btn mt-3 px-2 btn-outline-success">
+                        <a href="{% url 'owner-register' %}">ثبت نام فروشنده</a>
+                    </button>
+                    <button type="button" class="btn mt-3 px-2 btn-outline-success">
+                        <a href="{% url 'customer-register' %}">ثبت نام مشتری</a>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
 {% endblock %}

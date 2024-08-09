@@ -8,7 +8,7 @@ def header_section_parameters(request):
     is_operator = Operator.objects.filter(id=request.user.id).exists()
     is_vendor = is_owner or is_manager or is_operator
     is_superuser = request.user.is_superuser and request.user.is_staff
-    is_customer = not (is_owner or is_manager or is_operator)
+    is_customer = not (is_vendor or is_superuser)
     context = {
         'is_customer': is_customer,
         'is_owner': is_owner,

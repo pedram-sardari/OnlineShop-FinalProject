@@ -14,8 +14,8 @@ class MyLoginView(LoginView):
 
     def get_default_redirect_url(self):
         if self.request.user.is_customer:
-            return reverse('customer-panel')
-        return reverse('vendor-panel')
+            return reverse('customers:personal-info-display')
+        return reverse('vendors:personal-info-display')
 
     def form_valid(self, form):
         response = super().form_valid(form)

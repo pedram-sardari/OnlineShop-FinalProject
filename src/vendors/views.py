@@ -1,11 +1,14 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import FormView
+from django.views.generic import FormView, TemplateView, UpdateView
 
+import vendors
+from customers.forms import CustomerChangeForm
 from website.models import Address, CITIES, PROVINCES
-from .models import Owner, Store
+from .models import Owner, Store, Staff
 from .forms import OwnerRegisterForm
 
 
@@ -47,3 +50,24 @@ class OwnerRegisterView(UserPassesTestMixin, FormView):
         for error, message in form.errors.items():
             messages.error(self.request, message)
         return super().form_invalid(form)
+
+
+class PersonalInfoDisplayView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+    template_name = 'vendors/dashboard.html'
+    extra_context = {'personal_info_display': 'active'}
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+
+class PersonalInfoEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    template_name = 'customers/dashboard.html'
+    extra_context = {'personal_info_edit': 'active'}
+    form_class = CustomerChangeForm
+    success_url = reverse_lazy('customers:personal-info-display')
+
+    def get_object(self, queryset=None):
+        return Staff.objects.get(id=self.request.user.id)
+
+    def test_func(self):
+        return self.request.user.is_staff

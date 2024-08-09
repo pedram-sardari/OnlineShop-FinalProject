@@ -2,10 +2,10 @@ from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, TemplateView
+from django.views.generic import CreateView, DetailView, TemplateView, FormView, UpdateView
 
 from .models import Customer
-from .forms import CustomerRegisterForm
+from .forms import CustomerRegisterForm,   CustomerChangeForm
 
 
 class CustomerRegisterView(UserPassesTestMixin, CreateView):
@@ -32,12 +32,23 @@ class CustomerRegisterView(UserPassesTestMixin, CreateView):
         return super().form_invalid(form)
 
 
-class CustomerProfileView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
-    template_name = 'customers/customer_panel.html'
+class PersonalInfoDisplayView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+    template_name = 'customers/dashboard.html'
+    extra_context = {'personal_info_display': 'active'}
 
     def test_func(self):
         return self.request.user.is_customer
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['customer'] = self.request.user
+
+class PersonalInfoEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    template_name = 'customers/dashboard.html'
+    extra_context = {'personal_info_edit': 'active'}
+    form_class = CustomerChangeForm
+    success_url = reverse_lazy('customers:personal-info-display')
+
+    def get_object(self, queryset=None):
+        return Customer.objects.get(id=self.request.user.id)
+
+    def test_func(self):
+        return self.request.user.is_customer
+

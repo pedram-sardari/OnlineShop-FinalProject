@@ -12,22 +12,32 @@
                  src="{% static 'accounts/img/default_profile_photo.png' %}" alt="static">
         {% endif %}
     </div>
-    <a href="{% url 'customers:personal-info-display' %}"
+    <a href="{% url 'vendors:personal-info-display' %}"
        class="list-group-item list-group-item-action {{ personal_info_display }} {{ personal_info_edit }}">
         اطلاعات حساب کاربری
     </a>
-    <a href="{% url 'customers:register' %} " class="list-group-item list-group-item-action {{ customer_register }}">
-        آدرس ها
+    <a href="{% url 'vendors:register-owner' %} "
+       class="list-group-item list-group-item-action {{ customer_register }}">
+        اطلاعات فروشگاه
     </a>
-    <a href="{% url 'customers:register' %} " class="list-group-item list-group-item-action {{ customer_register }}">
+    <a href="{% url 'vendors:register-owner' %} "
+       class="list-group-item list-group-item-action {{ customer_register }}">
         سفارشات
     </a>
-    <a href="{% url 'customers:register' %} " class="list-group-item list-group-item-action {{ customer_register }}">
-        ثبت نظر و امتیاز
+    <a href="{% url 'vendors:register-owner' %} "
+       class="list-group-item list-group-item-action {{ customer_register }}">
+        محصولات
     </a>
-    <a href="{% url 'customers:register' %} " class="list-group-item list-group-item-action {{ customer_register }}">
+    <a href="{% url 'vendors:register-owner' %} "
+       class="list-group-item list-group-item-action {{ customer_register }}">
         نمایش نظرات و امتیازات
     </a>
+    {% if is_owner %}
+        <a href="{% url 'vendors:register-owner' %} "
+           class="list-group-item list-group-item-action {{ customer_register }}">
+            گزارشات
+        </a>
+    {% endif %} 
 {% endblock %}
 
 
@@ -35,10 +45,6 @@
 
     {% if personal_info_display == 'active' %}
         {% include 'accounts/personal_info_display.html' %}
-    {% endif %}
-
-    {% if personal_info_edit == 'active' %}
-        {% include 'accounts/../website/sections/form.html' %}
     {% endif %}
 
 {% endblock %}

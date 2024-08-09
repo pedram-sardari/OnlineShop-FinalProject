@@ -1,0 +1,21 @@
+<div class="p-5 mt-5 align-middle">
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+            {% if forloop.counter0|divisibleby:2 %}
+                <div class="row">
+            {% endif %}
+        <div class="col-md-6 mb-4">
+            {{ field.label_tag }}
+            {{ field }}
+        </div>
+
+        {% if not forloop.counter0|divisibleby:2 %}
+            </div>
+        {% endif %}
+        {% endfor %}
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-success fw-bold fs-5">ثبت</button>
+        </div>
+    </form>
+</div>

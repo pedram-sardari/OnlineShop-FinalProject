@@ -1,0 +1,111 @@
+<div class=" p-5">
+    <div class="row">
+        <div class="col-sm-3">
+            <h6 class="mb-0">نام</h6>
+        </div>
+        <div class="col-sm-9 text-secondary">
+            {% if request.user.first_name %}
+                {{ request.user.first_name }}
+            {% else %}
+                --
+            {% endif %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-3">
+            <h6 class="mb-0">نام خانوادگی</h6>
+        </div>
+        <div class="col-sm-9 text-secondary">
+            {% if request.user.last_name %}
+                {{ request.user.last_name }}
+            {% else %}
+                --
+            {% endif %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-3">
+            <h6 class="mb-0">آدرس ایمیل</h6>
+        </div>
+        <div class="col-sm-9 text-secondary">
+            {% if request.user.email %}
+                {{ request.user.email }}
+            {% else %}
+                --
+            {% endif %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-3">
+            <h6 class="mb-0">Phone</h6>
+        </div>
+        <div class="col-sm-9 text-secondary">
+            {% if request.user.phone %}
+                {{ request.user.phone }}
+            {% else %}
+                --
+            {% endif %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-3">
+            <h6 class="mb-0">Date Joined</h6>
+        </div>
+        <div class="col-sm-9 text-secondary">
+            {{ request.user.date_joined|date }}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-3">
+            <h6 class="mb-0">کد ملی</h6>
+        </div>
+        <div class="col-sm-9 text-secondary">
+            {% if request.user.national_id %}
+                {{ request.user.national_id }}
+            {% else %}
+                --
+            {% endif %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-3">
+            <h6 class="mb-0">جنسیت</h6>
+        </div>
+        <div class="col-sm-9 text-secondary">
+            {{ request.user.get_gender_display }}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-3">
+            <h6 class="mb-0">تاریخ تولد</h6>
+        </div>
+        <div class="col-sm-9 text-secondary">
+            {% if request.user.date_of_birth %}
+                {{ request.user.date_of_birth }}
+            {% else %}
+                --
+            {% endif %}
+
+        </div>
+    </div>
+    <hr>
+
+    <!-- edit button -->
+    <div class="d-grid gap-2">
+        {% if is_customer %}
+            <a class="btn btn-info fw-bold fs-5" 
+               href="{% url 'customers:personal-info-edit' %}">ویرایش</a>
+        {% elif is_vendor %}
+            
+        {% endif %}
+    </div>
+    <!-- edit button -->
+</div>
+

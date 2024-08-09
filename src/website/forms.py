@@ -1,5 +1,27 @@
 from django import forms
+
+
+class CustomModeForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields.values():
+            if isinstance(field, forms.DateField):
+                field.widget.attrs.update(
+                    {
+                        'type': 'date'
+                    }
+                )
+                field.widget.input_type = 'date'
+            field.widget.attrs.update(
+                {
+                    'class': 'form-control form-control-lg',
+                }
+            )
+
+
 import jdatetime
+
 
 class JalaliDateInput(forms.DateInput):
     input_type = 'date'
@@ -10,6 +32,7 @@ class JalaliDateInput(forms.DateInput):
         if isinstance(value, jdatetime.date):
             return value.strftime('%Y-%m-%d')
         return super().format_value(value)
+
 
 class JalaliDateField(forms.DateField):
     widget = JalaliDateInput
@@ -22,6 +45,7 @@ class JalaliDateField(forms.DateField):
             return dt.togregorian().date()
         except ValueError:
             raise forms.ValidationError('Invalid date format')
+
 
 class JalaliDateTimeInput(forms.DateTimeInput):
     input_type = 'datetime-local'

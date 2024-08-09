@@ -4,9 +4,11 @@
 {% block body %}
     <!-- Login 2 - Bootstrap Brain Component -->
     <div class="bg-light py-3 py-md-5">
+    
         <!-- display messages -->
         {% include 'website/sections/message_display.html' %}
         <!-- display messages -->
+        
         <div class="container">
             <div class="row justify-content-md-center">
                 <div class="col-12 col-md-11 col-lg-8 col-xl-7 col-xxl-6">
@@ -54,7 +56,7 @@
                                     <a href="#!" class="link-secondary text-decoration-none">فراموشی رمز عبور</a>
                                 </div>
                                 <div class="d-flex gap-2 gap-md-4 flex-column flex-md-row justify-content-md-end">
-                                    <a href="{% url 'choose-sign-up-type' %}" class="link-secondary text-decoration-none">ساختن حساب جدید</a>
+                                    <a href="{% url 'vendors:register-owner' %}" class="link-secondary text-decoration-none">ساختن حساب جدید</a>
                                 </div>
                             </div>
                         </div>

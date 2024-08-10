@@ -1,0 +1,127 @@
+{% extends 'website/template_sidebar_page.html' %}
+{% load static %}
+
+
+
+{% block side-bar %}
+    <!-- profile image -->
+    <div class="mb-3">
+        {% if request.user.image %}
+            <img class="rounded w-75" src="{{ request.user.image.url }}" alt="photo">
+        {% else %}
+            <img class="rounded w-75"
+                 src="{% static 'accounts/img/default_profile_photo.png' %}" alt="static">
+        {% endif %}
+    </div>
+    <!-- profile image -->
+
+    <!-- personal_info_detail -->
+    <a href="{% url 'accounts:personal-info-detail' %}"
+       class="list-group-item list-group-item-action {{ personal_info_detail }} {{ personal_info_update }}">
+        اطلاعات حساب کاربری
+    </a>
+    <!-- personal_info_detail -->
+
+    <!-- user_address_list -->
+    <a href="{% url 'accounts:user-address-list' %} "
+       class="list-group-item list-group-item-action {{ user_address_list }} {{ user_address_create }} 
+             {{ user_address_update }} {{ user_address_detail }}">
+        آدرس های من
+    </a>
+    <!-- user_address_list -->
+
+    <!-- user_address_list -->
+    <a href="{% url 'home' %} "
+       class="list-group-item list-group-item-action {{ customer_register }}">
+        رمز عبور
+    </a>
+    <!-- user_address_list -->
+
+    <!-- staff_selected -->
+    {% if is_staff %}
+        <a href="{% url 'vendors:staff-list' %} "
+           class="list-group-item list-group-item-action {{ staff_selected }}">
+            فروشگاه
+        </a>
+    {% endif %}
+    <!-- staff_selected -->
+
+    <!-- user_address_list -->
+    <a href="{% url 'home' %} " class="list-group-item list-group-item-action {{ customer_register }}">
+        سفارشات
+    </a>
+    <!-- user_address_list -->
+
+    <!-- user_address_list -->
+    <a href="{% url 'home' %} " class="list-group-item list-group-item-action {{ customer_register }}">
+        ثبت نظر و امتیاز
+    </a>
+    <!-- user_address_list -->
+
+    <!-- user_address_list -->
+    <a href="{% url 'home' %} "
+       class="list-group-item list-group-item-action {{ customer_register }}">
+        محصولات
+    </a>
+    <!-- user_address_list -->
+
+    <!-- user_address_list -->
+    <a href="{% url 'home' %} " class="list-group-item list-group-item-action {{ customer_register }}">
+        نمایش نظرات و امتیازات
+    </a>
+    <!-- user_address_list -->
+
+    <!-- user_address_list -->
+    {% if is_owner or is_superuser %}
+        <a href="{% url 'home' %} "
+           class="list-group-item list-group-item-action {{ customer_register }}">
+            گزارشات
+        </a>
+    {% endif %}
+    <!-- user_address_list -->
+
+{% endblock %}
+
+
+{% block main-content %}
+
+    {% if form_section %}
+
+        {% include 'website/sections/form.html' %}
+
+    {% elif personal_info_detail %}
+
+        {% include 'accounts/dashboard/personal_info_detail.html' %}
+
+    {% elif user_address_list %}
+
+        <div>
+            {% include 'accounts/dashboard/user_address_list.html' %}
+        </div>
+
+    {% elif user_address_detail %}
+
+        {% include 'accounts/dashboard/user_address_detail.html' %}
+
+    {% elif staff_selected %}
+        <div>
+            <ul class="nav nav-pills border-bottom pb-3 mb-5">
+                <li class="nav-item">
+                    <a href="{% url 'vendors:staff-list' %}" class="nav-link {{ store_info_selected }}" aria-current="page">
+                        اطلاعات فروشگاه
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'vendors:staff-list' %}" class="nav-link {{ staff_selected }}">کارمندان</a>
+                </li>
+            </ul>
+
+            {% if staff_list %}
+                {% include 'vendors/dashboard/staff_list.html' %}
+            {% elif staff %}
+                {% include 'vendors/dashboard/staff_detail.html' %}
+            {% endif %}
+        </div>
+    {% endif %}
+
+{% endblock %}

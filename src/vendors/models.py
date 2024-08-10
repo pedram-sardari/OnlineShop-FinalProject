@@ -49,8 +49,8 @@ class Staff(User):
         MANAGER = "Manager", _("مدیر محصول")
         OPERATOR = "Operator", _("ناظر")
 
-    role = models.CharField(_("سمت"), max_length=12, choices=Roles.choices, default=Roles.OPERATOR)
-    store = models.ForeignKey(Store, on_delete=models.CASCADE, verbose_name=_("فروشگاه"), related_name='staff')
+    role = models.CharField(_("عنوان شغلی"), max_length=12, choices=Roles.choices, default=Roles.OPERATOR)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, verbose_name=_("فروشگاه"), related_name='staffs')
 
     class Meta:
         verbose_name = _("کارمند")
@@ -70,6 +70,14 @@ class Owner(Staff):
         verbose_name = _("مدیر فروشگاه")
         verbose_name_plural = _("مدیران فروشگاه")
 
+    @classmethod
+    def get_owner(cls, user):
+        return cls.objects.filter(id=user.id).first()
+
+    @classmethod
+    def is_owner(cls, user):
+        return cls.objects.filter(id=user.id).exists()
+
     def save(self, *args, **kwargs):
         self.role = self.Roles.OWNER
         super(Owner, self).save(*args, **kwargs)
@@ -83,6 +91,14 @@ class Manager(Staff):
         verbose_name = _("مدیر محصول")
         verbose_name_plural = _("مدیران محصول")
 
+    @classmethod
+    def get_manager(cls, user):
+        return cls.objects.filter(id=user.id).first()
+
+    @classmethod
+    def is_manager(cls, user):
+        return cls.objects.filter(id=user.id).exists()
+
     def save(self, *args, **kwargs):
         self.role = self.Roles.MANAGER
         super().save(*args, **kwargs)
@@ -95,6 +111,14 @@ class Operator(Staff):
         proxy = True
         verbose_name = _("ناظر")
         verbose_name_plural = _("ناظران")
+
+    @classmethod
+    def get_operator(cls, user):
+        return cls.objects.filter(id=user.id).first()
+
+    @classmethod
+    def is_operator(cls, user):
+        return cls.objects.filter(id=user.id).exists()
 
     def save(self, *args, **kwargs):
         self.role = self.Roles.OPERATOR

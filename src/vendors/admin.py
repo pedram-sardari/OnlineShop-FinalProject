@@ -39,21 +39,22 @@ class StaffAdmin(CustomUserAdmin):
             },
         ),
     )
+    list_display = ('id', 'email', 'store')
 
 
 @admin.register(Owner)
 class OwnerAdmin(StaffAdmin):
-    pass
+    list_display = ('id', 'email', 'store')
 
 
 @admin.register(Manager)
 class ManagerAdmin(StaffAdmin):
-    pass
+    list_display = ('id', 'email', 'store')
 
 
 @admin.register(Operator)
 class OperatorAdmin(StaffAdmin):
-    pass
+    list_display = ('id', 'email', 'store')
 
 
 @admin.register(Store)

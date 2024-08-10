@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from .models import User, UserAddress
 
 
+@admin.register(User)
 class CustomUserAdmin(UserAdmin):
     model = User
     fieldsets = (
@@ -43,5 +44,9 @@ class CustomUserAdmin(UserAdmin):
     readonly_fields = ['last_login', 'date_joined', 'date_modified']
 
 
-admin.site.register(User, CustomUserAdmin)
-admin.site.register(UserAddress)
+@admin.register(UserAddress)
+class CustomUserAddressAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", 'province', 'city')
+
+    def get_queryset(self, request):
+        return UserAddress.objects.all_addresses()  # todo: remove after testings

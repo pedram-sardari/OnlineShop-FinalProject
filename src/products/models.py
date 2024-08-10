@@ -189,15 +189,15 @@ class ProductImage(models.Model):
         verbose_name = _("تصویر محصول")
         verbose_name_plural = _("تصاویر محصولات")
 
-    def check_default_validation(self):
+    def set_default(self):
         if default_product_image := self.product.images.filter(is_default=True).first():
-            if not self.id or self.id != default_product_image.id:
-                raise ValidationError(_(f"The product image with id '{default_product_image.id}' already "
-                                        f"used as default!"))
+            if default_product_image.id != self.id:
+                default_product_image.is_default = False
+                default_product_image.save()
 
     def save(self, *args, **kwargs):
         if self.is_default:
-            self.check_default_validation()
+            self.set_default()
         super().save(*args, **kwargs)
 
     def __str__(self):

@@ -1,25 +1,25 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import FormView, TemplateView, UpdateView
+from django.views.generic import FormView, CreateView, ListView, DetailView, UpdateView, DeleteView
 
-import vendors
-from customers.forms import CustomerChangeForm
-from website.models import Address, CITIES, PROVINCES
+from website.models import Address
+from .forms import OwnerRegistrationForm, StaffRegistrationForm, StaffUpdateForm
 from .models import Owner, Store, Staff
-from .forms import OwnerRegisterForm
+from website.mixins import IsOwner, IsStaffOfOwnerStore
 
 
 class OwnerRegisterView(UserPassesTestMixin, FormView):
     model = Owner
     template_name = 'accounts/register.html'
-    form_class = OwnerRegisterForm
-    success_url = reverse_lazy('login')
-    extra_context = {'vendor_register': 'active'}
+    form_class = OwnerRegistrationForm
+    success_url = reverse_lazy('accounts:login')
+    extra_context = {'staff_register': 'active'}
 
     def test_func(self):
+        """A logged in must not be able to register"""
         return not self.request.user.is_authenticated
 
     def handle_no_permission(self):
@@ -27,7 +27,6 @@ class OwnerRegisterView(UserPassesTestMixin, FormView):
         return redirect('home')
 
     def form_valid(self, form):
-        messages.success(self.request, f"Your account has been created successfully!")
         owner = form.save(commit=False)
         address = Address.objects.create(
             province=form.cleaned_data['province'],
@@ -44,6 +43,7 @@ class OwnerRegisterView(UserPassesTestMixin, FormView):
         )
         owner.store = store
         owner.save()
+        messages.success(self.request, f"Your account has been created successfully!")
         return super().form_valid(form)
 
     def form_invalid(self, form):
@@ -52,22 +52,87 @@ class OwnerRegisterView(UserPassesTestMixin, FormView):
         return super().form_invalid(form)
 
 
-class PersonalInfoDisplayView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
-    template_name = 'vendors/dashboard.html'
-    extra_context = {'personal_info_display': 'active'}
+class StaffRegisterView(LoginRequiredMixin, IsOwner, CreateView):
+    model = Staff
+    template_name = 'accounts/dashboard/dashboard.html'
+    form_class = StaffRegistrationForm
+    success_url = reverse_lazy('vendors:staff-list')
+    extra_context = {
+        'stor_info': 'active',
+        'form_section': 'active'
+    }
 
-    def test_func(self):
-        return self.request.user.is_staff
+    def form_valid(self, form):
+        staff = form.save(commit=False)
+        owner = Owner.get_owner(self.request.user)
+        staff.store = owner.store
+        staff.save()
+        response = super().form_valid(form)
+        messages.success(self.request, f"RegisterManagerView")
+        return response
+
+    def form_invalid(self, form):
+        for error, message in form.errors.items():
+            messages.error(self.request, message)
+        return super().form_invalid(form)
 
 
-class PersonalInfoEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    template_name = 'customers/dashboard.html'
-    extra_context = {'personal_info_edit': 'active'}
-    form_class = CustomerChangeForm
-    success_url = reverse_lazy('customers:personal-info-display')
+class StaffListView(LoginRequiredMixin, IsOwner, ListView):
+    template_name = 'accounts/dashboard/dashboard.html'
+    context_object_name = 'staff_list'
+    extra_context = {
+        'staff_selected': 'active',
+    }
+    success_url = reverse_lazy('accounts:user-address-list')
 
-    def get_object(self, queryset=None):
-        return Staff.objects.get(id=self.request.user.id)
+    def get_queryset(self):
+        owner = Owner.get_owner(user=self.request.user)
+        return owner.store.staffs.exclude(id=owner.id)
 
-    def test_func(self):
-        return self.request.user.is_staff
+
+class StaffDetailView(LoginRequiredMixin, IsStaffOfOwnerStore, DetailView):
+    template_name = 'accounts/dashboard/dashboard.html'
+    context_object_name = 'staff'
+    extra_context = {
+        'staff_selected': 'active',
+    }
+    model = Staff
+
+
+class StaffUpdateView(LoginRequiredMixin, IsStaffOfOwnerStore, UpdateView):
+    template_name = 'accounts/dashboard/dashboard.html'
+    extra_context = {
+        'staff_selected': 'active',
+        'form_section': 'active'
+    }
+    model = Staff
+    form_class = StaffUpdateForm
+
+    def get_success_url(self):
+        return reverse_lazy('vendors:staff-detail', kwargs={'pk': self.kwargs.get('pk')})
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, f"StaffUpdateView")
+        return response
+
+    def form_invalid(self, form):
+        for error, message in form.errors.items():
+            messages.error(self.request, message)
+        return super().form_invalid(form)
+
+
+class StaffDeleteView(LoginRequiredMixin, IsStaffOfOwnerStore, DeleteView):
+    template_name = 'accounts/dashboard/dashboard.html'
+    model = Staff
+    success_url = reverse_lazy('vendors:staff-list')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, f"StaffUpdateView")
+        return response
+
+    def form_invalid(self, form):
+        for error, message in form.errors.items():
+            messages.error(self.request, message)
+        return super().form_invalid(form)

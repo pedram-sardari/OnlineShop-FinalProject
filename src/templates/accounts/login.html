@@ -20,7 +20,7 @@
                                 </div>
                             </div>
                         </div>
-                        <form action="{% url 'login' %}?next={{ next }}" method="post">
+                        <form action="{% url 'accounts:login' %}?next={{ next }}" method="post">
                             {% csrf_token %}
                             <div class="row gy-3 gy-md-4 overflow-hidden">
                                 <div class="col-12">

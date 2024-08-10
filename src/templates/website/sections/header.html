@@ -66,12 +66,12 @@
                                 <li>
                                     {% if is_customer %}
                                         <a class="dropdown-item m-0"
-                                           href="{% url 'customers:personal-info-display' %}">
+                                           href="{% url 'accounts:personal-info-detail' %}">
                                             داشبورد
                                         </a>
-                                    {% elif is_vendor %}
+                                    {% elif is_staff or is_superuser %}
                                         <a class="dropdown-item m-0"
-                                           href="{% url 'vendors:personal-info-display' %}">
+                                           href="{% url 'accounts:personal-info-detail' %}">
                                             داشبورد
                                         </a>
                                     {% endif %}
@@ -80,7 +80,7 @@
 
                                 <!-- logout -->
                                 <li>
-                                    <form action="{% url 'logout' %}" method="post">
+                                    <form action="{% url 'accounts:logout' %}" method="post">
                                         {% csrf_token %}
                                         <button type="submit" class="dropdown-item m-0">خروج</button>
                                     </form>
@@ -90,7 +90,7 @@
                             </ul>
                         </div>
                     {% else %}
-                        <a class="btn btn-outline-secondary" href="{% url 'login' %}">
+                        <a class="btn btn-outline-secondary" href="{% url 'accounts:login' %}">
                             ورود | ثبت نام
                         </a>
                     {% endif %}

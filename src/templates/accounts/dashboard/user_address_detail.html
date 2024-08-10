@@ -1,0 +1,74 @@
+{% load template_filters %}
+<div class=" p-5">
+    <div class="row">
+        <div class="col-sm-3">
+            <h6 class="mb-0">عنوان آدرس</h6>
+        </div>
+        <div class="col-sm-8 text-secondary">
+            {{ user_address.label|default_if_none }}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-3">
+            <h6 class="mb-0">استان</h6>
+        </div>
+        <div class="col-sm-8 text-secondary">
+            {{ user_address.province|default_if_none }}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-3">
+            <h6 class="mb-0">محله</h6>
+        </div>
+        <div class="col-sm-8 text-secondary">
+            {{ user_address.neighborhood|default_if_none }}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-3">
+            <h6 class="mb-0">خیابان</h6>
+        </div>
+        <div class="col-sm-8 text-secondary">
+            {{ user_address.street|default_if_none }}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-3">
+            <h6 class="mb-0">کوچه</h6>
+        </div>
+        <div class="col-sm-8 text-secondary">
+            {{ user_address.alley|date }}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-3">
+            <h6 class="mb-0">پلاک</h6>
+        </div>
+        <div class="col-sm-8 text-secondary">
+            {{ user_address.no|default_if_none }}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-3">
+            <h6 class="mb-0">کد پستی</h6>
+        </div>
+        <div class="col-sm-8 text-secondary">
+            {{ user_address.zipcode|default_if_none }}
+        </div>
+    </div>
+    <hr>
+
+    <!-- edit button -->
+    <div class="d-grid gap-2">
+        <a class="btn btn-info fw-bold fs-5"
+           href="{% url 'accounts:user-address-update' user_address.id %}">ویرایش</a>
+    </div>
+    <!-- edit button -->
+</div>
+

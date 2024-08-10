@@ -1,4 +1,6 @@
 from datetime import datetime
+import copy
+from django.forms.models import model_to_dict
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
@@ -11,7 +13,7 @@ import datetime
 
 from website.models import Address
 from website.validators import phone_regex
-from .managers import UserManager
+from .managers import UserManager, UserAddressManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -147,6 +149,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def delete(self, *args, soft_delete=False, **kwargs):
         if soft_delete:
             self.is_deleted = True
+            self.save()
         else:
             super().delete(*args, *kwargs)
 
@@ -157,24 +160,49 @@ class User(AbstractBaseUser, PermissionsMixin):
 class UserAddress(Address):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses", verbose_name=_("کاربر"))
     label = models.CharField(verbose_name=_("عنوان آدرس"), max_length=100, null=True, blank=True)
+    is_deleted = models.BooleanField(default=False)
     is_default = models.BooleanField(verbose_name=_("آدرس پیش فرض"),
                                      default=False)  # todo: each user should only have ONE default address
+
+    objects = UserAddressManager()
 
     class Meta:
         verbose_name = _("آدرس کاربر")
         verbose_name_plural = _("آدرس های کاربران")
 
-    def check_default_validation(self):
+    def set_default(self):
         if default_address := self.user.addresses.filter(is_default=True).first():
-            if not self.id or self.id != default_address.id:
-                raise ValidationError(
-                    _(f"The address with id '{default_address.id}' for the user '{self.user.id}' "
-                      f"already used as default!")
-                )
+            if default_address.id != self.id:
+                default_address.is_default = False
+                default_address.save()
+
+    def soft_delete(self):
+        self.is_deleted = True
+        self.is_default = False
+        self.save()
+
+    def delete(self, *args, soft_delete=False, **kwargs):
+        if soft_delete:
+            self.soft_delete()
+        else:
+            super().delete(*args, *kwargs)
+
+    # def create_copy(self):
+    #     print('%' * 50)
+    #     old_address = UserAddress.objects.get(id=self.id)
+    #     old_address.soft_delete()
+    #     self.id = None
+
+    def is_there_any_order(self):
+        return self.orders.all().exists()
 
     def save(self, *args, **kwargs):
         if self.is_default:
-            self.check_default_validation()
+            self.set_default()
+
+        # if self.id and not self.is_deleted: todo:
+        #     if self.is_there_any_order():
+        #         self.create_copy()
         super().save(*args, **kwargs)
 
     def __str__(self):

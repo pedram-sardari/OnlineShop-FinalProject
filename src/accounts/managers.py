@@ -1,4 +1,5 @@
 from django.contrib.auth.base_user import BaseUserManager
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
@@ -31,6 +32,15 @@ class UserManager(BaseUserManager):
             raise ValueError("Superuser must have is_superuser=True.")
 
         return self._create_user(email, phone, password, **extra_fields)
+
+    def get_queryset(self):
+        return super().get_queryset().filter(is_deleted=False)
+
+
+class UserAddressManager(models.Manager):
+    def all_addresses(self):
+        """ Returns all addresses, including all 'is_deleted=True' addresses"""
+        return super().get_queryset()
 
     def get_queryset(self):
         return super().get_queryset().filter(is_deleted=False)

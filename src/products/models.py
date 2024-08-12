@@ -152,6 +152,12 @@ class Product(CreateUpdateDateTimeFieldMixin, models.Model):
         verbose_name = _("محصول")
         verbose_name_plural = _("محصولات")
 
+    def get_default_image(self):
+        default_product_image = self.images.filter(is_default=True).first()
+        if default_product_image:
+            return default_product_image.image
+        return None
+
     @property
     def inventory(self):
         return  # todo: implementation
@@ -170,7 +176,6 @@ class Product(CreateUpdateDateTimeFieldMixin, models.Model):
     def save(self, *args, **kwargs):
         self.set_slug()
         super().save(*args, **kwargs)
-
 
     def __str__(self):
         return self.name

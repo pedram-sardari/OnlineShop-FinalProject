@@ -59,5 +59,20 @@ class OperatorAdmin(StaffAdmin):
 
 @admin.register(Store)
 class StoreAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'owner', 'manager', 'operator')
     fields = ['name', 'description', 'address', 'order_count', 'slug']
     readonly_fields = ['order_count', 'slug']
+
+    def owner(self, obj):
+        return obj.staffs.filter(role=Staff.Roles.OWNER).first()
+
+    owner.short_description = 'مدیر فروشگاه'
+
+    def manager(self, obj):
+        return [str(manager_obj) for manager_obj in obj.staffs.filter(role=Staff.Roles.MANAGER)]
+
+    manager.short_description = 'مدیران محصول'
+    def operator(self, obj):
+        return [str(operator_obj) for operator_obj in obj.staffs.filter(role=Staff.Roles.OPERATOR)]
+
+    operator.short_description = 'ناظر'

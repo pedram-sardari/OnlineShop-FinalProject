@@ -1,11 +1,8 @@
-from customers.models import Customer
+from products.models import StoreProduct
 from vendors.models import Owner, Manager, Operator
 
 
 def header_section_parameters(request):
-    # is_owner = Owner.objects.filter(id=request.user.id).exists()
-    # is_manager = Manager.objects.filter(id=request.user.id).exists()
-    # is_operator = Operator.objects.filter(id=request.user.id).exists()
     is_owner = Owner.is_owner(request.user)
     is_manager = Manager.is_manager(request.user)
     is_operator = Operator.is_operator(request.user)
@@ -20,4 +17,9 @@ def header_section_parameters(request):
         'is_superuser': is_superuser,
         'is_staff': is_staff
     }
+    return context
+
+
+def store_products_list(request):
+    context = {"store_product_list": StoreProduct.objects.filter(inventory__gt=0)}
     return context

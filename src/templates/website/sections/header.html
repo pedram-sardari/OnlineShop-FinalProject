@@ -8,11 +8,15 @@
         </button>
         <div class="collapse navbar-collapse container-fluid" id="navbarNavDropdown">
 
+            <!-- search -->
             <form class="d-flex" role="search">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success mx-3" type="submit">Search</button>
             </form>
-            <ul class="navbar-nav">
+            <!-- search -->
+
+            <!-- middle navbar -->
+            <ul class="navbar-nav ps-5 ms-5">
                 <!-- Home icon -->
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="{% url 'home' %}">
@@ -25,15 +29,12 @@
                 <!-- Home icon -->
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Features</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
+                    <a class="nav-link" href="#">فروشگاه ها</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                        aria-expanded="false">
-                        Dropdown link
+                        دسته بندی ها
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Action</a></li>
@@ -42,6 +43,9 @@
                     </ul>
                 </li>
             </ul>
+            <!-- middle navbar -->
+
+            <!-- cart | login  -->
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <!-- login and user management button -->
@@ -108,6 +112,7 @@
                     <!-- cart icon -->
                 </li>
             </ul>
+            <!-- cart | login  -->
 
         </div>
     </nav>

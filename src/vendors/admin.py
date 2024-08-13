@@ -41,20 +41,36 @@ class StaffAdmin(CustomUserAdmin):
     )
     list_display = ('id', 'email', 'store')
 
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        form.instance.set_group()
+
 
 @admin.register(Owner)
 class OwnerAdmin(StaffAdmin):
     list_display = ('id', 'email', 'store')
+
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        form.instance.set_group()
 
 
 @admin.register(Manager)
 class ManagerAdmin(StaffAdmin):
     list_display = ('id', 'email', 'store')
 
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        form.instance.set_group()
+
 
 @admin.register(Operator)
 class OperatorAdmin(StaffAdmin):
     list_display = ('id', 'email', 'store')
+
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        form.instance.set_group()
 
 
 @admin.register(Store)
@@ -72,6 +88,7 @@ class StoreAdmin(admin.ModelAdmin):
         return [str(manager_obj) for manager_obj in obj.staffs.filter(role=Staff.Roles.MANAGER)]
 
     manager.short_description = 'مدیران محصول'
+
     def operator(self, obj):
         return [str(operator_obj) for operator_obj in obj.staffs.filter(role=Staff.Roles.OPERATOR)]
 

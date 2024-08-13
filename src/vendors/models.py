@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
@@ -45,9 +46,9 @@ class Store(CreateUpdateDateTimeFieldMixin, models.Model):
 
 class Staff(User):
     class Roles(models.TextChoices):
-        OWNER = "Owner", _("مدیر فروشگاه")
-        MANAGER = "Manager", _("مدیر محصول")
-        OPERATOR = "Operator", _("ناظر")
+        OWNER = "owner", _("مدیر فروشگاه")
+        MANAGER = "manager", _("مدیر محصول")
+        OPERATOR = "operator", _("ناظر")
 
     role = models.CharField(_("عنوان شغلی"), max_length=12, choices=Roles.choices, default=Roles.OPERATOR)
     store = models.ForeignKey(Store, on_delete=models.CASCADE, verbose_name=_("فروشگاه"), related_name='staffs')
@@ -56,10 +57,21 @@ class Staff(User):
         verbose_name = _("کارمند")
         verbose_name_plural = _("کارمندان")
 
+    def set_group(self):
+        from website.management.commands.constants import OWNER, MANAGER, OPERATOR
+        if self.role == self.Roles.OWNER:
+            group = Group.objects.get(name=OWNER)
+        elif self.role == self.Roles.MANAGER:
+            group = Group.objects.get(name=MANAGER)
+        else:
+            group = Group.objects.get(name=OPERATOR)
+        self.groups.add(group)
+
     def save(self, *args, **kwargs):
-        self.is_staff = True
-        self.is_superuser = False
+        self.is_staff = True  # NOQA
+        self.is_superuser = False  # NOQA
         super().save(*args, **kwargs)
+        self.set_group()
 
 
 class Owner(Staff):
@@ -78,8 +90,14 @@ class Owner(Staff):
     def is_owner(cls, user):
         return cls.objects.filter(id=user.id).exists()
 
+    def set_group(self):
+        from website.management.commands.constants import OWNER
+        owner_group = Group.objects.get(name=OWNER)
+        self.groups.add(owner_group)
+
     def save(self, *args, **kwargs):
         self.role = self.Roles.OWNER
+        self.set_group()
         super(Owner, self).save(*args, **kwargs)
 
 
@@ -99,8 +117,14 @@ class Manager(Staff):
     def is_manager(cls, user):
         return cls.objects.filter(id=user.id).exists()
 
+    def set_group(self):
+        from website.management.commands.constants import MANAGER
+        manager_group = Group.objects.get(name=MANAGER)
+        self.groups.add(manager_group)
+
     def save(self, *args, **kwargs):
         self.role = self.Roles.MANAGER
+        self.set_group()
         super().save(*args, **kwargs)
 
 
@@ -120,6 +144,14 @@ class Operator(Staff):
     def is_operator(cls, user):
         return cls.objects.filter(id=user.id).exists()
 
+    def set_group(self):
+        from website.management.commands.constants import OPERATOR
+        operator_group = Group.objects.get(name=OPERATOR)
+        print('*' * 50)
+        print(operator_group)
+        self.groups.add(operator_group)
+
     def save(self, *args, **kwargs):
         self.role = self.Roles.OPERATOR
+        self.set_group()
         super().save(*args, **kwargs)

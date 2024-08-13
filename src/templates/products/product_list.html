@@ -8,21 +8,21 @@
             <ul class="nav nav-underline">
                 <li class="nav-item">
                     <a class="nav-link {% if ordering == 'sort=best_seller' %} active {% endif %}" aria-current="page"
-                       href="{% url 'products:product-list' %}?sort=best_seller">
+                       href="{% url 'products:store-product-list' %}?sort=best_seller">
                         پرفروش ترین
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if ordering == 'sort=highest_rating' %} active {% endif %}"
                        aria-current="page"
-                       href="{% url 'products:product-list' %}?sort=highest_rating">
+                       href="{% url 'products:store-product-list' %}?sort=highest_rating">
                         بالاترین امتیاز
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if ordering == 'sort=most_expensive' %} active {% endif %}"
                        aria-current="page"
-                       href="{% url 'products:product-list' %}?sort=most_expensive">
+                       href="{% url 'products:store-product-list' %}?sort=most_expensive">
                         گرانترین
                     </a>
                 </li>
@@ -34,7 +34,7 @@
     <!-- card groups -->
     <div class="row row-cols-1 row-cols-md-5 g-4 m-auto pb-4 ">
         {% for store_product in store_product_list %}
-            <a id="card-link" href="#" style="text-decoration: none">
+            <a id="card-link" href="{% url 'products:store-product-detail' store_product.id %}" style="text-decoration: none">
 
                 <div class="col">
                     <div class="card h-100 position-relative">
@@ -101,7 +101,7 @@
                     {% if page_obj.has_previous %}
                         <li class="page-item">
                             <a class="page-link"
-                               href="{% url 'products:product-list' %}?page={{ page_obj.previous_page_number }}&{{ ordering }}"
+                               href="{% url 'products:store-product-list' %}?page={{ page_obj.previous_page_number }}&{{ ordering }}"
                                title="قبلی" aria-label="Previous">
                                 <span aria-hidden="true">قبلی</span>
                             </a>
@@ -118,7 +118,7 @@
                     {% if page_obj.has_next %}
                         <li class="page-item ">
                             <a class="page-link"
-                               href="{% url 'products:product-list' %}?page={{ page_obj.next_page_number }}&{{ ordering }}"
+                               href="{% url 'products:store-product-list' %}?page={{ page_obj.next_page_number }}&{{ ordering }}"
                                title="بعدی"
                                aria-label="Next">
                                 <span aria-hidden="true">بعدی</span>

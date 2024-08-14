@@ -1,6 +1,7 @@
-from products.models import Comment, Product, StoreProduct, Coupon, Discount, Color
+from products.models import Comment, Product, StoreProduct, Coupon, Discount, Color, Rating
 from orders.models import Order, OrderItem
 from vendors.models import Staff, Store
+from .constants import UserType
 
 PERMISSIONS = {
     1: 'view',
@@ -9,12 +10,8 @@ PERMISSIONS = {
     4: 'delete'
 }
 
-OWNER = 'owner'
-MANAGER = 'manager'
-OPERATOR = 'operator'
-
 GROUPS = {
-    OWNER: {
+    UserType.OWNER: {
         # owner specific
         Store: [1, 3],
         Staff: [1, 2, 3, 4],
@@ -25,20 +22,24 @@ GROUPS = {
         Order: [1, 2, 3, 4],
         OrderItem: [1, 2, 3, 4],
     },
-    MANAGER: {
+    UserType.MANAGER: {
         Store: [1, ],
         StoreProduct: [1, 2, 3, 4],
         Discount: [1, 2, 3, 4],
         Order: [1, 2, 3, 4],
         OrderItem: [1, 2, 3, 4],
     },
-    OPERATOR: {
+    UserType.OPERATOR: {
         Store: [1, ],
         StoreProduct: [1, ],
         Discount: [1, ],
         Order: [1, ],
         OrderItem: [1, ],
 
+    },
+    UserType.CUSTOMER: {
+        Comment: [1, 2],
+        Rating: [1, 2],
     }
 
 }

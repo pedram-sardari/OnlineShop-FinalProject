@@ -9,11 +9,6 @@ class IsAddressForLoggedInUser(UserPassesTestMixin):
         return self.request.user.addresses.contains(selected_address)  # NOQA
 
 
-class IsOwner(UserPassesTestMixin):
-    def test_func(self):
-        return Owner.is_owner(self.request.user)  # NOQA
-
-
 class IsStaffOfOwnerStore(UserPassesTestMixin):
     """Is the selected staff one of staffs of the owner's store?"""
 

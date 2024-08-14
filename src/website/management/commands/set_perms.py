@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
-from .constants import GROUPS, PERMISSIONS
+from website.permissions import GROUPS, PERMISSIONS
 
 
 class Command(BaseCommand):
@@ -26,8 +26,8 @@ class Command(BaseCommand):
                     try:
                         permission = Permission.objects.get(content_type=content_type, codename=permission_codename)
                         group_name.permissions.add(permission)
-                        self.stdout.write(self.style.SUCCESS(f'Assigned {permission_codename} to {group_name}.'))
+                        self.stdout.write(self.style.SUCCESS(f'Assigned `{permission_codename}` to {group_name}.'))
                     except Permission.DoesNotExist:
-                        self.stdout.write(self.style.ERROR(f'Permission {permission_codename} does not exist.'))
+                        self.stdout.write(self.style.ERROR(f'Permission `{permission_codename}` does not exist.'))
 
             self.stdout.write(self.style.SUCCESS('Permissions assignment completed.'))

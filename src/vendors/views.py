@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -8,7 +8,7 @@ from django.views.generic import FormView, CreateView, ListView, DetailView, Upd
 from website.models import Address
 from .forms import OwnerRegistrationForm, StaffRegistrationForm, StaffUpdateForm
 from .models import Owner, Store, Staff
-from website.mixins import IsOwner, IsStaffOfOwnerStore
+from website.mixins import IsStaffOfOwnerStore
 
 
 class OwnerRegisterView(UserPassesTestMixin, FormView):
@@ -52,7 +52,8 @@ class OwnerRegisterView(UserPassesTestMixin, FormView):
         return super().form_invalid(form)
 
 
-class StaffRegisterView(LoginRequiredMixin, IsOwner, CreateView):
+class StaffRegisterView(PermissionRequiredMixin, CreateView):
+    permission_required = ['vendors.add_staff']
     model = Staff
     template_name = 'accounts/dashboard/dashboard.html'
     form_class = StaffRegistrationForm
@@ -77,7 +78,8 @@ class StaffRegisterView(LoginRequiredMixin, IsOwner, CreateView):
         return super().form_invalid(form)
 
 
-class StaffListView(LoginRequiredMixin, IsOwner, ListView):
+class StaffListView(PermissionRequiredMixin, ListView):
+    permission_required = ['vendors.view_staff']
     template_name = 'accounts/dashboard/dashboard.html'
     context_object_name = 'staff_list'
     extra_context = {
@@ -90,7 +92,8 @@ class StaffListView(LoginRequiredMixin, IsOwner, ListView):
         return owner.store.staffs.exclude(id=owner.id)
 
 
-class StaffDetailView(LoginRequiredMixin, IsStaffOfOwnerStore, DetailView):
+class StaffDetailView(PermissionRequiredMixin, IsStaffOfOwnerStore, DetailView):
+    permission_required = ['vendors.view_staff']
     template_name = 'accounts/dashboard/dashboard.html'
     context_object_name = 'staff'
     extra_context = {
@@ -99,7 +102,8 @@ class StaffDetailView(LoginRequiredMixin, IsStaffOfOwnerStore, DetailView):
     model = Staff
 
 
-class StaffUpdateView(LoginRequiredMixin, IsStaffOfOwnerStore, UpdateView):
+class StaffUpdateView(PermissionRequiredMixin, IsStaffOfOwnerStore, UpdateView):
+    permission_required = ['vendors.change_staff']
     template_name = 'accounts/dashboard/dashboard.html'
     extra_context = {
         'staff_selected': 'active',
@@ -122,7 +126,8 @@ class StaffUpdateView(LoginRequiredMixin, IsStaffOfOwnerStore, UpdateView):
         return super().form_invalid(form)
 
 
-class StaffDeleteView(LoginRequiredMixin, IsStaffOfOwnerStore, DeleteView):
+class StaffDeleteView(PermissionRequiredMixin, IsStaffOfOwnerStore, DeleteView):
+    permission_required = ['vendors.delete_staff']
     template_name = 'accounts/dashboard/dashboard.html'
     model = Staff
     success_url = reverse_lazy('vendors:staff-list')

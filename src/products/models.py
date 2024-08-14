@@ -1,15 +1,12 @@
-from sqlite3 import IntegrityError
-
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.db import models, transaction
+from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
+from customers.models import Customer
 from vendors.models import Store
 from website.models import Address, CreateUpdateDateTimeFieldMixin
-from customers.models import Customer
 from . import utils
 
 User = get_user_model()
@@ -287,11 +284,11 @@ class Comment(CreateUpdateDateTimeFieldMixin, models.Model):
     title = models.CharField(_("عنوان نظر"), max_length=100)
     text = models.TextField(_("متن نظر"))
     status = models.CharField(_("وضعیت"), choices=Status.choices, max_length=15, default=Status.SUBMITTED)
-    user = models.ForeignKey(
-        User,
+    customer = models.ForeignKey(
+        Customer,
         on_delete=models.CASCADE,
         related_name="comments",
-        verbose_name=_("کاربر")
+        verbose_name=_("کاربر"),
     )
     product = models.ForeignKey(
         Product,
@@ -309,11 +306,11 @@ class Comment(CreateUpdateDateTimeFieldMixin, models.Model):
 
 
 class Rating(CreateUpdateDateTimeFieldMixin, models.Model):
-    user = models.ForeignKey(
-        User,
+    customer = models.ForeignKey(
+        Customer,
         on_delete=models.CASCADE,
         related_name="ratings",
-        verbose_name=_("کاربر")
+        verbose_name=_("کاربر"),
     )
     product = models.ForeignKey(
         Product,
@@ -333,7 +330,7 @@ class Rating(CreateUpdateDateTimeFieldMixin, models.Model):
     class Meta:
         verbose_name = _("امتیاز")
         verbose_name_plural = _("امتیازات")
-        unique_together = ("user", "product")
+        unique_together = ("customer", "product")
 
     def add_rating_to_product(self):
         if self.id:
@@ -362,4 +359,4 @@ class Rating(CreateUpdateDateTimeFieldMixin, models.Model):
         super().delete(*args, **kwargs)
 
     def __str__(self):
-        return f"{str(self.user)} | {self.product.name} | {self.score}"
+        return f"{str(self.customer)} | {self.product.name} | {self.score}"

@@ -33,5 +33,5 @@ class Customer(User):
     def save(self, *args, **kwargs):
         self.is_staff = False
         self.is_superuser = False
-        self.set_group()
         super().save(*args, **kwargs)
+        self.set_group()

@@ -34,7 +34,8 @@
     <!-- card groups -->
     <div class="row row-cols-1 row-cols-md-5 g-4 m-auto pb-4 ">
         {% for store_product in store_product_list %}
-            <a id="card-link" href="{% url 'products:store-product-detail' store_product.id %}" style="text-decoration: none">
+            <a id="card-link" href="{% url 'products:store-product-detail' store_product.id %}"
+               style="text-decoration: none">
 
                 <div class="col">
                     <div class="card h-100 position-relative">
@@ -56,6 +57,7 @@
                         <!-- rating -->
                         {% if store_product.product.rating_avg %}
                             <div class="d-flex bg-warning rounded-1 position-absolute bottom-0 end-0">
+                                <!-- star icon -->
                                 <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em"
                                      viewBox="0 0 72 72">
                                     <path fill="#0000"
@@ -64,6 +66,7 @@
                                           stroke-miterlimit="10" stroke-width="2"
                                           d="M35.993 10.736L27.791 27.37L9.439 30.044l13.285 12.94l-3.128 18.28l16.412-8.636l16.419 8.624l-3.142-18.278l13.276-12.95l-18.354-2.66z"></path>
                                 </svg>
+                                <!-- star icon -->
                                 <p class="card-text fw-bold px-1 m-0">
                                     {{ store_product.product.rating_avg }}
                                 </p>

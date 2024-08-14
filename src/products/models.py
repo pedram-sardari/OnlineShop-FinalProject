@@ -102,6 +102,15 @@ class Category(CreateUpdateDateTimeFieldMixin, models.Model):
     def can_be_a_subcategory(self, max_depth=3):
         pass  # todo: implementation
 
+    @property
+    def category_parent_list(self, include_child=True):
+        categories = []
+        current_category = self if include_child else self.parent_category
+        while current_category is not None:
+            categories.append(current_category)
+            current_category = current_category.parent_category
+        return categories
+
     def set_slug(self):
         if not self.id or self.slug != slugify(self.name, allow_unicode=True):
             self.slug = slugify(self.name, allow_unicode=True)

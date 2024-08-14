@@ -16,12 +16,14 @@ from .models import (
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
     fields = ['name', 'description', 'parent_category', 'slug']
     readonly_fields = ['slug']
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
     fields = ["category", "name", "description", "is_available", "slug",
               "rating_count", "rating_avg"]
     readonly_fields = ["slug", "rating_count", "rating_avg"]

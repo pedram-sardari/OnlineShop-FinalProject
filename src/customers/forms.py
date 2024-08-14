@@ -5,7 +5,7 @@ from website.forms import FormatFormFieldsMixin
 from .models import Customer
 
 
-class CustomerRegisterForm(FormatFormFieldsMixin, BaseUserCreationForm):
+class CustomerEmailRegisterForm(FormatFormFieldsMixin, BaseUserCreationForm):
     class Meta:
         model = Customer
         fields = ['email']

@@ -146,3 +146,5 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+
+OTP_EXPIRATION_TIME = 50 * 2  # in second

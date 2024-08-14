@@ -1,23 +1,19 @@
 from django.contrib import messages
+from django.contrib.auth import login
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
-from .forms import CustomerRegisterForm
-from .models import Customer
-
-
-class IsCustomerMixin(UserPassesTestMixin):
-    def test_func(self):
-        return self.request.user.is_customer  # NOQA
+from .forms import CustomerEmailRegisterForm
+from .models import Customer, User
 
 
 class CustomerRegisterView(UserPassesTestMixin, CreateView):
     model = Customer
     template_name = 'accounts/register.html'
-    form_class = CustomerRegisterForm
-    success_url = reverse_lazy('accounts:login')
+    form_class = CustomerEmailRegisterForm
+    success_url = reverse_lazy('accounts:personal-info-detail')
     extra_context = {'customer_register': 'active'}
 
     def test_func(self):
@@ -28,8 +24,12 @@ class CustomerRegisterView(UserPassesTestMixin, CreateView):
         return redirect('home')
 
     def form_valid(self, form):
+        customer = form.save(commit=False)
+        customer.save()
+        user = User.objects.get(id=customer.id)
+        login(self.request, user)
         messages.success(self.request, f"Your account has been created successfully!")
-        return super().form_valid(form)
+        return redirect(self.success_url)
 
     def form_invalid(self, form):
         for error, message in form.errors.items():

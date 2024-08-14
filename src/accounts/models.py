@@ -25,6 +25,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         FEMALE = 'F', 'Female'
         OTHER = 'O', 'Other'
 
+    password = models.CharField(_("رمز عبور"), max_length=128, null=True, blank=True)
     first_name = models.CharField(_("نام"), max_length=150, blank=True)
     last_name = models.CharField(_("نام خانوادگی"), max_length=150, blank=True)  # todo: last name >> نام خانوادگی
     email = models.EmailField(
@@ -60,7 +61,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             "unique": _("A user with that phone already exists."),
         },
     )
-    gender = models.CharField(max_length=1, choices=Gender.choices)
+    gender = models.CharField(max_length=1, choices=Gender.choices, null=True, blank=True)
     is_staff = models.BooleanField(
         _("کارمند"),
         default=False,

@@ -15,7 +15,7 @@ class OwnerRegisterView(UserPassesTestMixin, FormView):
     model = Owner
     template_name = 'accounts/register.html'
     form_class = OwnerRegistrationForm
-    success_url = reverse_lazy('accounts:login')
+    success_url = reverse_lazy('accounts:login-email')
     extra_context = {'staff_register': 'active'}
 
     def test_func(self):

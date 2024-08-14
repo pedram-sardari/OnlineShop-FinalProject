@@ -1,0 +1,52 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block body %}
+    <!-- display messages -->
+    {% include 'website/sections/message_display.html' %}
+    <!-- display messages -->
+
+    <div class="container vh-100">
+        <div class="row justify-content-md-center h-100">
+            <div class="col-sm-4 col-md-11 col-lg-8 col-xl-7 col-xxl-6 ">
+                <div class="p-5 mt-5 align-middle border rounded-3">
+                    <h2 class="text-center mb-5">ورود با موبایل</h2>
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="mt-2">
+                                {{ field.label_tag }}
+                            </div>
+                            <div class="my-3">
+                                {{ field }}
+                            </div>
+
+                        {% endfor %}
+                        <div class="d-grid gap-2">
+                            {% if login_button %}
+                                <button type="submit" class="btn btn-success my-3 fw-bold fs-5"> ورود</button>
+                                <div class="my-2 text-center fs-5">
+                                    <a href="{% url 'accounts:login-phone' %}" class="btn btn-outline-warning">ویرایش شماره</a>
+                                </div>
+                            {% elif get_code_button %}
+                                <button type="submit" class="btn btn-info my-3 fw-bold fs-5">دریافت کد</button>
+                            {% endif %}
+                        </div>
+                    </form>
+                    <div class="my-2 text-center fs-5">
+                        <a href="{% url 'accounts:login-email' %}" class="btn btn-outline-primary">ورود با ایمیل و رمز
+                            عبور</a>
+                    </div>
+
+                    <div class="my-2">
+                        <a href="#!" class="link-secondary text-decoration-none">فراموشی رمز عبور</a>
+                    </div>
+                    <div class="my-2">
+                        <a href="{% url 'vendors:register-owner' %}" class="link-secondary text-decoration-none">ساختن
+                            حساب جدید</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

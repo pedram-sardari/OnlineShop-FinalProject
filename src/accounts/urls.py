@@ -6,7 +6,11 @@ from django.contrib.auth.views import LogoutView
 app_name = 'accounts'
 
 urlpatterns = [
-    path('login/', views.MyLoginView.as_view(), name='login'),
+    path('login-email/', views.EmailLoginView.as_view(), name='login-email'),
+
+    path('login-phone/', views.PhoneLoginView.as_view(), name='login-phone'),
+    path('login-phone/verify/', views.PhoneLoginVerifyView.as_view(), name='login-phone-verify'),
+
     path('logout/', views.MyLogoutView.as_view(), name='logout'),
 
     path('panel/personal-info/detail/',

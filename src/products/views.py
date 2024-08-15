@@ -53,7 +53,7 @@ class StoreProductListView(ListView):
 
 class StoreProductDetailView(DetailView):
     model = StoreProduct
-    template_name = 'products/product_detail.html'
+    template_name = 'products/store_product_detail.html'
     context_object_name = 'store_product'
 
     def get_context_data(self, **kwargs):

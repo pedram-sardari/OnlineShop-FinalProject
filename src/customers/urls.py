@@ -7,4 +7,5 @@ from django.contrib.auth.views import LogoutView
 app_name = 'customers'
 urlpatterns = [
     path('register/', views.CustomerRegisterView.as_view(), name='register'),
+    path('panel/my-comment-list/', views.MyCommentsListView.as_view(), name='my-comment-list'),
 ]

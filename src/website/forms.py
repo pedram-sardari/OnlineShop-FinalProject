@@ -4,7 +4,7 @@ from django import forms
 class FormatFormFieldsMixin:
     def format_fields(self):
         for field in self.fields.values():  # NOQA
-            if isinstance(field, forms.DateField):
+            if isinstance(field, forms.DateField) or isinstance(field, forms.DateTimeField):
                 field.widget.input_type = 'date'
 
             if isinstance(field, forms.BooleanField):

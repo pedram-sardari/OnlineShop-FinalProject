@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from website.forms import FormatFormFieldsMixin
-from .models import Comment, Rating, ProductColor
+from .models import Comment, Rating, ProductColor, Product, StoreProduct, StoreDiscount
 
 
 class CommentForm(FormatFormFieldsMixin, forms.ModelForm):
@@ -37,3 +37,14 @@ class RatingForm(FormatFormFieldsMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.format_fields()
+
+
+class StoreDiscountForm(FormatFormFieldsMixin, forms.ModelForm):
+    class Meta:
+        model = StoreDiscount
+        fields = ['cash_discount', 'percentage_discount', 'expiration_date', 'is_active']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.format_fields()
+

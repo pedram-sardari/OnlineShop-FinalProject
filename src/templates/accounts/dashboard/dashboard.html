@@ -54,12 +54,12 @@
 
     <!-- store product list -->
     {% if is_staff %}
-        <a href="{% url 'vendors:store-product-list' %} "
-           class="list-group-item list-group-item-action {{ customer_register }}">
-            محصولات
+        <a href="{% url 'vendors:store-discount-list' %} "
+           class="list-group-item list-group-item-action {{ store_discount_section }}">
+            تخفیفات
         </a>
     {% endif %}
-    <!-- store product list -->
+    <!-- store discount list -->
 
     <!-- my comments and rates -->
     {% if is_customer %}
@@ -84,7 +84,7 @@
 
 {% block main-content %}
 
-    {% if form_section %}
+    {% if form %}
 
         {% include 'website/sections/form.html' %}
 
@@ -122,19 +122,17 @@
                 {% include 'vendors/dashboard/staff_detail.html' %}
             {% endif %}
         </div>
-    {% endif %}
 
+    {% elif my_comment_list_section %}
 
-    {% if my_comment_list_section %}
         <div class="text-end">
             {% include 'products/comment_list.html' %}
         </div>
-    {% endif %}
 
-    {% if dashboard_store_product_section %}
+    {% elif dashboard_store_product_section %}
+
         <div>
             {% include 'products/store_product_list.html' %}
         </div>
     {% endif %}
-
 {% endblock %}

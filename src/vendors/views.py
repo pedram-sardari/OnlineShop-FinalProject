@@ -1,10 +1,16 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.db import transaction
+from django.db.models import Min, F, Sum
+from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import FormView, CreateView, ListView, DetailView, UpdateView, DeleteView
 
+from products.forms import StoreProductForm, SelectProductForm, StoreDiscountForm
+from products.models import StoreProduct, Category, StoreDiscount
+from website.mixins import IsStaffOfOwnerStore
 from website.models import Address
 from .forms import OwnerRegistrationForm, StaffRegistrationForm, StaffUpdateForm
 from .models import Owner, Store, Staff
@@ -26,6 +32,7 @@ class OwnerRegisterView(UserPassesTestMixin, FormView):
         messages.error(self.request, 'شما با یک حساب کاربری در حال حاضر وارد شده اید')
         return redirect('home')
 
+    @transaction.atomic
     def form_valid(self, form):
         owner = form.save(commit=False)
         address = Address.objects.create(
@@ -187,5 +194,72 @@ class DashboardStoreProductListView(PermissionRequiredMixin, ListView):
         print(repr(qs.values('order_count')))
         print('1' * 50)
         return qs
+
+
+class StoreDiscountListView(ListView):
+    model = StoreDiscount
+    template_name = 'accounts/dashboard/dashboard.html'
+    extra_context = {'store_discount_section': 'active'}
+    context_object_name = 'store_discount_list'
+
+    def get_queryset(self):
+        owner = Owner.get_owner(user=self.request.user)
+        return self.model.objects.filter(store=owner.store)
+
+
+class StoreDiscountCreateView(CreateView):
+    form_class = StoreDiscountForm
+    template_name = 'accounts/dashboard/dashboard.html'
+    extra_context = {'store_discount_section': 'active'}
+    success_url = reverse_lazy('vendors:store-discount-list')
+
+    def form_valid(self, form):
+        store_discount = form.save(commit=False)
+        owner = Owner.get_owner(user=self.request.user)
+        store_discount.store = owner.store
+        store_discount.save()
+        response = super().form_valid(form)
+        messages.success(self.request, f"StoreDiscountCreateView")
+        return response
+
+    def form_invalid(self, form):
+        for error, message in form.errors.items():
+            messages.error(self.request, message)
+        return super().form_invalid(form)
+
+
+class StoreDiscountUpdateView(UpdateView):
+    model = StoreDiscount
+    form_class = StoreDiscountForm
+    template_name = 'accounts/dashboard/dashboard.html'
+    extra_context = {'store_discount_section': 'active'}
+    success_url = reverse_lazy('vendors:store-discount-list')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, f"StoreDiscountUpdateView")
+        return response
+
+    def form_invalid(self, form):
+        for error, message in form.errors.items():
+            messages.error(self.request, message)
+        return super().form_invalid(form)
+
+
+class StoreDiscountDeleteView(DeleteView):
+    model = StoreDiscount
+    template_name = 'accounts/dashboard/dashboard.html'
+    extra_context = {'store_discount_section': 'active'}
+    success_url = reverse_lazy('vendors:store-discount-list')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, f"StoreDiscountDeleteView")
+        return response
+
+    def form_invalid(self, form):
+        for error, message in form.errors.items():
+            messages.error(self.request, message)
+        return super().form_invalid(form)
 
 

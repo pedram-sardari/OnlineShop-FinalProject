@@ -31,6 +31,22 @@ urlpatterns = [
          views.StaffDeleteView.as_view(),
          name='staff-delete'),
 
+    path('panel/store-discount/',
+         views.StoreDiscountListView.as_view(),
+         name='store-discount-list'),
+
+    path('panel/store-discount/create/',
+         views.StoreDiscountCreateView.as_view(),
+         name='store-discount-create'),
+
+    path('panel/store-discount/<int:pk>/update/',
+         views.StoreDiscountUpdateView.as_view(),
+         name='store-discount-update'),
+
+    path('panel/store-discount/<int:pk>/delete/',
+         views.StoreDiscountDeleteView.as_view(),
+         name='store-discount-delete'),
+
     path('panel/store-product/',
          views.DashboardStoreProductListView.as_view(),
          name='store-product-list'),

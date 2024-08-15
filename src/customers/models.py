@@ -26,12 +26,15 @@ class Customer(User):
     def has_ordered_store_product(self, store_product):
         return self.orders.filter(order_items__store_product=store_product).exists()
 
+    def has_rated_store_product(self, store_product):
+        return store_product.product.ratings.filter(customer=self).exists()
+
     def set_group(self):
         group = Group.objects.get(name=UserType.CUSTOMER)
         self.groups.add(group)
 
     def save(self, *args, **kwargs):
-        self.is_staff = False
-        self.is_superuser = False
+        self.is_staff = False  # NOQA
+        self.is_superuser = False  # NOQA
         super().save(*args, **kwargs)
         self.set_group()

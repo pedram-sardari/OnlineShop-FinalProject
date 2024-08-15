@@ -46,17 +46,11 @@
     {% endif %}
     <!-- staff_selected -->
 
-    <!-- user_address_list -->
+    <!-- orders -->
     <a href="{% url 'home' %} " class="list-group-item list-group-item-action {{ customer_register }}">
         سفارشات
     </a>
-    <!-- user_address_list -->
-
-    <!-- user_address_list -->
-    <a href="{% url 'home' %} " class="list-group-item list-group-item-action {{ customer_register }}">
-        ثبت نظر و امتیاز
-    </a>
-    <!-- user_address_list -->
+    <!-- orders -->
 
     <!-- store product list -->
     {% if is_staff %}
@@ -67,14 +61,14 @@
     {% endif %}
     <!-- store product list -->
 
-    <!-- user_address_list -->
+    <!-- my comments and rates -->
     {% if is_customer %}
         <a href="{% url 'customers:my-comment-list' %} "
            class="list-group-item list-group-item-action {{ customer_register }}">
             نظرات و امتیازات من
         </a>
     {% endif %}
-    <!-- user_address_list -->
+    <!-- my comments and rates -->
 
     <!-- reports -->
     {% if is_owner or is_superuser %}

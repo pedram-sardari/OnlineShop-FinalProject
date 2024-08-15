@@ -61,10 +61,12 @@ class StoreProductDetailView(DetailView):
         context['comment_form'] = CommentForm()
         context['color_form'] = ProductColorForm()
         context['rating_form'] = RatingForm()
-        context['comment_list'] = Comment.objects.filter(product=self.get_object().product)
+        context['comment_list'] = Comment.objects.filter(product=self.get_object().product,
+                                                         status=Comment.Status.APPROVED)
         customer = Customer.get_customer(user=self.request.user)
         if customer:
-            context['can_rate'] = customer.has_ordered_store_product(self.get_object())
+            context['can_rate'] = (customer.has_ordered_store_product(self.get_object())
+                                   and not customer.has_rated_store_product(self.get_object()))
         return context
 
 
@@ -93,7 +95,8 @@ class RatingCreateView(PermissionRequiredMixin, CreateView):
     def test_func(self):
         customer = Customer.get_customer(user=self.request.user)
         store_product = get_object_or_404(StoreProduct, pk=self.kwargs.get('store_product_id'))
-        return customer.has_ordered_store_product(store_product)
+        return (customer.has_ordered_store_product(store_product)
+                and not customer.has_ordered_customer(store_product))
 
     def get_success_url(self):
         return reverse_lazy('products:store-product-detail', kwargs={'pk': self.kwargs.get('store_product_id')})

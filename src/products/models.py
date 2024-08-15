@@ -122,7 +122,7 @@ class Category(CreateUpdateDateTimeFieldMixin, models.Model):
         categories = []
         current_category = self if include_child else self.parent_category
         while current_category is not None:
-            categories.append(current_category)
+            categories.insert(0, current_category)
             current_category = current_category.parent_category
         return categories
 

@@ -1,0 +1,190 @@
+{% extends 'website/base.html' %}
+{% load static %}
+{% block content %}
+    <!-- product section -->
+    <div class="container border rounded-3 mx-auto mt-5 pt-3">
+
+        <!-- category hierarchy -->
+        <div class="row container m-auto">
+            <div>
+                {% for category in store_product.product.category.category_parent_list %}
+                    {{ category.name }} {% if not forloop.last %}/{% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <!-- category hierarchy -->
+
+        <!-- store product detail -->
+        <div class="row container g-4 m-auto pb-4 ">
+            <!-- image carousel -->
+            <div class="col-3 ps-3">
+                <div id="carouselExampleIndicators" class="carousel slide">
+                    {% if store_product.product.images.all %}
+                        <div class="carousel-indicators">
+                            {% for product_image in store_product.product.images.all %}
+                                <button type="button" data-bs-target="#carouselExampleIndicators"
+                                        data-bs-slide-to="{{ forloop.counter }}"
+                                        class{% if product_image.is_default or forloop.last %}="active"
+                                        aria-current="true"{% endif %}
+                                        aria-label="Slide {{ forloop.counter }}"></button>
+                            {% endfor %}
+                        </div>
+                        <!-- image part -->
+                        <div class="carousel-inner">
+                            {% for product_image in store_product.product.images.all %}
+                                <div class="carousel-item {% if product_image.is_default or forloop.last %}active{% endif %}">
+                                    <img src="{{ product_image.image.url }}" class="d-block w-100" alt="..."
+                                         height="220" width="220"
+                                    >
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <!-- image part -->
+                        {% if store_product.product.images.count > 1 %}
+                            <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#carouselExampleIndicators"
+                                    data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button"
+                                    data-bs-target="#carouselExampleIndicators"
+                                    data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        {% endif %}
+                    {% else %}
+                        <img src="{% static 'products/img/product-default-image.png' %}"
+                             class="d-block w-100"
+                             alt="..."
+                             height="220" width="220"
+                        >
+                    {% endif %}
+                </div>
+                <div class="d-grid gap-2 mt-3">
+                    <button type="submit" class="btn btn-primary fw-bold fs-5">افزودن به سبد خرید</button>
+                </div>
+            </div>
+            <!-- image carousel -->
+
+            <div class="col-9">
+                <!-- product name -->
+                <div class="row">
+                    <h1 class="border-bottom">{{ store_product.product.name }}</h1>
+                </div>
+                <!-- product name -->
+
+                <!-- product detail  & rating form-->
+                <div class="row pt-4">
+                    <!-- product detail -->
+                    <div class="col">
+                        <p class="">
+                            <!-- star icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em"
+                                 viewBox="0 0 72 72">
+                                <path fill="#FFD700FF"
+                                      d="M35.993 10.736L27.791 27.37L9.439 30.044l13.285 12.94l-3.128 18.28l16.412-8.636l16.419 8.624l-3.142-18.278l13.276-12.95l-18.354-2.66z"></path>
+                                <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round"
+                                      stroke-miterlimit="10" stroke-width="2"
+                                      d="M35.993 10.736L27.791 27.37L9.439 30.044l13.285 12.94l-3.128 18.28l16.412-8.636l16.419 8.624l-3.142-18.278l13.276-12.95l-18.354-2.66z"></path>
+                            </svg>
+                            <!-- star icon -->
+                            <span class="fw-bold"> {{ store_product.product.rating_avg }} </span><span
+                                class="text-muted">(امتیاز {{ store_product.product.rating_count }} خریدار) </span>
+                        </p>
+                        {{ color_form }}
+                        <div class="mt-4">
+                            <p>توضیحات:</p>
+                            <p>{{ store_product.product.description }}</p>
+                        </div>
+
+
+                    </div>
+                    <!-- product detail -->
+
+                    <!-- rating form -->
+                    {% if can_rate %}
+                        <div class="col-4">
+                            <form action="{% url 'products:rating-create' store_product.id %}" method="post">
+                                {% csrf_token %}
+                                {{ rating_form.as_p }}
+                                <div class="d-grid gap-2 mt-3">
+                                    <button type="submit" class="btn btn-success fw-bold fs-5">ثبت</button>
+                                </div>
+                            </form>
+                        </div>
+                    {% endif %}
+                    <!-- rating form -->
+                </div>
+            </div>
+        </div>
+        <!-- store product detail -->
+
+    </div>
+    <!-- product section -->
+
+    <!-- comments section -->
+    <div class="container row rounded-3 mx-auto mt-5 p-0">
+        <!-- comment form -->
+        {% if request.user.is_authenticated and is_customer %}
+            <div class="col-3 border rounded-3 ms-3 p-4">
+                <form action="{% url 'products:comment-create' store_product.id %}" method="post"
+                      class="position-sticky sticky-top mt-3 pt-5">
+                    {% csrf_token %}
+                    {{ comment_form.as_p }}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success fw-bold fs-5">ثبت</button>
+                    </div>
+                </form>
+            </div>
+        {% endif %}
+        <!-- comment form -->
+
+        <!-- comment list -->
+        <div class="col border p-3 rounded-3">
+            {% include 'products/comment_list.html' %}
+        </div>
+        <!-- comment list -->
+    </div>
+    <!-- comments section -->
+
+    <!-- pagination -->
+    {% if is_paginated %}
+
+        <div class="row" dir="ltr">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{% url 'products:store-product-list' %}?page={{ page_obj.previous_page_number }}&{{ ordering }}"
+                               title="قبلی" aria-label="Previous">
+                                <span aria-hidden="true">قبلی</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item active">
+                        <a class="page-link" href="#">
+                            <span class="current"
+                                  dir="rtl"> صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }} </span>
+                        </a>
+                    </li>
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item ">
+                            <a class="page-link"
+                               href="{% url 'products:store-product-list' %}?page={{ page_obj.next_page_number }}&{{ ordering }}"
+                               title="بعدی"
+                               aria-label="Next">
+                                <span aria-hidden="true">بعدی</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    {% endif %}
+    <!-- pagination -->
+{% endblock content %}

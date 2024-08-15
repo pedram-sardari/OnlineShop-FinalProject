@@ -1,0 +1,19 @@
+{% extends 'website/template_sidebar_page.html' %}
+{% load static %}
+
+
+
+{% block side-bar %}
+    <a href="{% url 'vendors:register-owner' %}" class="list-group-item list-group-item-action {{ staff_register }}">
+        ثبت نام فروشنده
+    </a>
+    <a href="{% url 'customers:register' %} " class="list-group-item list-group-item-action {{ customer_register }}">
+        ثبت نام مشتری
+    </a>
+{% endblock %}
+
+
+{% block main-content %}
+    {% include 'accounts/../website/sections/form.html' %}
+{% endblock %}
+          

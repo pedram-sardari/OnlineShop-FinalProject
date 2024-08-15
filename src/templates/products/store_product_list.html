@@ -1,6 +1,16 @@
 {% load static %}
 <div class="container border rounded-3 mx-auto mt-5 pt-3">
 
+    <!-- Add new product: (only available from staff dashboard) -->
+    {% if dashboard_store_product_section %}
+        {% if is_owner or is_manager %}
+            <div class="d-grid gap-2">
+                <a href="{% url 'vendors:store-product-create' %}" class="btn btn-success" type="button">افزودن محصول</a>
+            </div>
+        {% endif %}
+    {% endif %}
+    <!-- Add new product: (only available from staff dashboard) -->
+
     <!-- filtering -->
     <div class="row">
         <div class="d-flex ">
@@ -86,6 +96,17 @@
                             <div>
                                 <p class="card-text text-center">{{ store_product.price }} تومان</p>
                             </div>
+                            <!-- Edit and Delete buttons (only available from staff dashboard) -->
+                            {% if dashboard_store_product_section %}
+                                {% if is_owner or is_manager %}
+                                    <form class="d-flex my-3 justify-content-center">
+                                        <button type="button" class="btn btn-danger ms-1">حذف</button>
+                                        <button type="button" class="btn btn-info me-1">ویرایش</button>
+                                    </form>
+                                {% endif %}
+
+                            {% endif %}
+                            <!-- Edit and Delete buttons (only available from staff dashboard) -->
                         </div>
                     </div>
                 </div>

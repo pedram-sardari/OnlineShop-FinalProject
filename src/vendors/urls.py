@@ -30,4 +30,9 @@ urlpatterns = [
     path('panel/staff/<int:pk>/delete/',
          views.StaffDeleteView.as_view(),
          name='staff-delete'),
+
+    path('panel/store-product/',
+         views.DashboardStoreProductListView.as_view(),
+         name='store-product-list'),
+
 ]

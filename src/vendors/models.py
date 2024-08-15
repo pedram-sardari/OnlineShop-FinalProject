@@ -58,6 +58,14 @@ class Staff(User):
         verbose_name = _("کارمند")
         verbose_name_plural = _("کارمندان")
 
+    @classmethod
+    def get_staff(cls, user):
+        return cls.objects.filter(id=user.id).first()
+
+    @classmethod
+    def is_staff(cls, user):
+        return cls.objects.filter(id=user.id).exists()
+
     def set_group(self):
         if self.role == self.Roles.OWNER:
             group = Group.objects.get(name=self.Roles.OWNER)

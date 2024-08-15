@@ -30,12 +30,12 @@
     </a>
     <!-- user_address_list -->
 
-    <!-- user_address_list -->
+    <!-- change password -->
     <a href="{% url 'home' %} "
        class="list-group-item list-group-item-action {{ customer_register }}">
         رمز عبور
     </a>
-    <!-- user_address_list -->
+    <!-- change password -->
 
     <!-- staff_selected -->
     {% if is_staff %}
@@ -58,27 +58,32 @@
     </a>
     <!-- user_address_list -->
 
-    <!-- user_address_list -->
-    <a href="{% url 'home' %} "
-       class="list-group-item list-group-item-action {{ customer_register }}">
-        محصولات
-    </a>
-    <!-- user_address_list -->
+    <!-- store product list -->
+    {% if is_staff %}
+        <a href="{% url 'vendors:store-product-list' %} "
+           class="list-group-item list-group-item-action {{ customer_register }}">
+            محصولات
+        </a>
+    {% endif %}
+    <!-- store product list -->
 
     <!-- user_address_list -->
-    <a href="{% url 'home' %} " class="list-group-item list-group-item-action {{ customer_register }}">
-        نمایش نظرات و امتیازات
-    </a>
+    {% if is_customer %}
+        <a href="{% url 'customers:my-comment-list' %} "
+           class="list-group-item list-group-item-action {{ customer_register }}">
+            نظرات و امتیازات من
+        </a>
+    {% endif %}
     <!-- user_address_list -->
 
-    <!-- user_address_list -->
+    <!-- reports -->
     {% if is_owner or is_superuser %}
         <a href="{% url 'home' %} "
            class="list-group-item list-group-item-action {{ customer_register }}">
             گزارشات
         </a>
     {% endif %}
-    <!-- user_address_list -->
+    <!-- reports -->
 
 {% endblock %}
 
@@ -107,7 +112,8 @@
         <div>
             <ul class="nav nav-pills border-bottom pb-3 mb-5">
                 <li class="nav-item">
-                    <a href="{% url 'vendors:staff-list' %}" class="nav-link {{ store_info_selected }}" aria-current="page">
+                    <a href="{% url 'vendors:staff-list' %}" class="nav-link {{ store_info_selected }}"
+                       aria-current="page">
                         اطلاعات فروشگاه
                     </a>
                 </li>
@@ -121,6 +127,19 @@
             {% elif staff %}
                 {% include 'vendors/dashboard/staff_detail.html' %}
             {% endif %}
+        </div>
+    {% endif %}
+
+
+    {% if my_comment_list_section %}
+        <div class="text-end">
+            {% include 'products/comment_list.html' %}
+        </div>
+    {% endif %}
+
+    {% if dashboard_store_product_section %}
+        <div>
+            {% include 'products/store_product_list.html' %}
         </div>
     {% endif %}
 

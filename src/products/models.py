@@ -27,17 +27,32 @@ class Discount(CreateUpdateDateTimeFieldMixin, models.Model):
     # todo: validate both 'cash_discount' and 'percentage_discount' are not set 0
 
     class Meta:
-        unique_together = ("cash_discount", "percentage_discount", "expiration_date")
         verbose_name = _("تخفیف")
         verbose_name_plural = _("تخفیفات")
 
     def get_final_cash_discount(self, price=0):
         return self.cash_discount + round((self.percentage_discount / 100) * price)
 
+    def get_final_percentage_discount(self, price=0):
+        pass  # todo: implementation
+
     def __str__(self):
         if self.cash_discount and self.percentage_discount:
             return f"{self.percentage_discount}% - {self.cash_discount} تومان "
         return f"{self.percentage_discount}%" or f"{self.cash_discount}%"
+
+
+class StoreDiscount(Discount):
+    store = models.ForeignKey(
+        Store,
+        on_delete=models.CASCADE,
+        related_name='store_discounts',
+        verbose_name=_("فروشگاه")
+    )
+
+    class Meta:
+        verbose_name = _("تخفیف فروشگاه")
+        verbose_name_plural = _("تخفیفات فروشگاه")
 
 
 class Coupon(models.Model):
@@ -219,8 +234,8 @@ class StoreProduct(CreateUpdateDateTimeFieldMixin, models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="store_products",
                                 verbose_name=_("محصول"))
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="store_products", verbose_name=_("فروشگاه"))
-    discount = models.ForeignKey(
-        Discount,
+    store_discount = models.ForeignKey(
+        StoreDiscount,
         on_delete=models.SET_NULL,
         related_name="store_products",
         null=True,

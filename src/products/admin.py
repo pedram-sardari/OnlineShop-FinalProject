@@ -9,6 +9,7 @@ from .models import (
     Color,
     Rating,
     Discount,
+    StoreDiscount,
     Coupon,
     Comment
 )
@@ -46,6 +47,15 @@ class ProductImageAdmin(admin.ModelAdmin):
 
 @admin.register(Discount)
 class DiscountAdmin(admin.ModelAdmin):
+    pass
+    list_display = ['id', 'str_display']
+
+    def str_display(self, obj):
+        return str(obj)
+
+
+@admin.register(StoreDiscount)
+class StoreDiscountAdmin(admin.ModelAdmin):
     pass
     list_display = ['id', 'str_display']
 

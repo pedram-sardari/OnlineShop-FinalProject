@@ -1,15 +1,19 @@
-{% load static  template_filters %}
+{% load static template_filters %}
 <table class="table table-striped align-middle">
     <thead>
     <tr>
         <th scope="col">#</th>
+        <th scope="col"></th>
+        <th scope="col">نام محصول</th>
+        <th scope="col">رنگ محصول</th>
+        <th scope="col">قیمت</th>
         <th scope="col">تخفیف نقدی</th>
         <th scope="col">تخفیف درصدی</th>
-        <th scope="col">تاریخ انقضا</th>
-        <th scope="col">فعال</th>
+        <th scope="col">تعداد موجود</th>
+        <th scope="col">موجود</th>
         {% if is_owner %}
             <th scope="col">
-                <a href="{% url 'vendors:store-discount-create' %}">
+                <a href="{% url 'vendors:store-product-create-select-product' %}">
                     <button type="button" class="btn btn-success py-0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                             <g fill="none" fill-rule="evenodd">
@@ -18,7 +22,7 @@
                                       d="M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4v4a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-4H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h4zm4 0h-2v5a1 1 0 0 1-1 1H5v2h5a1 1 0 0 1 1 1v5h2v-5a1 1 0 0 1 1-1h5v-2h-5a1 1 0 0 1-1-1z"></path>
                             </g>
                         </svg>
-                        تخفیف جدید
+                        افزودن محصول به فروشگاه
                     </button>
                 </a>
             </th>
@@ -26,16 +30,30 @@
     </tr>
     </thead>
     <tbody>
-    {% for store_discount in store_discount_list %}
+    {% for store_product in store_product_list %}
         <tr>
             <th scope="row">{{ forloop.counter }}</th>
             <td>
-                {{ store_discount.cash_discount|default_if_none }}
+                {% if store_product.product.get_default_image %}
+                    <img class="rounded-circle border border-2 border-primary"
+                         src="{{ store_product.product.get_default_image.url }}" alt="photo"
+                         width="85" height="85">
+                {% else %}
+                    <img class="rounded-circle border border-2 border-primary"
+                         src="{% static 'products/img/product-default-image.png' %}" alt="static"
+                         width="85" height="85">
+                {% endif %}
             </td>
-            <td>{{ store_discount.percentage_discount|default_if_none }}%</td>
-            <td>{{ store_discount.expiration_date|date|default_if_none }}</td>
             <td>
-                {% if store_discount.is_active %}
+                {{ store_product.product.name|default_if_none|slice_string }}
+            </td>
+            <td>{{ store_product.product_color.color.value|default_if_none }}</td>
+            <td>{{ store_product.price }}</td>
+            <td>{{ store_product.store_discount.cash_discount|default_if_none }}</td>
+            <td>{{ store_product.store_discount.percentage_discount|default_if_none }}</td>
+            <td>{{ store_product.inventory }}</td>
+            <td>
+                {% if store_product.is_available %}
                     <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 72 72">
                         <path fill="#b1cc33"
                               d="m61.5 23.3l-8.013-8.013l-25.71 25.71l-9.26-9.26l-8.013 8.013l17.42 17.44z"></path>
@@ -48,7 +66,7 @@
             {% if is_owner %}
                 <td>
                     <!-- view detail -->
-                    <a href="{% url 'vendors:staff-detail' store_discount.id %}" class="px-2" title="View"
+                    <a href="{% url 'vendors:store-product-detail' store_product.id %}" class="px-2" title="View"
                        style="text-decoration: none">
                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                             <g fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round"
@@ -62,7 +80,7 @@
                     <!-- view detail -->
 
                     <!-- edit -->
-                    <a href="{% url 'vendors:store-discount-update' store_discount.id %}" class="px-2" title="edit"
+                    <a href="{% url 'vendors:store-product-update' store_product.product.id store_product.id %}" class="px-2" title="edit"
                        style="text-decoration: none">
                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                             <path fill="currentColor"
@@ -76,7 +94,7 @@
                        class="px-2"
                        title="Delete"
                        data-bs-toggle="modal"
-                       data-bs-target="#{{ store_discount.id }}"
+                       data-bs-target="#{{ store_product.id }}"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                             <path fill="none" stroke="red" stroke-linecap="round" stroke-linejoin="round"
@@ -88,7 +106,7 @@
                     </a>
                     <!-- Modal -->
 
-                    <div class="modal fade" id="{{ store_discount.id }}" tabindex="-1"
+                    <div class="modal fade" id="{{ store_product.id }}" tabindex="-1"
                          aria-labelledby="exampleModalLabel"
                          aria-hidden="true">
                         <div class="modal-dialog">
@@ -102,16 +120,16 @@
                                 </div>
                                 <div class="modal-body text-dark"
                                      style="font-family:'Open Sans', sans-serif">
-                                    آیا از حذف کردن تخفیف
+                                    آیا از حذف کردن محصول
                                     <span class="text-danger font-weight-bold">
-                                "{{ store_discount }}" 
+                                "{{ store_product.product.name }}" 
                                 </span> مطمئن هستید؟
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                         لغو
                                     </button>
-                                    <form action="{% url 'vendors:store-discount-delete' store_discount.id %}"
+                                    <form action="{% url 'vendors:store-product-delete' store_product.id %}"
                                           method="post">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-danger">

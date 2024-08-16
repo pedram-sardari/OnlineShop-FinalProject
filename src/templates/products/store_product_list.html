@@ -1,11 +1,11 @@
 {% load static %}
-<div class="container border rounded-3 mx-auto mt-5 pt-3">
 
     <!-- Add new product: (only available from staff dashboard) -->
     {% if dashboard_store_product_section %}
         {% if is_owner or is_manager %}
             <div class="d-grid gap-2">
-                <a href="{% url 'vendors:store-product-create' %}" class="btn btn-success" type="button">افزودن محصول به فروشگاه</a>
+                <a href="{% url 'vendors:store-product-create-select-product' %}" class="btn btn-success"
+                   type="button">افزودن محصول به فروشگاه</a>
             </div>
         {% endif %}
     {% endif %}
@@ -154,4 +154,3 @@
         </div>
     {% endif %}
     <!-- pagination -->
-</div>

@@ -48,3 +48,33 @@ class StoreDiscountForm(FormatFormFieldsMixin, forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.format_fields()
 
+
+class SelectProductForm(FormatFormFieldsMixin, forms.Form):
+    product = forms.ModelChoiceField(label=_("محصول مورد نظر"), queryset=Product.objects.filter(is_available=True))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.format_fields()
+
+
+class StoreProductForm(FormatFormFieldsMixin, forms.ModelForm):
+    class Meta:
+        model = StoreProduct
+        fields = ['price', 'inventory', 'product_color', 'store_discount', 'is_available']
+
+    def __init__(self, *args, **kwargs):
+        self.product = kwargs.pop('product', None)
+        self.store = kwargs.pop('store', None)
+        super().__init__(*args, **kwargs)
+
+        # Fill the `select` tag with corresponding data
+        if self.product:
+            self.fields['store_discount'].queryset = StoreDiscount.objects.filter(store=self.store)
+            # if self.instance and self.instance.store_discount:
+            #     self.fields['store_discount'].initial = StoreDiscount.objects.get(id=self.instance.store_discount.id)
+        if self.store:
+            # if self.instance and self.instance.product_color:
+            #     self.fields['product_color'].initial = ProductColor.objects.get(id=self.instance.store_discount.id)
+            self.fields['product_color'].queryset = ProductColor.objects.filter(product=self.product)
+        self.format_fields()
+

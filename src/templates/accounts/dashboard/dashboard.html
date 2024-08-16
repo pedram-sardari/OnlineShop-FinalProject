@@ -54,6 +54,15 @@
 
     <!-- store product list -->
     {% if is_staff %}
+        <a href="{% url 'vendors:store-product-list' %} "
+           class="list-group-item list-group-item-action {{ dashboard_store_product_section }}">
+            محصولات
+        </a>
+    {% endif %}
+    <!-- store product list -->
+
+    <!-- store discount list -->
+    {% if is_staff %}
         <a href="{% url 'vendors:store-discount-list' %} "
            class="list-group-item list-group-item-action {{ store_discount_section }}">
             تخفیفات
@@ -129,10 +138,26 @@
             {% include 'products/comment_list.html' %}
         </div>
 
-    {% elif dashboard_store_product_section %}
+    {% elif dashboard_store_product_list_section %}
 
         <div>
-            {% include 'products/store_product_list.html' %}
+            {% include 'vendors/dashboard/store_product_list.html' %}
         </div>
+
+    {% elif dashboard_category_list_section %}
+
+        <div>
+            {% include 'products/category_list.html' %}
+        </div>
+
+    {% elif store_discount_section %}
+
+        <div>
+            {% include 'vendors/dashboard/store_discount_list.html' %}
+        </div>
+
+    {% endif %}
+    {% if create_new_product_link_section %}
+        <p class="text-right mt-4">اگر محصول مورد نظر شما در سایت وجود ندارد میتوانید <a href="">اضافه کنید</a>. </p>
     {% endif %}
 {% endblock %}

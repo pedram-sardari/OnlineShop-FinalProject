@@ -264,7 +264,6 @@ class StoreProduct(CreateUpdateDateTimeFieldMixin, models.Model):
     objects = SoftDeleteManager()
 
     class Meta:
-        unique_together = ('product', 'product_color')
         verbose_name = _("محصول فروشگاه")
         verbose_name_plural = _("محصولات فروشگاه")
 

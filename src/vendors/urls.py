@@ -51,4 +51,28 @@ urlpatterns = [
          views.DashboardStoreProductListView.as_view(),
          name='store-product-list'),
 
+    path('panel/store-product/<int:pk>/',
+         views.DashboardStoreProductDetailView.as_view(),
+         name='store-product-detail'),
+
+    path('panel/product/<int:product_id>/store-product/create/',
+         views.StoreProductsCreateView.as_view(),
+         name='store-product-create'),
+
+    path('panel/product/<int:product_id>/store-product/<int:pk>/update/',
+         views.DashboardStoreProductUpdateView.as_view(),
+         name='store-product-update'),
+
+    path('panel/store-product/<int:pk>/delete/',
+         views.DashboardStoreProductDeleteView.as_view(),
+         name='store-product-delete'),
+
+    path('panel/store-product/create/select-product/',
+         views.SelectProductView.as_view(),
+         name='store-product-create-select-product'),
+
+    path('panel/store-product/create/select-category/',
+         views.SelectCategoryListView.as_view(),
+         name='store-product-create-select-category'),
+
 ]

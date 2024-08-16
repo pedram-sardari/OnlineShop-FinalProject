@@ -49,4 +49,4 @@ class CustomUserAddressAdmin(admin.ModelAdmin):
     list_display = ("id", "user", 'province', 'city')
 
     def get_queryset(self, request):
-        return UserAddress.objects.all_addresses()  # todo: remove after testings
+        return UserAddress.objects.all_objects()  # todo: remove after testings

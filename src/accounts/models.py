@@ -1,19 +1,16 @@
+import datetime
 from datetime import datetime
-import copy
-from django.forms.models import model_to_dict
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
-from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-import jdatetime
-import datetime
 
+from website.manager import SoftDeleteManager
 from website.models import Address
 from website.validators import phone_regex
-from .managers import UserManager, UserAddressManager
+from .managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -165,7 +162,7 @@ class UserAddress(Address):
     is_default = models.BooleanField(verbose_name=_("آدرس پیش فرض"),
                                      default=False)  # todo: each user should only have ONE default address
 
-    objects = UserAddressManager()
+    objects = SoftDeleteManager()
 
     class Meta:
         verbose_name = _("آدرس کاربر")

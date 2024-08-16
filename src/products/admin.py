@@ -71,6 +71,8 @@ class CouponAdmin(admin.ModelAdmin):
 @admin.register(StoreProduct)
 class StoreProductAdmin(admin.ModelAdmin):
     pass
+    def get_queryset(self, request):
+        return self.model.objects.all_objects()  # todo: remove after testings
 
 
 @admin.register(Rating)

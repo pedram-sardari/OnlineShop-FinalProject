@@ -8,6 +8,7 @@ from customers.models import Customer
 from vendors.models import Store
 from website.models import Address, CreateUpdateDateTimeFieldMixin
 from . import utils
+from website.manager import SoftDeleteManager
 
 User = get_user_model()
 
@@ -255,10 +256,27 @@ class StoreProduct(CreateUpdateDateTimeFieldMixin, models.Model):
         blank=True,
         verbose_name=_("رنگ محصول")
     )
+    is_deleted = models.BooleanField(
+        default=False,
+        help_text=_("Designates whether this user has deleted its account.")
+    )
+
+    objects = SoftDeleteManager()
 
     class Meta:
+        unique_together = ('product', 'product_color')
         verbose_name = _("محصول فروشگاه")
         verbose_name_plural = _("محصولات فروشگاه")
+
+    def soft_delete(self):
+        self.is_deleted = True
+        self.save()
+
+    def delete(self, *args, soft_delete=False, **kwargs):
+        if soft_delete:
+            self.soft_delete()
+        else:
+            super().delete(*args, *kwargs)
 
     def __str__(self):
         return f"{self.product}-{self.store}"

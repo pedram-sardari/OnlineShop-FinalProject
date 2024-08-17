@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 
 from website.manager import SoftDeleteManager
 from website.models import Address
-from website.validators import phone_regex
+from website.validators import phone_validator
 from .managers import UserManager
 
 
@@ -42,7 +42,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True,
         blank=True,
         default=None,
-        validators=[phone_regex],
+        validators=[phone_validator],
         error_messages={
             "unique": _("A user with that phone already exists."),
         },
@@ -101,7 +101,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         """Return the short name for the user."""
-        return self.email.split('@')[0]
+        if self.email:
+            return self.email.split('@')[0]
+        return ''
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
@@ -152,7 +154,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             super().delete(*args, *kwargs)
 
     def __str__(self):
-        return self.get_full_name() or self.get_short_name()
+        return self.get_full_name() or self.get_short_name() or self.phone
 
 
 class UserAddress(Address):

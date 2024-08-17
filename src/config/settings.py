@@ -148,3 +148,4 @@ MESSAGE_TAGS = {
 }
 
 OTP_EXPIRATION_TIME = 50 * 2  # in second
+OTP_LENGTH = 6

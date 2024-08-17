@@ -2,6 +2,7 @@ import random
 
 from dotenv import load_dotenv, dotenv_values
 from kavenegar import *
+from django.conf import settings
 
 
 def send_otp(otp, phone='09190893312'):
@@ -23,4 +24,6 @@ def send_otp(otp, phone='09190893312'):
 
 
 def generate_otp():
-    return str(random.randint(100000, 999999))
+    min_num = int(f"1{'0' * (settings.OTP_LENGTH - 1)}")
+    max_num = int(f"9{'9' * (settings.OTP_LENGTH - 1)}")
+    return str(random.randint(min_num, max_num))

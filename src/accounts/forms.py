@@ -1,8 +1,8 @@
 from django import forms
 from django.conf import settings
-from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, BaseUserCreationForm
+from django.utils.translation import gettext_lazy as _
 
 from accounts.models import UserAddress
 from website.forms import FormatFormFieldsMixin
@@ -38,10 +38,19 @@ class UserAddressForm(FormatFormFieldsMixin, forms.ModelForm):
         self.format_fields()
 
 
+class RegisterEmailForm(FormatFormFieldsMixin, BaseUserCreationForm):
+    """Be sure to define a `Meta` class."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.format_fields()
+
+
 class PhoneForm(FormatFormFieldsMixin, forms.Form):
     phone = forms.CharField(max_length=11, label=_("شماره تماس"), validators=[phone_validator])
 
     def __init__(self, *args, **kwargs):
+        kwargs.pop('request', None)  # LoginView passes request to this form inside the LoginPhone
         super().__init__(*args, **kwargs)
         self.format_fields()
 

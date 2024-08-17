@@ -7,9 +7,21 @@ from django.contrib.auth.views import LogoutView
 
 app_name = 'vendors'
 urlpatterns = [
-    path('register/',
-         views.OwnerRegisterView.as_view(),
-         name='register-owner'),
+    path('register-by-email/',
+         views.OwnerRegisterByEmailView.as_view(),
+         name='register-owner-by-email'),
+
+    path('register-by-phone/',
+         views.OwnerRegisterByPhoneView.as_view(),
+         name='register-owner-by-phone'),
+
+    path('register-by-phone/verify/',
+         views.OwnerRegisterByPhoneVerifyView.as_view(),
+         name='register-owner-by-phone-verify'),
+
+    path('store/create/',
+         views.StoreCreateView.as_view(),
+         name='store-create'),
 
     path('panel/staff/',
          views.StaffListView.as_view(),

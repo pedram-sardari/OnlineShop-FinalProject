@@ -4,16 +4,29 @@
 
 
 {% block side-bar %}
-    <a href="{% url 'vendors:register-owner' %}" class="list-group-item list-group-item-action {{ staff_register }}">
+    <a href="{% url 'vendors:register-owner-by-email' %}" class="list-group-item list-group-item-action {{ owner_register }}">
         ثبت نام فروشنده
     </a>
-    <a href="{% url 'customers:register' %} " class="list-group-item list-group-item-action {{ customer_register }}">
+    <a href="{% url 'customers:register-by-email' %} " class="list-group-item list-group-item-action {{ customer_register }}">
         ثبت نام مشتری
     </a>
 {% endblock %}
 
 
 {% block main-content %}
-    {% include 'accounts/../website/sections/form.html' %}
+    <ul class="nav nav-pills border-bottom pb-3 ">
+        <li class="nav-item">
+            <a href="{{ by_email_link }}" class="nav-link {{ by_email }}"
+               aria-current="page">
+                با ایمیل
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ by_phone_link }}" class="nav-link {{ by_phone }}">
+                با شماره موبایل
+            </a>
+        </li>
+    </ul>
+    {% include 'website/sections/form.html' %}
 {% endblock %}
           

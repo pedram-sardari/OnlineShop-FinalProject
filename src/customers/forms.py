@@ -1,18 +1,14 @@
 from django import forms
-from django.contrib.auth.forms import BaseUserCreationForm
 
+from accounts.forms import RegisterEmailForm
 from website.forms import FormatFormFieldsMixin
 from .models import Customer
 
 
-class CustomerEmailRegisterForm(FormatFormFieldsMixin, BaseUserCreationForm):
+class CustomerRegisterForm(RegisterEmailForm):
     class Meta:
         model = Customer
         fields = ['email']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.format_fields()
 
 
 class CustomerChangeForm(FormatFormFieldsMixin, forms.ModelForm):

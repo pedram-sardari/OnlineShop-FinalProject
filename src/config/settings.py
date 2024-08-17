@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 
 from django.contrib import messages
+from django.urls import reverse, reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -147,5 +148,9 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
-OTP_EXPIRATION_TIME = 50 * 2  # in second
+LOGIN_URL = reverse_lazy('accounts:login-email')
+CUSTOMERS_LOGIN_REDIRECT_URL = reverse_lazy('home')
+STAFF_LOGIN_REDIRECT_URL = reverse_lazy('accounts:personal-info-detail')
+OWNER_REGISTRATION_TIMEOUT = 60 * 10
+OTP_EXPIRATION_TIME = 60 * 2  # in second
 OTP_LENGTH = 6

@@ -27,7 +27,7 @@
                         </div>
                     </form>
                     <div class="my-2 text-center fs-5">
-                        <a href="{% url 'accounts:login-phone' %}" class="btn btn-outline-primary">ورورد با شماره
+                        <a href="{% url 'accounts:login-phone' %}?next={{ next }}" class="btn btn-outline-primary">ورورد با شماره
                             موبایل</a>
                     </div>
 
@@ -35,7 +35,7 @@
                         <a href="#!" class="link-secondary text-decoration-none">فراموشی رمز عبور</a>
                     </div>
                     <div class="my-2">
-                        <a href="{% url 'vendors:register-owner' %}" class="link-secondary text-decoration-none">ساختن
+                        <a href="{% url 'vendors:register-owner-by-email' %}" class="link-secondary text-decoration-none">ساختن
                             حساب جدید</a>
                     </div>
                 </div>

@@ -1,55 +1,126 @@
+from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import login
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db import transaction
-from django.db.models import Min, F, Sum
-from django.http import HttpResponseRedirect
+from django.db.models import Sum
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import FormView, CreateView, ListView, DetailView, UpdateView, DeleteView
 
+from accounts.forms import RegisterPhoneForm
+from accounts.views_base import SendOTPView, VerifyOTPView
 from products.forms import StoreProductForm, SelectProductForm, StoreDiscountForm
 from products.models import StoreProduct, Category, StoreDiscount, Product
-from website.mixins import IsStaffOfOwnerStore
-from website.models import Address
-from .forms import OwnerRegistrationForm, StaffRegistrationForm, StaffUpdateForm
+from website.mixins import IsStaffOfOwnerStore, IsNotAuthenticated
+from .forms import OwnerRegisterEmailForm, StaffRegistrationForm, StaffUpdateForm, StoreForm
 from .models import Owner, Store, Staff
 
 
-class OwnerRegisterView(UserPassesTestMixin, FormView):
-    model = Owner
+class OwnerRegisterByEmailView(IsNotAuthenticated, FormView):
     template_name = 'accounts/register.html'
-    form_class = OwnerRegistrationForm
-    success_url = reverse_lazy('accounts:login-email')
-    extra_context = {'staff_register': 'active'}
+    form_class = OwnerRegisterEmailForm
+    success_url = reverse_lazy('vendors:store-create')
+    extra_context = {
+        'owner_register': 'active',
+        'by_phone_link': reverse_lazy('vendors:register-owner-by-phone'),
+        'by_email_link': reverse_lazy('vendors:register-owner-by-email'),
+        'by_email': 'active',
+        'submit_button_content': 'ادامه'
+    }
+
+    def form_valid(self, form):
+        self.request.session['email'] = form.cleaned_data.get('email')
+        self.request.session['hashed_password'] = make_password(form.cleaned_data.get('password2'))
+        self.request.session.set_expiry(settings.OWNER_REGISTRATION_TIMEOUT)
+        response = redirect(self.success_url)
+        response.set_cookie('sessionid', self.request.session.session_key)
+        return response
+
+    def form_invalid(self, form):
+        for error, message in form.errors.items():
+            messages.error(self.request, message)
+        return super().form_invalid(form)
+
+
+class OwnerRegisterByPhoneView(IsNotAuthenticated, SendOTPView):
+    template_name = 'accounts/register.html'
+    form_class = RegisterPhoneForm
+    success_url = reverse_lazy('vendors:register-owner-by-phone-verify')
+    extra_context = {
+        'owner_register': 'active',
+        'by_email_link': reverse_lazy('vendors:register-owner-by-email'),
+        'by_phone_link': reverse_lazy('vendors:register-owner-by-phone'),
+        'by_phone': 'active',
+        'submit_button_content': 'دریافت کد تائید'
+    }
+
+
+class OwnerRegisterByPhoneVerifyView(IsNotAuthenticated, VerifyOTPView):
+    template_name = 'accounts/register.html'
+    model = Owner
+    success_url = reverse_lazy('vendors:store-create')
+    failed_url = reverse_lazy('accounts:login-phone')
+    extra_context = {
+        'owner_register': 'active',
+        'by_email_link': reverse_lazy('vendors:register-owner-by-email'),
+        'by_phone_link': reverse_lazy('vendors:register-owner-by-phone'),
+        'by_phone': 'active',
+        'submit_button_content': 'ادامه'
+    }
+
+    def form_valid(self, form):
+        self.request.session.pop('otp')
+        self.request.session.set_expiry(settings.OWNER_REGISTRATION_TIMEOUT)
+        response = redirect(self.success_url)
+        response.set_cookie('sessionid', self.request.session.session_key)
+        return response
+
+
+class StoreCreateView(UserPassesTestMixin, FormView):
+    template_name = 'accounts/register.html'
+    form_class = StoreForm
+    success_url = reverse_lazy('accounts:personal-info-detail')
+    extra_context = {
+        'owner_register': 'active',
+        'by_email_link': reverse_lazy('vendors:register-owner-by-email'),
+        'by_email': 'active',
+    }
 
     def test_func(self):
-        """A logged in must not be able to register"""
-        return not self.request.user.is_authenticated
+        phone = self.request.session.get('phone')
+        email = self.request.session.get('email')
+        hashed_password = self.request.session.get('hashed_password')
+        return (email and hashed_password) or phone
 
     def handle_no_permission(self):
-        messages.error(self.request, 'شما با یک حساب کاربری در حال حاضر وارد شده اید')
-        return redirect('home')
+        raise Http404()
+
+    def create_owner(self):
+        phone = self.request.session.get('phone')
+        email = self.request.session.get('email')
+        hashed_password = self.request.session.get('hashed_password')
+        if email and hashed_password:
+            return Owner(email=email, password=hashed_password)
+        elif phone:
+            return Owner(phone=phone)
 
     @transaction.atomic
     def form_valid(self, form):
-        owner = form.save(commit=False)
-        address = Address.objects.create(
-            province=form.cleaned_data['province'],
-            city=form.cleaned_data['city'],
-            neighborhood=form.cleaned_data['neighborhood'],
-            street=form.cleaned_data['street'],
-            alley=form.cleaned_data['alley'],
-            no=form.cleaned_data['no'],
-            zipcode=form.cleaned_data['zipcode']
-        )
+        owner = self.create_owner()
+        address = form.save()  # It's an `Address Form model`
         store = Store.objects.create(
             name=form.cleaned_data['store_name'],
             address=address
         )
         owner.store = store
         owner.save()
+        self.request.session.flush()
+        login(self.request, owner)
         messages.success(self.request, f"Your account has been created successfully!")
         return super().form_valid(form)
 
@@ -150,7 +221,8 @@ class StaffDeleteView(PermissionRequiredMixin, IsStaffOfOwnerStore, DeleteView):
         return super().form_invalid(form)
 
 
-class StoreDiscountListView(ListView):
+class StoreDiscountListView(PermissionRequiredMixin, ListView):
+    permission_required = ['products.view_storediscount']
     model = StoreDiscount
     template_name = 'accounts/dashboard/dashboard.html'
     extra_context = {'store_discount_section': 'active'}
@@ -161,7 +233,8 @@ class StoreDiscountListView(ListView):
         return self.model.objects.filter(store=owner.store)
 
 
-class StoreDiscountCreateView(CreateView):
+class StoreDiscountCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = ['products.add_storediscount']
     form_class = StoreDiscountForm
     template_name = 'accounts/dashboard/dashboard.html'
     extra_context = {'store_discount_section': 'active'}
@@ -182,7 +255,8 @@ class StoreDiscountCreateView(CreateView):
         return super().form_invalid(form)
 
 
-class StoreDiscountUpdateView(UpdateView):
+class StoreDiscountUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ['products.change_storediscount']
     model = StoreDiscount
     form_class = StoreDiscountForm
     template_name = 'accounts/dashboard/dashboard.html'
@@ -200,7 +274,8 @@ class StoreDiscountUpdateView(UpdateView):
         return super().form_invalid(form)
 
 
-class StoreDiscountDeleteView(DeleteView):
+class StoreDiscountDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = ['products.delete_storediscount']
     model = StoreDiscount
     template_name = 'accounts/dashboard/dashboard.html'
     extra_context = {'store_discount_section': 'active'}
@@ -316,8 +391,9 @@ class DashboardStoreProductDeleteView(PermissionRequiredMixin, DeleteView):
         return super().form_invalid(form)
 
 
-class SelectProductView(FormView):
+class SelectProductView(PermissionRequiredMixin, FormView):
     """To create a new `StoreProduct` you need to provide `Product` first. """
+    permission_required = ['products.add_storeproduct']
     template_name = 'accounts/dashboard/dashboard.html'
     form_class = SelectProductForm
     extra_context = {
@@ -333,7 +409,8 @@ class SelectProductView(FormView):
         return redirect(reverse('vendors:store-product-create', kwargs={'product_id': product.id}))
 
 
-class StoreProductsCreateView(CreateView):
+class StoreProductsCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = ['products.add_storeproduct']
     model = StoreProduct
     form_class = StoreProductForm
     template_name = 'accounts/dashboard/dashboard.html'
@@ -361,7 +438,8 @@ class StoreProductsCreateView(CreateView):
         return super().form_invalid(form)
 
 
-class SelectCategoryListView(ListView):
+class SelectCategoryListView(PermissionRequiredMixin, ListView):
+    permission_required = ['products.add_product']
     model = Category
     template_name = 'accounts/dashboard/dashboard.html'
     extra_context = {'dashboard_category_list_section': True}

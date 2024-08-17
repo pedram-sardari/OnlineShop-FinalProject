@@ -1,11 +1,22 @@
-from django.urls import path, reverse_lazy
+from django.urls import path
+
 from . import views
-from accounts import views as accounts_views
-from django.views.generic import TemplateView
-from django.contrib.auth.views import LogoutView
 
 app_name = 'customers'
 urlpatterns = [
-    path('register/', views.CustomerRegisterView.as_view(), name='register'),
-    path('panel/my-comment-list/', views.MyCommentsListView.as_view(), name='my-comment-list'),
+    path('register-by-email/',
+         views.CustomerRegisterByEmailView.as_view(),
+         name='register-by-email'),
+
+    path('register-by-phone/',
+         views.CustomerRegisterByPhoneView.as_view(),
+         name='register-by-phone'),
+
+    path('register-by-phone/verify/',
+         views.CustomerRegisterByPhoneVerifyView.as_view(),
+         name='register-by-phone-verify'),
+
+    path('panel/my-comment-list/',
+         views.MyCommentsListView.as_view(),
+         name='my-comment-list'),
 ]

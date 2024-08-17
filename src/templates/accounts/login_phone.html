@@ -26,23 +26,27 @@
                             {% if login_button %}
                                 <button type="submit" class="btn btn-success my-3 fw-bold fs-5"> ورود</button>
                                 <div class="my-2 text-center fs-5">
-                                    <a href="{% url 'accounts:login-phone' %}" class="btn btn-outline-warning">ویرایش شماره</a>
+                                    <a href="{% url 'accounts:login-phone' %}?next={{ next }}" class="btn btn-outline-warning">ویرایش
+                                        شماره</a>
                                 </div>
-                            {% elif get_code_button %}
+                            {% elif get_otp_button %}
                                 <button type="submit" class="btn btn-info my-3 fw-bold fs-5">دریافت کد</button>
                             {% endif %}
                         </div>
                     </form>
                     <div class="my-2 text-center fs-5">
-                        <a href="{% url 'accounts:login-email' %}" class="btn btn-outline-primary">ورود با ایمیل و رمز
-                            عبور</a>
+                        <a href="{% url 'accounts:login-email' %}?next={{ next }}" class="btn btn-outline-primary">ورود
+                            با ایمیل و رمز
+                            عبور
+                        </a>
                     </div>
 
                     <div class="my-2">
                         <a href="#!" class="link-secondary text-decoration-none">فراموشی رمز عبور</a>
                     </div>
                     <div class="my-2">
-                        <a href="{% url 'vendors:register-owner' %}" class="link-secondary text-decoration-none">ساختن
+                        <a href="{% url 'vendors:register-owner-by-email' %}"
+                           class="link-secondary text-decoration-none">ساختن
                             حساب جدید</a>
                     </div>
                 </div>

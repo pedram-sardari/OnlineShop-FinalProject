@@ -19,7 +19,7 @@ class SendOTPView(FormView):
         self.request.session['otp'] = otp
         self.request.session.set_expiry(settings.OTP_EXPIRATION_TIME)
         send_otp(otp, phone)
-        response = redirect(self.success_url)
+        response = redirect(self.get_success_url())
         response.set_cookie('sessionid', self.request.session.session_key)
         return response
 
@@ -49,7 +49,7 @@ class VerifyOTPView(FormView):
         # Register situation we create the user based on the `model` attribute.
         user, created = self.get_model().objects.get_or_create(phone=phone)
 
-        self.request.session.delete()
+        self.request.session.flush()
         login(self.request, user)
         messages.success(self.request, f"شما با موفقیت وارد شدید `{phone}`")
 

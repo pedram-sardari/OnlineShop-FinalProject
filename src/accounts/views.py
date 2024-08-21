@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, UpdateView, ListView, CreateView, DetailView, DeleteView
 
+from customers.models import Customer
+from orders.utils import sync_session_and_db_carts
 from website.mixins import IsAddressForLoggedInUser, CustomRedirectURLMixin, DjangoLoginDispatchMixin
 from .forms import LoginForm, MyUserChangeForm, UserAddressForm, LoginPhoneForm
 from .models import UserAddress, User
@@ -19,6 +21,8 @@ class EmailLoginView(CustomRedirectURLMixin, LoginView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
+        if customer := Customer.get_customer(user=form.get_user()):
+            sync_session_and_db_carts(self.request, customer)
         messages.success(self.request, f"Welcome dear '{str(self.request.user)}'")
         return response
 

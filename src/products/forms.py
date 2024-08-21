@@ -17,8 +17,11 @@ class CommentForm(FormatFormFieldsMixin, forms.ModelForm):
 
 class ProductColorForm(FormatFormFieldsMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
+        product = kwargs.pop('product', None)
         super().__init__(*args, **kwargs)
-        # self.fields.appent()
+        qs = ProductColor.objects.filter(product=product)
+        self.fields['color'].queryset = qs
+        self.fields['color'].initial = qs.first()
 
     # colors = forms.ModelMultipleChoiceField()
 
@@ -77,4 +80,3 @@ class StoreProductForm(FormatFormFieldsMixin, forms.ModelForm):
             #     self.fields['product_color'].initial = ProductColor.objects.get(id=self.instance.store_discount.id)
             self.fields['product_color'].queryset = ProductColor.objects.filter(product=self.product)
         self.format_fields()
-

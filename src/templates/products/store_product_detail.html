@@ -1,6 +1,7 @@
 {% extends 'website/base.html' %}
 {% load static %}
 {% block content %}
+    {% csrf_token %}
     <!-- product section -->
     <div class="container border rounded-3 mx-auto mt-5 pt-3">
 
@@ -62,16 +63,14 @@
                         >
                     {% endif %}
                 </div>
-                <div class="d-grid gap-2 mt-3">
-                    <button type="submit" class="btn btn-primary fw-bold fs-5">افزودن به سبد خرید</button>
-                </div>
             </div>
             <!-- image carousel -->
 
             <div class="col-9">
                 <!-- product name -->
                 <div class="row">
-                    <h1 class="border-bottom">{{ store_product.product.name }}</h1>
+                    <!-- DO NOT change value of this field. Js uses the content text to fetch data-->
+                    <h1 id="product-name" class="border-bottom">{{ store_product.product.name }}</h1>
                 </div>
                 <!-- product name -->
 
@@ -123,6 +122,15 @@
 
     </div>
     <!-- product section -->
+
+    <!-- vendors section -->
+    <div id="" class="container border rounded-3 mx-auto mt-5 py-3">
+        <h4 class="text-center mb-4">فروشندگان این محصول</h4>
+        <section id="vendors-container">
+            
+        </section>
+    </div>
+    <!-- vendors section -->
 
     <!-- comments section -->
     <div class="container row rounded-3 mx-auto mt-5 p-0">
@@ -188,3 +196,7 @@
     {% endif %}
     <!-- pagination -->
 {% endblock content %}
+
+{% block js %}
+    <script src="{% static 'products/js/storeProductVendors.js' %}"></script>
+{% endblock %}

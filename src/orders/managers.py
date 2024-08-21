@@ -9,7 +9,8 @@ class OrderManager(models.Manager):
 
 class OrderItemManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(order__is_paid=True)
+        # return super().get_queryset().filter(order__is_paid=True)
+        return super().get_queryset().filter()
 
 
 class CartManager(models.Manager):
@@ -19,4 +20,5 @@ class CartManager(models.Manager):
 
 class CartItemManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(order__is_paid=False)
+        # return super().get_queryset().filter(order__is_paid=False)
+        return super().get_queryset().filter()

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # 3rd-party
+    'rest_framework',
 
     # custom
     'accounts',
@@ -154,3 +155,18 @@ STAFF_LOGIN_REDIRECT_URL = reverse_lazy('accounts:personal-info-detail')
 OWNER_REGISTRATION_TIMEOUT = 60 * 10
 OTP_EXPIRATION_TIME = 60 * 2  # in second
 OTP_LENGTH = 6
+
+SESSION_CART_KEY = 'cart'
+
+REST_FRAMEWORK = {
+
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny'
+    ],
+'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}

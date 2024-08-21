@@ -59,7 +59,7 @@ class StoreProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['comment_form'] = CommentForm()
-        context['color_form'] = ProductColorForm()
+        context['color_form'] = ProductColorForm(product=self.get_object().product)
         context['rating_form'] = RatingForm()
         context['comment_list'] = Comment.objects.filter(product=self.get_object().product,
                                                          status=Comment.Status.APPROVED)

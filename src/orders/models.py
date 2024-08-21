@@ -100,7 +100,6 @@ class OrderItem(CreateUpdateDateTimeFieldMixin, models.Model):
         self.order.update_total()
 
 
-
 class Cart(Order):
     objects = CartManager()
 
@@ -109,8 +108,12 @@ class Cart(Order):
         verbose_name = _("سبد خرید")
         verbose_name_plural = _("سبد های خرید")
 
+    @classmethod
+    def get_user_cart(cls, user):
+        return cls.objects.filter(customer_id=user.id).first
+
     def save(self, *args, **kwargs):
-        self.is_paid = True
+        self.is_paid = False
         super().save(*args, **kwargs)
 
 

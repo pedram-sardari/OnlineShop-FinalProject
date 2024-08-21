@@ -70,7 +70,11 @@ class CouponAdmin(admin.ModelAdmin):
 
 @admin.register(StoreProduct)
 class StoreProductAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('id', 'name', 'store')
+
+    def name(self, instance):
+        return instance.product.name
+
     def get_queryset(self, request):
         return self.model.objects.all_objects()  # todo: remove after testings
 

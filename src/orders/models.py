@@ -26,7 +26,9 @@ class Order(CreateUpdateDateTimeFieldMixin, models.Model):
         UserAddress,
         on_delete=models.CASCADE,
         related_name="orders",
-        verbose_name=_("آدرس")
+        verbose_name=_("آدرس"),
+        null=True,
+        blank=True
     )
     customer = models.ForeignKey(
         Customer,

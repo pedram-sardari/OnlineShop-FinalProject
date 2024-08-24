@@ -9,7 +9,8 @@ from django.views.generic import TemplateView, UpdateView, ListView, CreateView,
 from customers.models import Customer
 from orders.utils import sync_session_and_db_carts
 from website.mixins import IsAddressForLoggedInUser, CustomRedirectURLMixin, DjangoLoginDispatchMixin
-from .forms import LoginForm, MyUserChangeForm, UserAddressForm, LoginPhoneForm, EmailAndPasswordChangeForm
+from .forms import (LoginForm, MyUserChangeForm, UserAddressForm, LoginPhoneForm, EmailAndPasswordChangeForm,
+                    UpdatePhoneForm)
 from .models import UserAddress, User
 from .views_base import SendOTPView, VerifyOTPView
 
@@ -55,7 +56,7 @@ class PhoneLoginVerifyView(DjangoLoginDispatchMixin, CustomRedirectURLMixin, Ver
     template_name = 'accounts/login_phone.html'
     model = User
     success_url = reverse_lazy('home')
-    failed_url = reverse_lazy('accounts:login-phone')
+    failed_url = reverse_lazy('accounts:login-phone')  # todo: check if it's necessary and then remove
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -123,7 +124,7 @@ class EmailAndPasswordUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_form(self, form_class=None):
         kwargs = self.get_form_kwargs()
-        kwargs.pop('instance', None) # instance is an extra argument
+        kwargs.pop('instance', None)  # instance is an extra argument
         user = self.get_object()
         return self.form_class(user, **kwargs)
 
@@ -136,6 +137,49 @@ class EmailAndPasswordUpdateView(LoginRequiredMixin, UpdateView):
         for error, message in form.errors.items():
             messages.error(self.request, message)
         return super().form_invalid(form)
+
+
+class PhoneDetailView(LoginRequiredMixin, TemplateView):
+    template_name = 'accounts/dashboard/dashboard.html'
+    extra_context = {
+        'phone_detail': 'active',
+        'account_info': 'active',
+    }
+
+
+class PhoneUpdateView(LoginRequiredMixin, SendOTPView):
+    template_name = 'accounts/dashboard/dashboard.html'
+    form_class = UpdatePhoneForm
+    success_url = reverse_lazy('accounts:phone-update-verify')
+    extra_context = {
+        'account_info': 'active',
+        'form_section': 'active',
+    }
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+
+class PhoneUpdateVerifyView(LoginRequiredMixin, VerifyOTPView):
+    model = User
+    template_name = 'accounts/dashboard/dashboard.html'
+    success_url = reverse_lazy('accounts:phone-detail')
+    extra_context = {
+        'account_info': 'active',
+        'form_section': 'active',
+    }
+
+    def form_valid(self, form):
+        phone = self.request.session.get('phone')
+        self.request.user.phone = phone
+        self.request.user.save()
+
+        self.request.session.flush()
+        messages.success(self.request, f"شماره تماس شما به `{phone} تغییر پیدا کرد.`")
+
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class UserAddressListView(LoginRequiredMixin, ListView):

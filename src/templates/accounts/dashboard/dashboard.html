@@ -96,7 +96,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'vendors:staff-list' %}" class="nav-link {{ staff_selected }}">
+                    <a href="{% url 'accounts:phone-detail' %}" class="nav-link {{ phone_detail }}">
                         شماره تماس
                     </a>
                 </li>
@@ -112,6 +112,8 @@
                 {% include 'accounts/dashboard/personal_info_detail.html' %}
             {% elif email_and_password_detail %}
                 {% include 'accounts/dashboard/email_and_password_detail.html' %}
+            {% elif phone_detail %}
+                {% include 'accounts/dashboard/phone_detail.html' %}
             {% endif %}
         </div>
 

@@ -99,6 +99,19 @@ class RegisterPhoneForm(PhoneForm):
         return phone
 
 
+class UpdatePhoneForm(PhoneForm):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        user = User.objects.filter(phone=phone).first()
+        if user and user.phone != self.user.phone:
+            raise forms.ValidationError('این شماره تماس قبلا ثبت شده است.')
+        return phone
+
+
 class OTPForm(FormatFormFieldsMixin, forms.Form):
     otp = forms.CharField(max_length=settings.OTP_LENGTH, label="کد تایید")
 

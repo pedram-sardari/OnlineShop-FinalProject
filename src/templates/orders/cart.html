@@ -10,121 +10,111 @@
 {% endblock %}
 
 {% block content %}
-
-    <div class="container mt-5">
+    {% csrf_token %}
+    <div id="main-container" class="container mt-5">
         <!-- Address section -->
-        {% if 2 %}
-            {#        {% if is_customer %}#}
-            <div class="row">
-                <div id="" class="col">
-                    <div class="card border shadow-none">
-                        <div class="card-body d-flex">
-                            <div class="d-flex flex-grow-1 align-items-center">
-                                <p class="mb-0 fw-bold ps-2">
-                                    آدرس:
-                                </p>
-                                <p id="selected-address" class="mb-0 ">
-                                    daf
-                                </p>
-                            </div>
-                            <div class="">
-                                <!-- Add Address -->
+        <div id="address-container" class="row ">
+            <div id="" class="col ">
+                <div class="card border shadow-none">
+                    <div class="card-body d-flex">
+                        <div class="d-flex flex-grow-1 align-items-center">
+                            <p id="address-title" class="mb-0 fw-bold ps-2">
+                                آدرس:
+                            </p>
+                            <p id="cart-address" class="mb-0 ">
+                                daf
+                            </p>
+                        </div>
+                        <div class="">
+                            <!-- Add Address -->
 
-                                <!-- addAddress Modal -->
-                                <div class="modal fade" id="addAddress" tabindex="-1"
-                                     aria-labelledby="exampleModalLabel"
-                                     aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-scrollable">
-                                        <div class="modal-content">
-                                            <div class="modal-header d-flex">
-                                                <h1 class="modal-title fs-5 flex-grow-1" id="exampleModalLabel">تغییر
-                                                    آدرس</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <button type="button" class="btn btn-danger">افزودن آدرس</button>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                    بستن
+                            <!-- addAddress Modal -->
+                            <div class="modal fade" id="addAddress" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header d-flex">
+                                            <h1 class="modal-title fs-5 flex-grow-1" id="exampleModalLabel">افزودن
+                                                آدرس</h1>
+                                            <button id="closeAddAddressModal" type="button" class="btn-close"
+                                                    data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="create-new-address-form" action="" method="post">
+                                                {% csrf_token %}
+                                                {{ create_new_address_form }}
+                                                <button id="submit-form-button" type="submit" hidden
+                                                        class="btn btn-primary">
                                                 </button>
-                                                <form action="" method="post">
-                                                    {% csrf_token %}
-                                                    {{ form.as_dev }}
-                                                    <button type="button" class="btn btn-primary">ذخیره</button>
-                                                </form>
-                                            </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button id="send-form-button" type="button" class="btn btn-success">ارسال
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Add Address -->
+                            </div>
+                            <!-- Add Address -->
 
-                                <!-- change Address -->
-                                <!-- Button trigger changeAddress modal -->
-                                <button type="button" class="btn btn-info" data-bs-toggle="modal"
-                                        data-bs-target="#changeAddress">تغییر آدرس
-                                </button>
+                            <!-- change Address -->
+                            <!-- Button trigger changeAddressModal modal -->
+                            <button id="change-address-button" type="button" class="btn btn-info"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#changeAddressModal">انتخاب آدرس
+                            </button>
 
-                                <!-- changeAddress Modal -->
-                                <div class="modal fade" id="changeAddress" tabindex="-1"
-                                     aria-labelledby="exampleModalLabel"
-                                     aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-scrollable">
-                                        <div class="modal-content">
-                                            <div class="modal-header d-flex">
-                                                <h1 class="modal-title fs-5 flex-grow-1" id="exampleModalLabel">تغییر
-                                                    آدرس</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
+                            <!-- changeAddressModal Modal -->
+                            <div class="modal fade" id="changeAddressModal" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header d-flex">
+                                            <h1 class="modal-title fs-5 flex-grow-1" id="exampleModalLabel">انتخاب
+                                                آدرس
+                                            </h1>
+                                            <button id="closeChangeAddressModal" type="button" class="btn-close"
+                                                    data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <select id="change-address-select" class="form-select" multiple
+                                                    aria-label="Multiple select example">
                                                 <!-- Button trigger addAddress modal -->
-                                                <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                                                        data-bs-target="#addAddress">افزودن آدرس
-                                                </button>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                    بستن
-                                                </button>
-                                                <form action="" method="post">
-                                                    {% csrf_token %}
-                                                    {{ form.as_dev }}
-                                                    <button type="button" class="btn btn-primary">ذخیره</button>
-                                                </form>
-                                            </div>
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer d-flex justify-content-between">
+                                            <button id="add-address-button" type="button" class="btn btn-success"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#addAddress">افزودن آدرس جدید
+                                            </button>
+                                            <button id="save-selected-address" type="button" class="btn btn-primary">
+                                                ذخیره
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- change Address -->
-
                             </div>
+                            <!-- change Address -->
+
                         </div>
                     </div>
                 </div>
-            </div> <!-- End row -->
-
-        {% endif %}
+            </div>
+        </div> <!-- End row -->
         <!-- Address section -->
 
         <!-- cart group section -->
         <div class="row">
-            <div id="cart-container" class="col-xl-8">
+            <div class="col-xl-8">
 
+                <div id="cart-container" class="mb-4">
+                    <!-- cart items go here -->
+                </div>
 
-                <div class="row my-4">
-                    <div class="col-sm-6">
-                        <a href="ecommerce-products.html" class="btn btn-link text-muted">
-                            <i class="mdi mdi-arrow-left me-1"></i> Continue Shopping </a>
-                    </div> <!-- end col -->
-                    <div class="col-sm-6">
-                        <div class="text-sm-start mt-2 mt-sm-0">
-                            <a href="ecommerce-checkout.html" class="btn btn-success">
-                                <i class="mdi mdi-cart-outline me-1"></i> ثبت سفارش </a>
-                        </div>
-                    </div> <!-- end col -->
-                </div> <!-- end row-->
             </div>
 
             <div class="col-xl-4">
@@ -163,7 +153,48 @@
                                         </td>
                                     </tr>
                                     </tbody>
+
                                 </table>
+
+                                <!-- Button trigger submitOrderModal modal -->
+                                <button id="confirm-submit-order-modal-button" hidden type="button" class="btn btn-info"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#submitOrderModal">انتخاب آدرس
+                                </button>
+
+                                <!-- submitOrderModal Modal -->
+                                <div class="modal fade" id="submitOrderModal" tabindex="-1"
+                                     aria-labelledby="exampleModalLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header d-flex">
+                                                <h1 class="modal-title fs-5 flex-grow-1" id="exampleModalLabel">
+                                                    تائید ثبت سفارش
+                                                </h1>
+                                                <button id="closeSubmitOrderModal" type="button" class="btn-close"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p> از ثبت سفارش خود مطمئن هستید؟ </p>
+                                            </div>
+                                            <div class="modal-footer d-flex justify-content-end">
+                                                <button id="yes-button" type="button"
+                                                        class="btn btn-success">
+                                                    بله
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- change Address -->
+                                <div class="d-grid gap-2">
+                                    <button id="submitOrderButton" href="#" class="btn btn-success mt-3">
+                                        <i class="mdi mdi-cart-outline me-1"></i>
+                                        ثبت سفارش
+                                    </button>
+                                </div> <!-- end col -->
                             </div>
                             <!-- end table-responsive -->
                         </div>

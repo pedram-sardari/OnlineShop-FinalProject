@@ -114,8 +114,14 @@ class Cart(Order):
     def get_user_cart(cls, user):
         return cls.objects.filter(customer_id=user.id).first
 
-    def save(self, *args, **kwargs):
-        self.is_paid = False
+    def convert_to_order(self):
+        self.save(convert_to_order=True)
+
+    def save(self, convert_to_order=False, *args, **kwargs):
+        if convert_to_order:
+            self.is_paid = True
+        else:
+            self.is_paid = False
         super().save(*args, **kwargs)
 
 

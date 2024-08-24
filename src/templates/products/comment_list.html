@@ -2,15 +2,21 @@
 <div class="row mx-2">
     <h4 class="text-center">نظرات</h4>
     {% for comment in comment_list %}
-        <div class="border rounded-3 p-2 mb-2">
+        <div class="border border-primary bg-info bg-opacity-10 rounded-3 p-2 mb-4">
             <div>
                 <h5>{{ comment.title }}</h5>
             </div>
             <p>{{ comment.text }}</p>
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between border-top">
                 <p class="text-muted m-0 fs-6">{{ comment.created_at|date }}</p>
                 {% if my_comment_list_section and is_customer %}
                     <p class="text-muted m-0 fs-6">وضعیت: {{ comment.status }}</p>
+                    <p class="mb-0">
+                        محصول:
+                        <a href="{% url 'products:store-product-detail' comment.product.id %}">
+                            {{ comment.product.name }}
+                        </a>
+                    </p>
                 {% endif %}
             </div>
         </div>

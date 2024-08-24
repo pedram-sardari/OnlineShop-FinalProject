@@ -72,7 +72,7 @@ class MyCommentsListView(PermissionRequiredMixin, ListView):
     template_name = 'accounts/dashboard/dashboard.html'
     context_object_name = 'comment_list'
     extra_context = {
-        'my_comment_list_section': True,
+        'my_comment_list_section': 'active',
     }
 
     def get_queryset(self):

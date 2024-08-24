@@ -74,12 +74,15 @@ class PhoneForm(FormatFormFieldsMixin, forms.Form):
     phone = forms.CharField(max_length=11, label=_("شماره تماس"), validators=[phone_validator])
 
     def __init__(self, *args, **kwargs):
-        kwargs.pop('request', None)  # LoginView passes request to this form inside the LoginPhone
         super().__init__(*args, **kwargs)
         self.format_fields()
 
 
 class LoginPhoneForm(PhoneForm):
+    def __init__(self, *args, **kwargs):
+        kwargs.pop('request', None)  # LoginView passes request to this form inside the LoginPhone
+        super().__init__(*args, **kwargs)
+
     def clean_phone(self):
         phone = self.cleaned_data.get('phone')
         # Try to retrieve the user associated with the session phone number

@@ -1,5 +1,5 @@
-from products.models import Comment, Product, StoreProduct, Coupon, Discount, StoreDiscount, Color, Rating
 from orders.models import Order, OrderItem
+from products.models import Comment, StoreProduct, Discount, StoreDiscount, Rating
 from vendors.models import Staff, Store
 from .constants import UserType
 

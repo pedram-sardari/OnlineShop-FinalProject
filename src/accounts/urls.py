@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 from django.views.generic import TemplateView
 from django.contrib.auth.views import LogoutView
@@ -6,6 +6,10 @@ from django.contrib.auth.views import LogoutView
 app_name = 'accounts'
 
 urlpatterns = [
+
+    path('api/v1/',
+         include('accounts.api.v1.urls')),
+
     path('login-email/',
          views.EmailLoginView.as_view(),
          name='login-email'),

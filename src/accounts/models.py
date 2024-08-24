@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 
 from website.manager import SoftDeleteManager
 from website.models import Address
-from website.validators import phone_validator
+from website.validators import phone_validator, national_id_validator
 from .managers import UserManager
 
 
@@ -53,7 +53,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique=True,
         null=True,
         blank=True,
-        validators=[],  # todo : regex validation
+        validators=[national_id_validator],  # todo : regex validation
         error_messages={
             "unique": _("A user with that phone already exists."),
         },

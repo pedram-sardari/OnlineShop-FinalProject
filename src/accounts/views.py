@@ -70,13 +70,17 @@ class MyLogoutView(LoginRequiredMixin, LogoutView):
 
 class PersonalInfoDetailView(LoginRequiredMixin, TemplateView):
     template_name = 'accounts/dashboard/dashboard.html'
-    extra_context = {'personal_info_detail': 'active'}
+    extra_context = {
+        'personal_info_detail': 'active',
+        'account_info': 'active',
+    }
 
 
 class PersonalInfoUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'accounts/dashboard/dashboard.html'
     extra_context = {
         'personal_info_update': 'active',
+        'account_info': 'active',
         'form_section': 'active'
     }
     form_class = MyUserChangeForm

@@ -17,7 +17,7 @@
 
     <!-- personal_info_detail -->
     <a href="{% url 'accounts:personal-info-detail' %}"
-       class="list-group-item list-group-item-action {{ personal_info_detail }} {{ personal_info_update }}">
+       class="list-group-item list-group-item-action {{ account_info }} ">
         اطلاعات حساب کاربری
     </a>
     <!-- personal_info_detail -->
@@ -30,12 +30,12 @@
     </a>
     <!-- user_address_list -->
 
-    <!-- change password -->
+
     <a href="{% url 'home' %} "
-       class="list-group-item list-group-item-action {{ customer_register }}">
+       class="list-group-item list-group-item-action {{ customer_register }}"><!-- change password -->
         رمز عبور
-    </a>
-    <!-- change password -->
+    </a> <!-- change password -->
+
 
     <!-- staff_selected -->
     {% if is_staff %}
@@ -46,47 +46,42 @@
     {% endif %}
     <!-- staff_selected -->
 
-    <!-- orders -->
-    <a href="{% url 'home' %} " class="list-group-item list-group-item-action {{ customer_register }}">
-        سفارشات
-    </a>
-    <!-- orders -->
 
-    <!-- store product list -->
-    {% if is_staff %}
+    <a href="{% url 'home' %}" class="list-group-item list-group-item-action {{ customer_register }}"><!-- orders -->
+        سفارشات
+    </a><!-- orders -->
+
+
+    {% if is_staff %} <!-- store product list -->
         <a href="{% url 'vendors:store-product-list' %} "
            class="list-group-item list-group-item-action {{ dashboard_store_product_section }}">
             محصولات
         </a>
-    {% endif %}
-    <!-- store product list -->
+    {% endif %} <!-- store product list -->
 
-    <!-- store discount list -->
-    {% if is_staff %}
+
+    {% if is_staff %}<!-- store discount list -->
         <a href="{% url 'vendors:store-discount-list' %} "
            class="list-group-item list-group-item-action {{ store_discount_section }}">
             تخفیفات
         </a>
-    {% endif %}
-    <!-- store discount list -->
+    {% endif %}<!-- store discount list -->
 
-    <!-- my comments and rates -->
-    {% if is_customer %}
+
+    {% if is_customer %} <!-- my comments and rates -->
         <a href="{% url 'customers:my-comment-list' %} "
            class="list-group-item list-group-item-action {{ my_comment_list_section }}">
             نظرات و امتیازات من
         </a>
-    {% endif %}
-    <!-- my comments and rates -->
+    {% endif %}<!-- my comments and rates -->
 
-    <!-- reports -->
-    {% if is_owner or is_superuser %}
+
+    {% if is_owner or is_superuser %} <!-- reports -->
         <a href="{% url 'home' %} "
            class="list-group-item list-group-item-action {{ customer_register }}">
             گزارشات
         </a>
-    {% endif %}
-    <!-- reports -->
+    {% endif %}<!-- reports -->
 
 {% endblock %}
 
@@ -97,9 +92,34 @@
 
         {% include 'website/sections/form.html' %}
 
-    {% elif personal_info_detail %}
+    {% elif account_info %}
+        <div>
+            <ul class="nav nav-pills border-bottom pb-3 ">
+                <li class="nav-item">
+                    <a href="{% url 'accounts:personal-info-detail' %}" class="nav-link {{ personal_info_detail }}"
+                       aria-current="page">
+                        اطلاعات شخصی
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'vendors:staff-list' %}" class="nav-link {{ staff_selected }}">
+                        شماره تماس
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'vendors:staff-list' %}" class="nav-link {{ staff_selected }}">
+                        ایمیل و رمز عبور
+                    </a>
+                </li>
+            </ul>
 
-        {% include 'accounts/dashboard/personal_info_detail.html' %}
+            {% if personal_info_detail %}
+                {% include 'accounts/dashboard/personal_info_detail.html' %}
+            {% elif staff %}
+{#                {% include 'vendors/dashboard/staff_detail.html' %}#}
+            {% endif %}
+        </div>
+
 
     {% elif user_address_list %}
 
@@ -157,7 +177,9 @@
         </div>
 
     {% endif %}
+
     {% if create_new_product_link_section %}
         <p class="text-right mt-4">اگر محصول مورد نظر شما در سایت وجود ندارد میتوانید <a href="">اضافه کنید</a>. </p>
     {% endif %}
+
 {% endblock %}

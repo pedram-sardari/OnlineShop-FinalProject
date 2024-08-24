@@ -20,29 +20,7 @@
     <hr>
     <div class="row">
         <div class="col-sm-3">
-            <h6 class="mb-0">آدرس ایمیل</h6>
-        </div>
-        <div class="col-sm-8 text-secondary">
-            {{ request.user.email|default_if_none }}
-        </div>
-    </div>
-    <hr>
-    <div class="row">
-        <div class="col-sm-3">
-            <h6 class="mb-0">Phone</h6>
-        </div>
-        <div class="col-sm-8 text-secondary">
-            {{ request.user.phone|default_if_none }}
-        </div>
-        <div class="col-sm-1 text-secondary">
-
-            <input type="button" value="ویرایش">
-        </div>
-    </div>
-    <hr>
-    <div class="row">
-        <div class="col-sm-3">
-            <h6 class="mb-0">Date Joined</h6>
+            <h6 class="mb-0">تاریخ عضویت</h6>
         </div>
         <div class="col-sm-8 text-secondary">
             {{ request.user.date_joined|date }}

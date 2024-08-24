@@ -9,7 +9,81 @@ from orders.models import Cart, CartItem
 from products.api.v1.serializer import StoreProductSerializer
 from products.models import StoreProduct
 from .serializer import CartSerializer, CartItemSerializer
-from django.conf import settings
+
+
+def create_session_cart_items_list(session):
+    session[settings.SESSION_CART_KEY] = []
+    return session[settings.SESSION_CART_KEY]
+
+
+class SubmitOrderAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, *args, **kwargs):
+        cart = Cart.objects.get(customer=Customer.get_customer(self.request.user))
+        cart.convert_to_order()
+        return Response({'message': 'Order has been paid'}, status=status.HTTP_200_OK)
+
+
+class CartAPIView(APIView):
+    model = Cart
+    cart_dict = {
+        "cart_items": []
+    }
+
+    def is_authenticated(self):
+        if self.request.user.is_authenticated:
+            if customer := Customer.get_customer(user=self.request.user):
+                return customer
+        return None
+
+    def get_db_cart(self, customer):
+        cart, created = Cart.objects.get_or_create(customer=customer)
+        return cart
+
+    def get(self, request, *args, **kwargs):
+        if customer := self.is_authenticated():
+            return self.detail_authenticated(customer)
+        else:
+            return self.detail_anonymous()
+
+    def detail_authenticated(self, customer):
+        """from db"""
+        print('u' * 50, self.request.session.get(settings.SESSION_CART_KEY))
+        cart = self.get_db_cart(customer)
+        serializer = CartSerializer(cart, context={'request': self.request})
+        return Response(serializer.data)
+
+    def detail_anonymous(self):
+        """from session"""
+        print('&' * 50, self.request.session.get(settings.SESSION_CART_KEY))
+        cart_items = self.request.session.get(settings.SESSION_CART_KEY)
+        if not cart_items:
+            cart_items = create_session_cart_items_list(self.request.session)
+            self.request.session.save()
+
+        for cart_item in cart_items:  # todo: don't hit for each cart item separately
+            cart_item['store_product'] = StoreProductSerializer(
+                StoreProduct.objects.get(id=cart_item.get('store_product')), context={'request': self.request}).data
+
+        self.cart_dict['cart_items'] = cart_items
+        return Response(self.cart_dict)
+
+    def put(self, request, *args, **kwargs):
+        if customer := self.is_authenticated():
+            return self.update_authenticated(customer)
+        else:
+            return Response({'error': 'Not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+
+    def update_authenticated(self, customer):
+        cart = self.get_db_cart(customer)
+        serializer = CartSerializer(cart, data=self.request.data,
+                                    context={'customer': customer, 'request': self.request}, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        print('is_valid' * 10, serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class CartItemAPIView(APIView):

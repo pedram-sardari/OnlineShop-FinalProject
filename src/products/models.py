@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.text import slugify
@@ -31,18 +32,30 @@ class Discount(CreateUpdateDateTimeFieldMixin, models.Model):
         verbose_name = _("تخفیف")
         verbose_name_plural = _("تخفیفات")
 
-    def get_final_cash_discount(self, price=0):
-        return self.cash_discount + round((self.percentage_discount / 100) * price)
+    def get_cash_discount(self, price=0):
+        final_cash_discount = self.cash_discount or round((self.percentage_discount / 100) * price)
+        if price - final_cash_discount < 0:
+            return -1
+        return final_cash_discount
 
-    def get_final_percentage_discount(self, price=0):
-        pass  # todo: implementation
+    def get_percentage_discount(self, price=0):
+        final_percentage_discount = self.percentage_discount or round(self.cash_discount / price * 100)
+        if final_percentage_discount > 100:
+            return -1
+        return final_percentage_discount
+
+    def get_discounted_price(self, price):
+        cash_discount = self.get_cash_discount(price)
+        return price - cash_discount if cash_discount > 0 else cash_discount
 
     def __str__(self):
-        if self.cash_discount and self.percentage_discount:
-            return f"{self.percentage_discount}% - {self.cash_discount} تومان "
-        return f"{self.percentage_discount}%" or f"{self.cash_discount}%"
+        if self.percentage_discount:
+            return f"{self.percentage_discount}%"
+        return f"{self.cash_discount}تومان"
 
 
+# todo: discount !< product price
+# todo: don't fill both cash and percentage
 class StoreDiscount(Discount):
     store = models.ForeignKey(
         Store,
@@ -74,7 +87,7 @@ class Coupon(models.Model):
         unique_together = ("discount", "customer")
 
     def get_final_cash_discount(self, price):
-        return self.discount.get_final_cash_discount(price=price)
+        return self.discount.get_cash_discount(price=price)
 
     def save(self, *args, **kwargs):
         if not self.code:

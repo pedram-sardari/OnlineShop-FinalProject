@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
@@ -51,6 +53,34 @@ class StoreDiscountForm(FormatFormFieldsMixin, forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.format_fields()
 
+    def clean(self):
+        cleaned_data = super().clean()
+        cash_discount = cleaned_data.get("cash_discount")
+        percentage_discount = cleaned_data.get("percentage_discount")
+        if not (cash_discount or percentage_discount):
+            raise forms.ValidationError("Please provide one of cash_discount or percentage_discount.")
+        if cash_discount and percentage_discount:
+            raise forms.ValidationError("Please provide only one of cash_discount or percentage_discount.")
+
+        if cash_discount is None:
+            cleaned_data['cash_discount'] = 0
+        if percentage_discount is None:
+            cleaned_data['percentage_discount'] = 0
+        return cleaned_data
+
+    def clean_percentage_discount(self):
+        cash_discount = self.cleaned_data.get("cash_discount")
+        percentage_discount = self.cleaned_data.get("percentage_discount")
+        if not cash_discount and percentage_discount and (percentage_discount > 100 or percentage_discount < 1):
+            raise forms.ValidationError("Percentage must be between 0 and 100.")
+        return percentage_discount
+
+    def clean_expiration_date(self):
+        expiration_date = self.cleaned_data.get("expiration_date")
+        if expiration_date < timezone.now():
+            raise forms.ValidationError("The expiration date must be after the current date.")
+        return expiration_date
+
 
 class SelectProductForm(FormatFormFieldsMixin, forms.Form):
     product = forms.ModelChoiceField(label=_("محصول مورد نظر"), queryset=Product.objects.filter(is_available=True))
@@ -73,10 +103,13 @@ class StoreProductForm(FormatFormFieldsMixin, forms.ModelForm):
         # Fill the `select` tag with corresponding data
         if self.product:
             self.fields['store_discount'].queryset = StoreDiscount.objects.filter(store=self.store)
-            # if self.instance and self.instance.store_discount:
-            #     self.fields['store_discount'].initial = StoreDiscount.objects.get(id=self.instance.store_discount.id)
         if self.store:
-            # if self.instance and self.instance.product_color:
-            #     self.fields['product_color'].initial = ProductColor.objects.get(id=self.instance.store_discount.id)
             self.fields['product_color'].queryset = ProductColor.objects.filter(product=self.product)
         self.format_fields()
+
+    def clean_store_discount(self):
+        price = self.cleaned_data.get('price')
+        store_discount = self.cleaned_data.get('store_discount')
+        if store_discount.get_discounted_price(price) < 0:
+            raise forms.ValidationError('Discount is greater than the price!')
+        return store_discount

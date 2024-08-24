@@ -13,3 +13,7 @@ class FormatFormFieldsMixin:
                 field.widget.attrs.update({'class': 'form-select form-select-lg mb-3'})
             else:
                 field.widget.attrs.update({'class': 'form-control form-control-lg'})
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.format_fields()

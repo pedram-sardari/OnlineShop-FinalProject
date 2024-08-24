@@ -1,7 +1,7 @@
 from django import forms
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import AuthenticationForm, BaseUserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, BaseUserCreationForm, PasswordChangeForm
 from django.utils.translation import gettext_lazy as _
 
 from accounts.models import UserAddress
@@ -21,11 +21,35 @@ class LoginForm(FormatFormFieldsMixin, AuthenticationForm):
 class MyUserChangeForm(FormatFormFieldsMixin, forms.ModelForm):
     class Meta:
         model = User
-        fields = ['email', 'first_name', 'last_name', 'national_id', 'gender', 'date_of_birth', 'image', ]
+        fields = ['first_name', 'last_name', 'national_id', 'gender', 'date_of_birth', 'image', ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.format_fields()
+
+
+class EmailAndPasswordChangeForm(FormatFormFieldsMixin, PasswordChangeForm):
+    email = forms.EmailField()
+
+    def __init__(self, user, *args, **kwargs):
+        """The `user` argument is required"""
+        super().__init__(user, *args, **kwargs)
+        self.format_fields()
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        user = User.objects.filter(email=email).first()
+        if user and self.user.email != user.email:
+            raise forms.ValidationError('Email already registered!')
+        return email
+
+    def save(self, commit=True):
+        password = self.cleaned_data["new_password1"]
+        self.user.set_password(password)
+        self.user.email = self.cleaned_data["email"]
+        if commit:
+            self.user.save()
+        return self.user
 
 
 class UserAddressForm(FormatFormFieldsMixin, forms.ModelForm):

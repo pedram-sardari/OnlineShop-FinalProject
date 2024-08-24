@@ -31,12 +31,6 @@
     <!-- user_address_list -->
 
 
-    <a href="{% url 'home' %} "
-       class="list-group-item list-group-item-action {{ customer_register }}"><!-- change password -->
-        رمز عبور
-    </a> <!-- change password -->
-
-
     <!-- staff_selected -->
     {% if is_staff %}
         <a href="{% url 'vendors:staff-list' %} "
@@ -107,7 +101,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'vendors:staff-list' %}" class="nav-link {{ staff_selected }}">
+                    <a href="{% url 'accounts:email-and-password-detail' %}"
+                       class="nav-link {{ email_and_password_detail }}">
                         ایمیل و رمز عبور
                     </a>
                 </li>
@@ -115,8 +110,8 @@
 
             {% if personal_info_detail %}
                 {% include 'accounts/dashboard/personal_info_detail.html' %}
-            {% elif staff %}
-{#                {% include 'vendors/dashboard/staff_detail.html' %}#}
+            {% elif email_and_password_detail %}
+                {% include 'accounts/dashboard/email_and_password_detail.html' %}
             {% endif %}
         </div>
 

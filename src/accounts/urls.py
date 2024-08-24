@@ -34,6 +34,14 @@ urlpatterns = [
          views.PersonalInfoUpdateView.as_view(),
          name='personal-info-update'),
 
+    path('panel/email-and-password/detail/',
+         views.EmailAndPasswordDetailView.as_view(),
+         name='email-and-password-detail'),
+
+    path('panel/email-and-password/update/',
+         views.EmailAndPasswordUpdateView.as_view(),
+         name='email-and-password-update'),
+
     path('panel/user-address/',
          views.UserAddressListView.as_view(),
          name='user-address-list'),

@@ -1,11 +1,6 @@
 from django.urls import path
-from . import views
-from rest_framework.routers import DefaultRouter
 
-router = DefaultRouter()
-router.register(r'cart-items', views.CartItemViewSet, 'cart-items')
-router.register(r'cart', views.CartViewSet, 'cart')
-urlpatterns = router.urls
+from . import views
 
 app_name = 'api'
 urlpatterns += [

@@ -1,5 +1,4 @@
 from django.urls import path, include
-from django.views.generic import TemplateView
 
 from . import views
 
@@ -10,6 +9,7 @@ urlpatterns = [
          include('orders.api.v1.urls')),
 
     path('cart/',
-         TemplateView.as_view(template_name='orders/cart.html'),
+         views.CartTemplateView.as_view(),
          name='cart'),
+
 ]

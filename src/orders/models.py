@@ -2,6 +2,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Sum, Value
 from django.db.models.functions import Coalesce
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from accounts.models import UserAddress
@@ -36,6 +37,7 @@ class Order(CreateUpdateDateTimeFieldMixin, models.Model):
         related_name="orders",
         verbose_name=_("مشتری")
     )
+    created_at = models.DateTimeField(_("Date of submitting"), default=timezone.now)
 
     objects = OrderManager()
 
@@ -73,6 +75,7 @@ class OrderItem(CreateUpdateDateTimeFieldMixin, models.Model):
         related_name='order_items',
         verbose_name=_("سفارش")
     )
+    created_at = models.DateTimeField(_("Date of submitting"), default=timezone.now)
     objects = OrderItemManager()
 
     class Meta:
@@ -115,6 +118,8 @@ class Cart(Order):
         return cls.objects.filter(customer_id=user.id).first
 
     def convert_to_order(self):
+        self.created_at = timezone.now()
+        self.order_items.update(created_at=self.created_at)
         self.save(convert_to_order=True)
 
     def save(self, convert_to_order=False, *args, **kwargs):

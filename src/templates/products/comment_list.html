@@ -13,7 +13,7 @@
                     <p class="text-muted m-0 fs-6">وضعیت: {{ comment.status }}</p>
                     <p class="mb-0">
                         محصول:
-                        <a href="{% url 'products:store-product-detail' comment.product.id %}">
+                        <a href="{% url 'products:product-detail' comment.product.id %}">
                             {{ comment.product.name }}
                         </a>
                     </p>

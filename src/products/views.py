@@ -1,8 +1,8 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Min, F, Sum
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse_lazy, reverse
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
 
 from customers.models import Customer
@@ -51,22 +51,23 @@ class StoreProductListView(ListView):
         return qs
 
 
-class StoreProductDetailView(DetailView):
-    model = StoreProduct
-    template_name = 'products/store_product_detail.html'
-    context_object_name = 'store_product'
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'products/product_detail.html'
+    context_object_name = 'product'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        product = self.get_object()
         context['comment_form'] = CommentForm()
-        context['color_form'] = ProductColorForm(product=self.get_object().product)
+        context['color_form'] = ProductColorForm(product=product)
         context['rating_form'] = RatingForm()
-        context['comment_list'] = Comment.objects.filter(product=self.get_object().product,
+        context['comment_list'] = Comment.objects.filter(product=product,
                                                          status=Comment.Status.APPROVED)
         customer = Customer.get_customer(user=self.request.user)
         if customer:
-            context['can_rate'] = (customer.has_ordered_store_product(self.get_object())
-                                   and not customer.has_rated_store_product(self.get_object()))
+            context['can_rate'] = (customer.has_ordered_product(product)
+                                   and not customer.has_rated_product(product))
         return context
 
 
@@ -76,12 +77,12 @@ class CommentCreateView(PermissionRequiredMixin, CreateView):
     form_class = CommentForm
 
     def get_success_url(self):
-        return reverse_lazy('products:store-product-detail', kwargs={'pk': self.kwargs.get('store_product_id')})
+        return reverse_lazy('products:product-detail', kwargs={'pk': self.kwargs.get('product_id')})
 
     def form_valid(self, form):
         comment = form.save(commit=False)
-        store_product = get_object_or_404(StoreProduct, pk=self.kwargs.get('store_product_id'))
-        comment.product = store_product.product
+        product = get_object_or_404(Product, pk=self.kwargs.get('product_id'))
+        comment.product = product
         comment.customer = Customer.get_customer(user=self.request.user)
         comment.save()
         return super().form_valid(form)
@@ -107,18 +108,18 @@ class RatingCreateView(PermissionRequiredMixin, CreateView):
 
     def test_func(self):
         customer = Customer.get_customer(user=self.request.user)
-        store_product = get_object_or_404(StoreProduct, pk=self.kwargs.get('store_product_id'))
-        return (customer.has_ordered_store_product(store_product)
-                and not customer.has_ordered_customer(store_product))
+        product = get_object_or_404(Product, pk=self.kwargs.get('product_id'))
+        return (customer.has_ordered_product(product)
+                and not customer.has_ordered_customer(product))
 
     def get_success_url(self):
-        return reverse_lazy('products:store-product-detail', kwargs={'pk': self.kwargs.get('store_product_id')})
+        return reverse_lazy('products:product-detail', kwargs={'pk': self.kwargs.get('product_id')})
 
     def form_valid(self, form):
         rating = form.save(commit=False)
-        store_product = get_object_or_404(StoreProduct, pk=self.kwargs.get('store_product_id'))
+        product = get_object_or_404(Product, pk=self.kwargs.get('product_id'))
         self.model.objects.update_or_create(
-            product=store_product.product,
+            product=product,
             customer=Customer.get_customer(user=self.request.user),
             defaults={'score': rating.score},
         )

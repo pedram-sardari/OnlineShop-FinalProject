@@ -44,7 +44,7 @@
     <!-- card groups -->
     <div class="row row-cols-1 row-cols-md-5 g-4 m-auto pb-4 ">
         {% for store_product in store_product_list %}
-            <a id="card-link" href="{% url 'products:store-product-detail' store_product.id %}"
+            <a id="card-link" href="{% url 'products:product-detail' store_product.product.id %}"
                style="text-decoration: none">
 
                 <div class="col">

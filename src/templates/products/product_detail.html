@@ -3,12 +3,12 @@
 {% block content %}
     {% csrf_token %}
     <!-- product section -->
-    <div class="container border rounded-3 mx-auto mt-5 pt-3">
+    <div class="container border rounded-3 mx-auto mt-5 pt-3 bg-white">
 
         <!-- category hierarchy -->
         <div class="row container m-auto">
             <div>
-                {% for category in store_product.product.category.category_parent_list %}
+                {% for category in product.category.category_parent_list %}
                     {{ category.name }} {% if not forloop.last %}/{% endif %}
                 {% endfor %}
             </div>
@@ -16,13 +16,13 @@
         <!-- category hierarchy -->
 
         <!-- store product detail -->
-        <div class="row container g-4 m-auto pb-4 ">
+        <div class="row container g-4 m-auto pb-4">
             <!-- image carousel -->
             <div class="col-3 ps-3">
                 <div id="carouselExampleIndicators" class="carousel slide">
-                    {% if store_product.product.images.all %}
+                    {% if product.images.all %}
                         <div class="carousel-indicators">
-                            {% for product_image in store_product.product.images.all %}
+                            {% for product_image in product.images.all %}
                                 <button type="button" data-bs-target="#carouselExampleIndicators"
                                         data-bs-slide-to="{{ forloop.counter }}"
                                         class{% if product_image.is_default or forloop.last %}="active"
@@ -32,7 +32,7 @@
                         </div>
                         <!-- image part -->
                         <div class="carousel-inner">
-                            {% for product_image in store_product.product.images.all %}
+                            {% for product_image in product.images.all %}
                                 <div class="carousel-item {% if product_image.is_default or forloop.last %}active{% endif %}">
                                     <img src="{{ product_image.image.url }}" class="d-block w-100" alt="..."
                                          height="220" width="220"
@@ -41,7 +41,7 @@
                             {% endfor %}
                         </div>
                         <!-- image part -->
-                        {% if store_product.product.images.count > 1 %}
+                        {% if product.images.count > 1 %}
                             <button class="carousel-control-prev" type="button"
                                     data-bs-target="#carouselExampleIndicators"
                                     data-bs-slide="prev">
@@ -70,7 +70,7 @@
                 <!-- product name -->
                 <div class="row">
                     <!-- DO NOT change value of this field. Js uses the content text to fetch data-->
-                    <h1 id="product-name" class="border-bottom">{{ store_product.product.name }}</h1>
+                    <h1 id="product-name" class="border-bottom">{{ product.name }}</h1>
                 </div>
                 <!-- product name -->
 
@@ -89,13 +89,15 @@
                                       d="M35.993 10.736L27.791 27.37L9.439 30.044l13.285 12.94l-3.128 18.28l16.412-8.636l16.419 8.624l-3.142-18.278l13.276-12.95l-18.354-2.66z"></path>
                             </svg>
                             <!-- star icon -->
-                            <span class="fw-bold"> {{ store_product.product.rating_avg }} </span><span
-                                class="text-muted">(امتیاز {{ store_product.product.rating_count }} خریدار) </span>
+                            <span class="fw-bold"> {{ product.rating_avg }} </span><span
+                                class="text-muted">(امتیاز {{ product.rating_count }} خریدار) </span>
                         </p>
+                        <div style="width: 180px">
                         {{ color_form }}
+                            </div>
                         <div class="mt-4">
                             <p>توضیحات:</p>
-                            <p>{{ store_product.product.description }}</p>
+                            <p>{{ product.description }}</p>
                         </div>
 
 
@@ -105,7 +107,7 @@
                     <!-- rating form -->
                     {% if can_rate %}
                         <div class="col-4">
-                            <form action="{% url 'products:rating-create' store_product.id %}" method="post">
+                            <form action="{% url 'products:rating-create' product.id %}" method="post">
                                 {% csrf_token %}
                                 {{ rating_form.as_p }}
                                 <div class="d-grid gap-2 mt-3">
@@ -124,7 +126,7 @@
     <!-- product section -->
 
     <!-- vendors section -->
-    <div id="" class="container border rounded-3 mx-auto mt-5 py-3">
+    <div id="" class="container border rounded-3 mx-auto mt-5 py-3 bg-white">
         <h4 class="text-center mb-4">فروشندگان این محصول</h4>
         <section id="vendors-container">
             
@@ -133,11 +135,11 @@
     <!-- vendors section -->
 
     <!-- comments section -->
-    <div class="container row rounded-3 mx-auto mt-5 p-0">
+    <div class="container row rounded-3 mx-auto mt-5 p-0 ">
         <!-- comment form -->
         {% if request.user.is_authenticated and is_customer %}
-            <div class="col-3 border rounded-3 ms-3 p-4">
-                <form action="{% url 'products:comment-create' store_product.id %}" method="post"
+            <div class="col-3 border rounded-3 ms-3 p-4 bg-white">
+                <form action="{% url 'products:comment-create' product.id %}" method="post"
                       class="position-sticky sticky-top mt-3 pt-5">
                     {% csrf_token %}
                     {{ comment_form.as_p }}
@@ -150,7 +152,7 @@
         <!-- comment form -->
 
         <!-- comment list -->
-        <div class="col border p-3 rounded-3">
+        <div class="col border p-3 rounded-3 bg-white">
             {% include 'products/comment_list.html' %}
         </div>
         <!-- comment list -->

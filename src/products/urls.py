@@ -12,11 +12,11 @@ urlpatterns = [
          views.StoreProductListView.as_view(),
          name='store-product-list'),
 
-    path('store-products/<int:pk>/',
-         views.StoreProductDetailView.as_view(),
-         name='store-product-detail'),
+    path('product/<int:pk>/',
+         views.ProductDetailView.as_view(),
+         name='product-detail'),
 
-    path('store-product/<int:store_product_id>/comment/create/',
+    path('product/<int:product_id>/comment/create/',
          views.CommentCreateView.as_view(),
          name='comment-create'),
 
@@ -24,7 +24,7 @@ urlpatterns = [
          views.MyCommentsListView.as_view(),
          name='my-comment-list'),
 
-    path('store-product/<int:store_product_id>/rating/create/',
+    path('product/<int:product_id>/rating/create/',
          views.RatingCreateView.as_view(),
          name='rating-create'),
 

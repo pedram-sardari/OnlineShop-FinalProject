@@ -87,6 +87,19 @@ class CommentCreateView(PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
+class MyCommentsListView(PermissionRequiredMixin, ListView):
+    permission_required = ['products.view_comment']
+    model = Comment
+    template_name = 'accounts/dashboard/dashboard.html'
+    context_object_name = 'comment_list'
+    extra_context = {
+        'my_comment_list_section': 'active',
+    }
+
+    def get_queryset(self):
+        return Comment.objects.filter(customer=Customer.get_customer(self.request.user))
+
+
 class RatingCreateView(PermissionRequiredMixin, CreateView):
     permission_required = ['products.add_rating']
     model = Rating

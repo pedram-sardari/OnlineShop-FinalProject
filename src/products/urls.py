@@ -20,6 +20,10 @@ urlpatterns = [
          views.CommentCreateView.as_view(),
          name='comment-create'),
 
+    path('panel/my-comment-list/',
+         views.MyCommentsListView.as_view(),
+         name='my-comment-list'),
+
     path('store-product/<int:store_product_id>/rating/create/',
          views.RatingCreateView.as_view(),
          name='rating-create'),

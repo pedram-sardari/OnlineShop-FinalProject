@@ -16,7 +16,4 @@ urlpatterns = [
          views.CustomerRegisterByPhoneVerifyView.as_view(),
          name='register-by-phone-verify'),
 
-    path('panel/my-comment-list/',
-         views.MyCommentsListView.as_view(),
-         name='my-comment-list'),
 ]

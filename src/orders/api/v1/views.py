@@ -87,6 +87,12 @@ class CartAPIView(APIView):
 
 
 class CartItemAPIView(APIView):
+    """
+    request body for `POST,PUT,DELETE` >> {
+        store_product: <id>,
+        quantity: <int>
+    }
+    """
     model = CartItem
 
     def is_authenticated(self):
@@ -132,9 +138,10 @@ class CartItemAPIView(APIView):
 
     def create_authenticated(self, customer):
         cart = self.get_db_cart(customer)
-        serializer = CartItemSerializer(data=self.request.data, context={'cart': cart})
+        serializer = CartItemSerializer(data=self.request.data, context={'cart': cart, 'request': self.request})
         if serializer.is_valid():
             serializer.save()
+            print('*'*50, serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def create_anonymous(self):

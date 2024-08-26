@@ -16,7 +16,7 @@ let closeSubmitOrderModalBtn = document.getElementById('closeSubmitOrderModal')
 let cart;
 
 // urls
-let baseURL = `http://${window.location.host}/`
+let baseURL = `http://${window.location.host}/en/`
 let cartURL = baseURL + 'orders/api/v1/cart/'
 let authenticationStatusURL = baseURL + 'accounts/api/v1/is-authenticated/'
 let submitOrderURL = baseURL + 'orders/api/v1/submit-order/'

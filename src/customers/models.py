@@ -24,7 +24,7 @@ class Customer(User):
         return cls.objects.filter(id=user.id).first()
 
     def has_ordered_store_product(self, store_product):
-        return self.orders.filter(order_items__store_product=store_product).exists()
+        return self.orders.filter(is_paid=True, order_items__store_product=store_product).exists()
 
     def has_rated_store_product(self, store_product):
         return store_product.product.ratings.filter(customer=self).exists()

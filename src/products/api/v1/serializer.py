@@ -15,11 +15,16 @@ class StoreProductVendorsSerializer(serializers.ModelSerializer):
 class StoreProductSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source='product.name')
     image = serializers.ImageField(source='product.get_default_image')
-    color = serializers.CharField(source='product_color.color.value')
+    color = serializers.SerializerMethodField()
 
     class Meta:
         model = StoreProduct
         fields = ['id', 'name', 'price', 'store_discount', 'image', 'color']
+
+    def get_color(self, instance):
+        if instance.product_color:
+            return instance.product_color.color.value
+        return None
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)

@@ -463,7 +463,7 @@ class OrderItemListView(PermissionRequiredMixin, ListView):  # todo : ddddoinnng
     model = OrderItem
     template_name = 'accounts/dashboard/dashboard.html'
     extra_context = {
-        'order_section': 'active',
+        'staff_dashboard__order_section': 'active',
         'order_item_section_list': True,
     }
     context_object_name = 'order_item_list'
@@ -487,7 +487,7 @@ class OrderItemDetailView(PermissionRequiredMixin, DetailView):
     model = OrderItem
     template_name = 'accounts/dashboard/dashboard.html'
     extra_context = {
-        'order_section': 'active',
+        'staff_dashboard__order_section': 'active',
         'order_item_detail_section': 'active'
     }
     context_object_name = 'order_item'
@@ -498,10 +498,6 @@ class OrderItemUpdateView(PermissionRequiredMixin, UpdateView):
     model = OrderItem
     form_class = OrderItemStatusUpdateForm
     template_name = 'accounts/dashboard/dashboard.html'
-    extra_context = {
-        'order_section': 'active',
-        'order_item_update_section': 'active'
-    }
 
     def get_success_url(self):
         return reverse('vendors:order-item-detail', kwargs={'pk': self.object.id})
@@ -509,6 +505,8 @@ class OrderItemUpdateView(PermissionRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context[OrderItemDetailView.context_object_name] = self.get_object()
+        context['staff_dashboard__order_section'] = 'active'
+        context['order_item_update_section'] = 'active'
         context['change_status_form'] = context['form']
         context['form'] = None
         return context

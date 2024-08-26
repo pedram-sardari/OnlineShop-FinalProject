@@ -42,7 +42,7 @@
 
     {% if is_staff or is_superuser %}
         <a href="{% url 'vendors:order-item-list' %}"
-           class="list-group-item list-group-item-action {{ order_section }}">
+           class="list-group-item list-group-item-action {{ staff_dashboard__order_section }}">
             <!-- orders -->
             سفارشات مشتریان
         </a><!-- orders -->
@@ -181,7 +181,7 @@
         <div>
             {% include 'vendors/dashboard/store_discount_list.html' %}
         </div>
-    {% elif order_section %}
+    {% elif staff_dashboard__order_section %}
         <div>
 
             {% if order_item_section_list %}

@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
+from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
 
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'coreapi',
     'drf_yasg',
+    'rosetta',
 
     # custom
     'accounts',
@@ -59,6 +60,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',  # new
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -121,11 +123,19 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tehran'
+USE_TZ = True
 
 USE_I18N = True
+USE_L10N = True
+LANGUAGES = (
+    ('en', _('English')),
+    ('fa', _('Farsi')),
+)
+LOCALE_PATHS = [
+    BASE_DIR / 'locale/',
+]
 
-USE_TZ = True
 USE_THOUSAND_SEPARATOR = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/

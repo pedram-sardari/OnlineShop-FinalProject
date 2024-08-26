@@ -1,6 +1,5 @@
 {% extends 'website/template_sidebar_page.html' %}
-{% load static %}
-
+{% load static i18n %}
 
 
 {% block side-bar %}
@@ -18,7 +17,7 @@
     <!-- personal_info_detail -->
     <a href="{% url 'accounts:personal-info-detail' %}"
        class="list-group-item list-group-item-action {{ account_info }} ">
-        اطلاعات حساب کاربری
+        {% trans "account info" %}
     </a>
     <!-- personal_info_detail -->
 

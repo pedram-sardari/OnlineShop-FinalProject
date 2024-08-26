@@ -1,8 +1,9 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Min, F, Sum
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
-from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView
 
 from customers.models import Customer
@@ -77,6 +78,8 @@ class CommentCreateView(PermissionRequiredMixin, CreateView):
     form_class = CommentForm
 
     def get_success_url(self):
+        if next_url := self.request.GET.get('next'):
+            return next_url
         return reverse_lazy('products:product-detail', kwargs={'pk': self.kwargs.get('product_id')})
 
     def form_valid(self, form):
@@ -85,7 +88,9 @@ class CommentCreateView(PermissionRequiredMixin, CreateView):
         comment.product = product
         comment.customer = Customer.get_customer(user=self.request.user)
         comment.save()
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        messages.success(self.request, f"CommentCreateView")
+        return response
 
 
 class MyCommentsListView(PermissionRequiredMixin, ListView):
@@ -113,6 +118,8 @@ class RatingCreateView(PermissionRequiredMixin, CreateView):
                 and not customer.has_ordered_customer(product))
 
     def get_success_url(self):
+        if next_url := self.request.GET.get('next'):
+            return next_url
         return reverse_lazy('products:product-detail', kwargs={'pk': self.kwargs.get('product_id')})
 
     def form_valid(self, form):
@@ -123,4 +130,6 @@ class RatingCreateView(PermissionRequiredMixin, CreateView):
             customer=Customer.get_customer(user=self.request.user),
             defaults={'score': rating.score},
         )
-        return HttpResponseRedirect(self.get_success_url())
+        response = HttpResponseRedirect(self.get_success_url())
+        messages.success(self.request, f"CommentCreateView")
+        return response

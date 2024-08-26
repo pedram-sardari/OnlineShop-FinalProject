@@ -110,6 +110,6 @@ class StoreProductForm(FormatFormFieldsMixin, forms.ModelForm):
     def clean_store_discount(self):
         price = self.cleaned_data.get('price')
         store_discount = self.cleaned_data.get('store_discount')
-        if store_discount.get_discounted_price(price) < 0:
+        if store_discount and store_discount.get_discounted_price(price) < 0:
             raise forms.ValidationError('Discount is greater than the price!')
         return store_discount

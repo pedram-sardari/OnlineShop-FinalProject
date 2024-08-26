@@ -1,0 +1,55 @@
+{% load i18n %}
+
+<h3 class="box-title mt-5">Order {{ order_item.order.id }}</h3>
+<div class="table-responsive">
+    <table class="table align-middle table-striped table-product">
+        <tbody>
+        <tr>
+            <td>Date of order</td>
+            <td>{{ order_item.created_at }}</td>
+        </tr>
+        <tr>
+            <td>Product Name</td>
+            <td>{{ order_item.store_product.product.name }}</td>
+        </tr>
+        <tr>
+            <td>Quantity</td>
+            <td>{{ order_item.quantity }}</td>
+        </tr>
+        <tr>
+            <td>Price</td>
+            <td>{{ order_item.price }}</td>
+        </tr>
+        <tr>
+            <td>Cash Discount</td>
+            <td>{{ order_item.cash_discount }}</td>
+        </tr>
+        <tr>
+            <td>Total</td>
+            <td>{{ order_item.total }}</td>
+        </tr>
+        <tr>
+            <td class="">status</td>
+            {% if change_status_form %}
+                <td>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        {{ change_status_form.status }}
+                        <input type="submit" class="btn btn-success btn-sm" value="{% trans "Submit" %}">
+                    </form>
+                </td>
+            {% else %}
+                <td>
+                    <p class="mb-0">
+                        {{ order_item.status }}
+                    </p>
+                    {% if is_owner or is_manager %}
+                        <a href="{% url 'vendors:order-item-update' order_item.id %}"
+                           class="btn btn-info btn-sm">{% trans "Change Status" %}</a>
+                    {% endif %}
+                </td>
+            {% endif %}
+        </tr>
+        </tbody>
+    </table>
+</div>

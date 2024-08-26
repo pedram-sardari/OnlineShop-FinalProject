@@ -87,4 +87,15 @@ urlpatterns = [
          views.SelectCategoryListView.as_view(),
          name='store-product-create-select-category'),
 
+    path('panel/order-item/',
+         views.OrderItemListView.as_view(),
+         name='order-item-list'),
+
+    path('panel/order-item/<int:pk>/',
+         views.OrderItemDetailView.as_view(),
+         name='order-item-detail'),
+
+    path('panel/order-item/<int:pk>/update/',
+         views.OrderItemUpdateView.as_view(),
+         name='order-item-update'),
 ]

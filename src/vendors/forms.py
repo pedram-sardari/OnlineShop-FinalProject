@@ -3,6 +3,7 @@ from django.contrib.auth.forms import BaseUserCreationForm
 from django.utils.translation import gettext_lazy as _
 
 from accounts.forms import RegisterEmailForm
+from orders.models import OrderItem
 from website.forms import FormatFormFieldsMixin
 from website.models import Address
 from .models import Owner, Store, Staff
@@ -58,3 +59,9 @@ class StaffUpdateForm(FormatFormFieldsMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.format_fields()
+
+
+class OrderItemStatusUpdateForm(forms.ModelForm):
+    class Meta:
+        model = OrderItem
+        fields = ['status']

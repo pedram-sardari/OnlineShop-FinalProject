@@ -1,0 +1,56 @@
+{% load static  template_filters %}
+<table class="table table-striped align-middle">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">شماره سفارش</th>
+        <th scope="col">نام محصول</th>
+        <th scope="col">تاریخ ثبت</th>
+        <th scope="col">قیمت نهایی</th>
+        <th scope="col">وضعیت سفارش</th>
+        <th scope="col">جزئیات سفارش</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for order_item in order_item_list %}
+        <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>
+                {{ order_item.order.id }}
+            </td>
+            <td>{{ order_item.store_product }}</td>
+            <td>{{ order_item.created_at }}</td>
+            <td>{{ order_item.total }}</td>
+            <td>{{ order_item.get_status_display }}</td>
+            <td>
+                <!-- view detail -->
+                <a href="{% url 'vendors:order-item-detail' order_item.id %}" class="px-2" title="View"
+                   style="text-decoration: none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                        <g fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round"
+                           stroke-width="1.5"
+                           color="currentColor">
+                            <path d="M21.544 11.045c.304.426.456.64.456.955c0 .316-.152.529-.456.955C20.178 14.871 16.689 19 12 19c-4.69 0-8.178-4.13-9.544-6.045C2.152 12.529 2 12.315 2 12c0-.316.152-.529.456-.955C3.822 9.129 7.311 5 12 5c4.69 0 8.178 4.13 9.544 6.045"></path>
+                            <path d="M15 12a3 3 0 1 0-6 0a3 3 0 0 0 6 0"></path>
+                        </g>
+                    </svg>
+                </a>
+                <!-- view detail -->
+
+
+                <!-- edit -->
+                {% if is_owner or is_manager %}
+                    <a href="{% url 'vendors:order-item-update' order_item.id %}" class="px-2" title="edit"
+                       style="text-decoration: none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                            <path fill="currentColor"
+                                  d="M6.414 15.89L16.556 5.748l-1.414-1.414L5 14.476v1.414zm.829 2H3v-4.243L14.435 2.212a1 1 0 0 1 1.414 0l2.829 2.829a1 1 0 0 1 0 1.414zM3 19.89h18v2H3z"></path>
+                        </svg>
+                    </a>
+                {% endif %}
+                <!-- edit -->
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

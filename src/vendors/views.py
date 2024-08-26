@@ -14,10 +14,11 @@ from django.views.generic import FormView, CreateView, ListView, DetailView, Upd
 
 from accounts.forms import RegisterPhoneForm
 from accounts.views_base import SendOTPView, VerifyOTPView
+from orders.models import OrderItem
 from products.forms import StoreProductForm, SelectProductForm, StoreDiscountForm
 from products.models import StoreProduct, Category, StoreDiscount, Product
 from website.mixins import IsStaffOfOwnerStore, IsNotAuthenticated
-from .forms import OwnerRegisterEmailForm, StaffRegistrationForm, StaffUpdateForm, StoreForm
+from .forms import OwnerRegisterEmailForm, StaffRegistrationForm, StaffUpdateForm, StoreForm, OrderItemStatusUpdateForm
 from .models import Owner, Store, Staff
 
 
@@ -455,3 +456,59 @@ class SelectCategoryListView(PermissionRequiredMixin, ListView):
         if category_slug := self.request.GET.get('category_slug'):
             return self.model.objects.filter(parent_category__slug=category_slug)
         return self.model.objects.filter(parent_category=None)
+
+
+class OrderItemListView(PermissionRequiredMixin, ListView):  # todo : ddddoinnngg
+    permission_required = ['orders.view_order']
+    model = OrderItem
+    template_name = 'accounts/dashboard/dashboard.html'
+    extra_context = {
+        'order_section': 'active',
+        'order_item_section_list': True,
+    }
+    context_object_name = 'order_item_list'
+
+    def get_queryset(self):
+        staff = Staff.get_staff(user=self.request.user)
+        qs = super(
+        ).get_queryset(
+        ).select_related(
+            'order', 'store_product'
+        ).filter(
+            store_product__store=staff.store,
+            order__is_paid=True
+        ).order_by('created_at')
+
+        return qs
+
+
+class OrderItemDetailView(PermissionRequiredMixin, DetailView):
+    permission_required = ['orders.view_order']
+    model = OrderItem
+    template_name = 'accounts/dashboard/dashboard.html'
+    extra_context = {
+        'order_section': 'active',
+        'order_item_detail_section': 'active'
+    }
+    context_object_name = 'order_item'
+
+
+class OrderItemUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ['orders.change_order']
+    model = OrderItem
+    form_class = OrderItemStatusUpdateForm
+    template_name = 'accounts/dashboard/dashboard.html'
+    extra_context = {
+        'order_section': 'active',
+        'order_item_update_section': 'active'
+    }
+
+    def get_success_url(self):
+        return reverse('vendors:order-item-detail', kwargs={'pk': self.object.id})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context[OrderItemDetailView.context_object_name] = self.get_object()
+        context['change_status_form'] = context['form']
+        context['form'] = None
+        return context

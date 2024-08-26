@@ -40,9 +40,19 @@
     <!-- staff_selected -->
 
 
-    <a href="{% url 'home' %}" class="list-group-item list-group-item-action {{ customer_register }}"><!-- orders -->
-        سفارشات
-    </a><!-- orders -->
+    {% if is_staff or is_superuser %}
+        <a href="{% url 'vendors:order-item-list' %}"
+           class="list-group-item list-group-item-action {{ order_section }}">
+            <!-- orders -->
+            سفارشات مشتریان
+        </a><!-- orders -->
+    {% else %}
+        <a href="{% url 'home' %}"
+           class="list-group-item list-group-item-action {{ order_section }}">
+            <!-- orders -->
+            تاریچه سفارشات
+        </a><!-- orders -->
+    {% endif %}
 
 
     {% if is_staff %} <!-- store product list -->
@@ -171,7 +181,39 @@
         <div>
             {% include 'vendors/dashboard/store_discount_list.html' %}
         </div>
+    {% elif order_section %}
+        <div>
 
+            {% if order_item_section_list %}
+                <ul class="nav nav-pills border-bottom pb-3 mb-5">
+                    <li class="nav-item">
+                        <a href="{% url 'vendors:staff-list' %}"
+                           class="nav-link {{ order }}">{% trans "All" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'vendors:staff-list' %}"
+                           class="nav-link {{ order_section_list }}"
+                           aria-current="page">{% trans "Active" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'vendors:staff-list' %}"
+                           class="nav-link {{ staff_selected }}">{% trans "Delivered" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'vendors:staff-list' %}"
+                           class="nav-link {{ staff_selected }}">{% trans "Returned" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'vendors:staff-list' %}"
+                           class="nav-link {{ staff_selected }}">{% trans "Canceled" %}</a>
+                    </li>
+                </ul>
+                
+                {% include 'vendors/dashboard/order_item_list.html' %}
+            {% elif order_item_detail_section or order_item_update_section %}
+                {% include 'vendors/dashboard/order_item_detail.html' %}
+            {% endif %}
+        </div>
     {% endif %}
 
     {% if create_new_product_link_section %}

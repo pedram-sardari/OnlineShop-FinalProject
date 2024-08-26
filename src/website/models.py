@@ -16,7 +16,7 @@ class CreateUpdateDateTimeFieldMixin(models.Model):
 
 class Address(CreateUpdateDateTimeFieldMixin, models.Model):
     province = models.CharField(
-        _("استان"),
+        _("province"),
         max_length=100,
         choices=PROVINCES
     )  # todo: province should defines the list of cities
@@ -33,5 +33,3 @@ class Address(CreateUpdateDateTimeFieldMixin, models.Model):
 
     def __str__(self):
         return f"{self.province}-{self.city}-{self.neighborhood}-{self.street}-{self.alley}-{self.no}-{self.zipcode}"
-
-

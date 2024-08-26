@@ -23,6 +23,8 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 from rest_framework.documentation import include_docs_urls
+from django.conf.urls.i18n import i18n_patterns
+
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -37,12 +39,15 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny, ],
 )
 
-urlpatterns = [
+urlpatterns = i18n_patterns(
     # api documentations
     path('swagger/<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('api-doc', include_docs_urls('Shopping Cart')),
+
+    # i18n
+    path('rosetta/', include('rosetta.urls')),  # NEW
 
     path('api-auth/', include('rest_framework.urls')),
     path('admin/', admin.site.urls),
@@ -54,7 +59,7 @@ urlpatterns = [
     path('products/', include('products.urls')),
     path('orders/', include('orders.urls')),
     path('', TemplateView.as_view(template_name='website/index.html'), name='home')
-]
+)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

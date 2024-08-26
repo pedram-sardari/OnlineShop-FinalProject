@@ -13,13 +13,6 @@ from .managers import OrderManager, OrderItemManager, CartManager, CartItemManag
 
 
 class Order(CreateUpdateDateTimeFieldMixin, models.Model):
-    class Status(models.TextChoices):
-        ACTIVE = "active", _("جاری")
-        DELIVERED = "delivered", _("تحویل شده")
-        RETURNED = "returned", _("مرجوع شده")
-        CANCELED = "canceled", _("لغو شده")
-
-    status = models.CharField(_("وضعیت"), choices=Status.choices, max_length=15, default=Status.ACTIVE)
     cash_coupon_discount = models.PositiveIntegerField(_("کوپن تخفیف"), default=0)
     is_paid = models.BooleanField(_("پرداخت شده"), default=False)
     total = models.PositiveIntegerField(_("جمع کل"), default=0)
@@ -45,9 +38,6 @@ class Order(CreateUpdateDateTimeFieldMixin, models.Model):
         verbose_name = _("سفارش")
         verbose_name_plural = _("سفارشات")
 
-    def __str__(self):
-        return f"{self.id}-{self.status}"
-
     def update_total(self):
         self.total = self.order_items.aggregate(
             sum=Coalesce(
@@ -58,6 +48,13 @@ class Order(CreateUpdateDateTimeFieldMixin, models.Model):
 
 
 class OrderItem(CreateUpdateDateTimeFieldMixin, models.Model):
+    class Status(models.TextChoices):
+        ACTIVE = "active", _("Active")
+        DELIVERED = "delivered", _("Delivered")
+        RETURNED = "returned", _("Returned")
+        CANCELED = "canceled", _("Canceled")
+
+    status = models.CharField(_("status"), choices=Status.choices, max_length=15, default=Status.ACTIVE)
     price = models.PositiveIntegerField(_('قیمت'), default=0)
     cash_discount = models.PositiveIntegerField(_("تخفیف (به تومان)"), default=0)
     quantity = models.PositiveSmallIntegerField(_("تعداد"), default=1,

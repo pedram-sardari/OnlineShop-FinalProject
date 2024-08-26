@@ -6,8 +6,8 @@ from .models import Order, OrderItem, Cart, CartItem
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'customer', 'status', 'total')
-    fields = ['customer', 'is_paid', 'status', 'user_address', 'cash_coupon_discount', 'total']
+    list_display = ('id', 'customer', 'total')
+    fields = ['customer', 'is_paid', 'user_address', 'cash_coupon_discount', 'total']
     readonly_fields = ['cash_coupon_discount', 'total']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -18,8 +18,8 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(OrderItem)
 class OrderItemsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'store_product', 'quantity')
-    fields = ['order', 'store_product', 'quantity', 'price', 'cash_discount', 'total']
+    list_display = ('id', 'store_product', 'quantity', 'status')
+    fields = ['order', 'store_product', 'quantity', 'price', 'cash_discount', 'total', 'status']
     readonly_fields = ['price', 'cash_discount', 'total']
 
 

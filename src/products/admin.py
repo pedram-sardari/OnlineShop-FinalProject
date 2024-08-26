@@ -86,6 +86,6 @@ class RatingAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('id', 'title', 'product')
     # fields = []
     # readonly_fields = []

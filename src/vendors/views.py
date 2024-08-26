@@ -166,8 +166,8 @@ class StaffListView(PermissionRequiredMixin, ListView):
     success_url = reverse_lazy('accounts:user-address-list')
 
     def get_queryset(self):
-        owner = Owner.get_owner(user=self.request.user)
-        return owner.store.staffs.exclude(id=owner.id)
+        staff = Staff.get_staff(user=self.request.user)
+        return staff.store.staffs.exclude(id=staff.id)
 
 
 class StaffDetailView(PermissionRequiredMixin, IsStaffOfOwnerStore, DetailView):
@@ -229,8 +229,8 @@ class StoreDiscountListView(PermissionRequiredMixin, ListView):
     context_object_name = 'store_discount_list'
 
     def get_queryset(self):
-        owner = Owner.get_owner(user=self.request.user)
-        return self.model.objects.filter(store=owner.store)
+        staff = Staff.get_staff(user=self.request.user)
+        return self.model.objects.filter(store=staff.store)
 
 
 class StoreDiscountCreateView(PermissionRequiredMixin, CreateView):

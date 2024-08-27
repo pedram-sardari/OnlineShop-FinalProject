@@ -46,7 +46,7 @@ class Discount(CreateUpdateDateTimeFieldMixin, models.Model):
 
     def get_discounted_price(self, price):
         cash_discount = self.get_cash_discount(price)
-        return price - cash_discount if cash_discount > 0 else cash_discount
+        return price - cash_discount if cash_discount > 0 else 0
 
     def __str__(self):
         if self.percentage_discount:

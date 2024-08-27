@@ -47,8 +47,8 @@
             سفارشات مشتریان
         </a><!-- orders -->
     {% else %}
-        <a href="{% url 'home' %}"
-           class="list-group-item list-group-item-action {{ order_section }}">
+        <a href="{% url 'customers:order-list' %}"
+           class="list-group-item list-group-item-action {{ customer_dashboard__order_section }}">
             <!-- orders -->
             تاریچه سفارشات
         </a><!-- orders -->
@@ -208,10 +208,18 @@
                            class="nav-link {{ staff_selected }}">{% trans "Canceled" %}</a>
                     </li>
                 </ul>
-                
+
                 {% include 'vendors/dashboard/order_item_list.html' %}
             {% elif order_item_detail_section or order_item_update_section %}
                 {% include 'vendors/dashboard/order_item_detail.html' %}
+            {% endif %}
+        </div>
+    {% elif customer_dashboard__order_section %}
+        <div>
+            {% if order_list_section %}
+                {% include 'customers/dashboard/order_list.html' %}
+            {% elif order_detail_section %}
+                {% include 'customers/dashboard/order_detail.html' %}
             {% endif %}
         </div>
     {% endif %}

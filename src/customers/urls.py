@@ -16,4 +16,12 @@ urlpatterns = [
          views.CustomerRegisterByPhoneVerifyView.as_view(),
          name='register-by-phone-verify'),
 
+    path('panel/order/',
+         views.OrderListView.as_view(),
+         name='order-list'),
+
+    path('panel/order/<int:pk>/',
+         views.OrderDetailView.as_view(),
+         name='order-detail'),
+
 ]

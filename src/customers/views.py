@@ -1,14 +1,14 @@
 from django.contrib import messages
-from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, DetailView
 
 from accounts.forms import RegisterPhoneForm
 from accounts.views import SendOTPView, VerifyOTPView
-from products.models import Comment
+from orders.models import Order
+from products.forms import CommentForm, RatingForm
 from website.mixins import IsNotAuthenticated
 from .forms import CustomerRegisterForm
 from .models import Customer, User
@@ -65,3 +65,39 @@ class CustomerRegisterByPhoneVerifyView(IsNotAuthenticated, VerifyOTPView):
         'by_phone': 'active',
     }
 
+
+class OrderListView(PermissionRequiredMixin, ListView):
+    permission_required = ['orders.view_order']
+    model = Order
+    template_name = 'accounts/dashboard/dashboard.html'
+    extra_context = {
+        'customer_dashboard__order_section': 'active',
+        'order_list_section': True,
+    }
+
+    def get_queryset(self):
+        customer = Customer.get_customer(user=self.request.user)
+        qs = super().get_queryset(
+        ).filter(
+            customer=customer,
+            is_paid=True
+        ).order_by(
+            "created_at"
+        )
+        return qs
+
+
+class OrderDetailView(PermissionRequiredMixin, DetailView):
+    permission_required = ['orders.view_order']
+    model = Order
+    template_name = 'accounts/dashboard/dashboard.html'
+    context_object_name = 'order'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['customer_dashboard__order_section'] = 'active'
+        context['order_detail_section'] = True
+        context['comment_form'] = CommentForm
+        context['rating_form'] = RatingForm
+        context['next_url'] = self.request.path
+        return context

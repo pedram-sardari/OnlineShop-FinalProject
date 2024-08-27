@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'coreapi',
     'drf_yasg',
     'rosetta',
+    'django_filters',
 
     # custom
     'accounts',
@@ -171,9 +172,6 @@ OTP_LENGTH = 6
 SESSION_CART_KEY = 'cart'
 
 REST_FRAMEWORK = {
-
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny'
     ],
@@ -182,4 +180,5 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }

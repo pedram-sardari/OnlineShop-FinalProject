@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.db import models
+from django.db.models import Sum
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
@@ -30,8 +31,20 @@ class Store(CreateUpdateDateTimeFieldMixin, models.Model):
 
     @property
     def order_count(self):
-        """todo: implementation"""
-        return '------------------------- implementation ---------------------------'
+        from orders.models import OrderItem
+        qs = self.store_products.filter(
+            order_items__order__is_paid=True,
+            order_items__status=OrderItem.Status.DELIVERED
+        ).annotate(
+            quantity=Sum("order_items__quantity")
+        ).aggregate(
+            quantity_sum=Sum("quantity", default=0)
+        )
+        return qs['quantity_sum']
+
+    @property
+    def product_count(self):
+        return self.store_products.count()
 
     def set_slug(self):
         if not self.id or self.slug != slugify(self.name, allow_unicode=True):

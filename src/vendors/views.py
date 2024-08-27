@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db import transaction
 from django.db.models import Sum
+from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
@@ -138,7 +139,7 @@ class StaffRegisterView(PermissionRequiredMixin, CreateView):
     form_class = StaffRegistrationForm
     success_url = reverse_lazy('vendors:staff-list')
     extra_context = {
-        'stor_info': 'active',
+        'store_section': 'active',
         'form_section': 'active'
     }
 
@@ -162,6 +163,7 @@ class StaffListView(PermissionRequiredMixin, ListView):
     template_name = 'accounts/dashboard/dashboard.html'
     context_object_name = 'staff_list'
     extra_context = {
+        'store_section': 'active',
         'staff_selected': 'active',
     }
     success_url = reverse_lazy('accounts:user-address-list')
@@ -176,6 +178,7 @@ class StaffDetailView(PermissionRequiredMixin, IsStaffOfOwnerStore, DetailView):
     template_name = 'accounts/dashboard/dashboard.html'
     context_object_name = 'staff'
     extra_context = {
+        'store_section': 'active',
         'staff_selected': 'active',
     }
     model = Staff
@@ -185,6 +188,7 @@ class StaffUpdateView(PermissionRequiredMixin, IsStaffOfOwnerStore, UpdateView):
     permission_required = ['vendors.change_staff']
     template_name = 'accounts/dashboard/dashboard.html'
     extra_context = {
+        'store_section': 'active',
         'staff_selected': 'active',
         'form_section': 'active'
     }
@@ -220,6 +224,59 @@ class StaffDeleteView(PermissionRequiredMixin, IsStaffOfOwnerStore, DeleteView):
         for error, message in form.errors.items():
             messages.error(self.request, message)
         return super().form_invalid(form)
+
+
+class StoreDetailView(PermissionRequiredMixin, DetailView):
+    permission_required = ['vendors.view_store']
+    model = Store
+    template_name = 'accounts/dashboard/dashboard.html'
+    extra_context = {
+        'store_section': 'active',
+        'store_detail_section': 'active',
+    }
+    context_object_name = 'store'
+
+    def get_object(self, queryset=None):
+        staff = Staff.get_staff(self.request.user)
+        return staff.store
+
+
+class StoreUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ['vendors.change_store']
+    model = Store
+    form_class = StoreForm
+    template_name = 'accounts/dashboard/dashboard.html'
+    extra_context = {
+        'store_section': 'active',
+        'form_section': 'active'
+    }
+    success_url = reverse_lazy('vendors:store-detail')
+
+    def get_object(self, queryset=None):
+        staff = Staff.get_staff(self.request.user)
+        return staff.store
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        initial = {
+            "store_name": self.get_object().name,
+            **model_to_dict(self.get_object().address)
+        }
+        kwargs['initial'] = initial
+        print('%' * 50, initial)
+        return kwargs
+
+    @transaction.atomic
+    def form_valid(self, form):
+        store_name = form.cleaned_data.pop('store_name', None)
+        self.object.name = store_name
+        for field, value in form.cleaned_data.items():
+            setattr(self.object.address, field, value)
+        self.object.save()
+        self.object.address.save()
+        response = HttpResponseRedirect(self.get_success_url())
+        messages.success(self.request, f"StoreUpdateView")
+        return response
 
 
 class StoreDiscountListView(PermissionRequiredMixin, ListView):

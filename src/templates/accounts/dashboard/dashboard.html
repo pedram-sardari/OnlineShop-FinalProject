@@ -32,8 +32,8 @@
 
     <!-- staff_selected -->
     {% if is_staff %}
-        <a href="{% url 'vendors:staff-list' %} "
-           class="list-group-item list-group-item-action {{ staff_selected }}">
+        <a href="{% url 'vendors:store-detail' %} "
+           class="list-group-item list-group-item-action {{ store_section }}">
             فروشگاه
         </a>
     {% endif %}
@@ -137,11 +137,11 @@
 
         {% include 'accounts/dashboard/user_address_detail.html' %}
 
-    {% elif staff_selected %}
+    {% elif store_section %}
         <div>
             <ul class="nav nav-pills border-bottom pb-3 mb-5">
                 <li class="nav-item">
-                    <a href="{% url 'vendors:staff-list' %}" class="nav-link {{ store_info_selected }}"
+                    <a href="{% url 'vendors:store-detail' %}" class="nav-link {{ store_detail_section }}"
                        aria-current="page">
                         اطلاعات فروشگاه
                     </a>
@@ -155,6 +155,8 @@
                 {% include 'vendors/dashboard/staff_list.html' %}
             {% elif staff %}
                 {% include 'vendors/dashboard/staff_detail.html' %}
+            {% elif store %}
+                {% include 'vendors/dashboard/store_detail.html' %}
             {% endif %}
         </div>
 

@@ -43,6 +43,14 @@ urlpatterns = [
          views.StaffDeleteView.as_view(),
          name='staff-delete'),
 
+    path('panel/store/',
+         views.StoreDetailView.as_view(),
+         name='store-detail'),
+
+    path('panel/store/update/',
+         views.StoreUpdateView.as_view(),
+         name='store-update'),
+
     path('panel/store-discount/',
          views.StoreDiscountListView.as_view(),
          name='store-discount-list'),

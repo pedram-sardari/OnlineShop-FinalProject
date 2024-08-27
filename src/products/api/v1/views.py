@@ -1,9 +1,13 @@
+from django.db.models import Sum
+from rest_framework import filters
 from rest_framework.generics import RetrieveAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from .serializer import StoreProductVendorsSerializer
+from django_filters.rest_framework import DjangoFilterBackend
+from vendors.models import Store
+from website.paginations import MyPagination
+from .serializer import StoreProductVendorsSerializer, StoreSerializer
 from products.models import StoreProduct
 
 
@@ -23,5 +27,16 @@ class StoreProductVendorListAPIView(ListAPIView):
         serializer = self.get_serializer_class()(qs, many=True)
         return Response(serializer.data)
 
-class StoreProductListAPIView(ListAPIView):
-    pass
+
+class StoreListAPIView(ListAPIView):
+    """
+     name, description, address, product_count, rate
+    """
+    serializer_class = StoreSerializer
+    queryset = Store.objects.all().annotate(orders_count=Sum('store_products__order_items__quantity'))
+    pagination_class = MyPagination
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_fields = ['name']
+    search_fields = ['name']
+    ordering_fields = ['id', 'created_at', 'orders_count']
+    ordering = ['id']

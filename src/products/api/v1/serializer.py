@@ -1,6 +1,8 @@
+from django.utils import timezone
 from rest_framework import serializers
 
 from products.models import StoreProduct
+from vendors.models import Store
 
 
 class StoreProductVendorsSerializer(serializers.ModelSerializer):
@@ -38,3 +40,15 @@ class StoreProductSerializer(serializers.ModelSerializer):
             )
         representation['image'] = image_url
         return representation
+
+
+class StoreSerializer(serializers.ModelSerializer):
+    active_days = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Store
+        fields = ['id', 'name', 'address', 'order_count', 'product_count', 'created_at', 'active_days']
+
+    def get_active_days(self, instance):
+        timedelta = timezone.now() - instance.created_at
+        return timedelta.days

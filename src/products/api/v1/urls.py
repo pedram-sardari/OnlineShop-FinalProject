@@ -8,5 +8,8 @@ urlpatterns = [
          views.StoreProductVendorListAPIView.as_view(),
          name='store-product-vendor'),
 
+    path('store/',
+         views.StoreListAPIView.as_view(),
+         name='store-list'),
 
 ]

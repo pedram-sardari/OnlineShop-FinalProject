@@ -1,156 +1,154 @@
 {% load static %}
 
-    <!-- Add new product: (only available from staff dashboard) -->
-    {% if dashboard_store_product_section %}
-        {% if is_owner or is_manager %}
-            <div class="d-grid gap-2">
-                <a href="{% url 'vendors:store-product-create-select-product' %}" class="btn btn-success"
-                   type="button">افزودن محصول به فروشگاه</a>
-            </div>
-        {% endif %}
-    {% endif %}
-    <!-- Add new product: (only available from staff dashboard) -->
-
-    <!-- filtering -->
-    <div class="row">
-        <div class="d-flex ">
-            <h6 class="my-auto">مرتب سازی: </h6>
-            <ul class="nav nav-underline">
-                <li class="nav-item">
-                    <a class="nav-link {% if ordering == 'sort=best_seller' %} active {% endif %}" aria-current="page"
-                       href="{% url 'products:store-product-list' %}?sort=best_seller">
-                        پرفروش ترین
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if ordering == 'sort=highest_rating' %} active {% endif %}"
-                       aria-current="page"
-                       href="{% url 'products:store-product-list' %}?sort=highest_rating">
-                        بالاترین امتیاز
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if ordering == 'sort=most_expensive' %} active {% endif %}"
-                       aria-current="page"
-                       href="{% url 'products:store-product-list' %}?sort=most_expensive">
-                        گرانترین
-                    </a>
-                </li>
-            </ul>
+<!-- Add new product: (only available from staff dashboard) -->
+{% if dashboard_store_product_section %}
+    {% if is_owner or is_manager %}
+        <div class="d-grid gap-2">
+            <a href="{% url 'vendors:store-product-create-select-product' %}" class="btn btn-success"
+               type="button">افزودن محصول به فروشگاه</a>
         </div>
+    {% endif %}
+{% endif %}
+<!-- Add new product: (only available from staff dashboard) -->
+
+<!-- filtering -->
+<div class="row">
+    <div class="d-flex ">
+        <h6 class="my-auto">مرتب سازی: </h6>
+        <ul class="nav nav-underline">
+            <li class="nav-item">
+                <a class="nav-link {% if ordering == 'sort=best_seller' %} active {% endif %}" aria-current="page"
+                   href="{% url 'products:store-product-list' %}?sort=best_seller">
+                    پرفروش ترین
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if ordering == 'sort=highest_rating' %} active {% endif %}"
+                   aria-current="page"
+                   href="{% url 'products:store-product-list' %}?sort=highest_rating">
+                    بالاترین امتیاز
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if ordering == 'sort=most_expensive' %} active {% endif %}"
+                   aria-current="page"
+                   href="{% url 'products:store-product-list' %}?sort=most_expensive">
+                    گرانترین
+                </a>
+            </li>
+        </ul>
     </div>
-    <!-- filtering -->
+</div>
+<!-- filtering -->
 
-    <!-- card groups -->
-    <div class="row row-cols-1 row-cols-md-5 g-4 m-auto pb-4 ">
-        {% for store_product in store_product_list %}
-            <a id="card-link" href="{% url 'products:product-detail' store_product.product.id %}"
-               style="text-decoration: none">
+<!-- card groups -->
+<div class="row row-cols-1 row-cols-md-5 g-4 m-auto pb-4 ">
+    {% for store_product in store_product_list %}
+        <a id="card-link" href="{% url 'products:product-detail' store_product.product.id %}"
+           style="text-decoration: none">
 
-                <div class="col">
-                    <div class="card h-100 position-relative">
+            <div class="col">
+                <div class="card h-100 position-relative">
 
-                        <!-- Image -->
-                        <div class="p-auto" style="height: 200px">
-                            {% if store_product.product.get_default_image %}
-                                <img src="{{ store_product.product.get_default_image.url }}"
-                                     class="card-img-top h-100 v-100"
-                                     alt="...">
-                            {% else %}
-                                <img src="{% static 'products/img/product-default-image.png' %}"
-                                     class="card-img-top h-100 v-100"
-                                     alt="...">
-                            {% endif %}
-                        </div>
-                        <!-- Image -->
+                    <!-- Image -->
+                    <div class="p-auto" style="height: 200px">
+                        {% if store_product.product.get_default_image %}
+                            <img src="{{ store_product.product.get_default_image.url }}"
+                                 class="card-img-top h-100 v-100"
+                                 alt="...">
+                        {% else %}
+                            <img src="{% static 'products/img/product-default-image.png' %}"
+                                 class="card-img-top h-100 v-100"
+                                 alt="...">
+                        {% endif %}
+                    </div>
+                    <!-- Image -->
 
+
+                    <div class="card-body" style="height: 130px">
+                        <h5 class="card-title text-center">{{ store_product.product.name }}</h5>
                         <!-- rating -->
                         {% if store_product.product.rating_avg %}
-                            <div class="d-flex bg-warning rounded-1 position-absolute bottom-0 end-0">
+                            <div class="d-flex justify-content-center my-2">
                                 <!-- star icon -->
                                 <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em"
                                      viewBox="0 0 72 72">
-                                    <path fill="#0000"
+                                    <path fill="#FFD700FF"
                                           d="M35.993 10.736L27.791 27.37L9.439 30.044l13.285 12.94l-3.128 18.28l16.412-8.636l16.419 8.624l-3.142-18.278l13.276-12.95l-18.354-2.66z"></path>
                                     <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round"
                                           stroke-miterlimit="10" stroke-width="2"
                                           d="M35.993 10.736L27.791 27.37L9.439 30.044l13.285 12.94l-3.128 18.28l16.412-8.636l16.419 8.624l-3.142-18.278l13.276-12.95l-18.354-2.66z"></path>
                                 </svg>
                                 <!-- star icon -->
-                                <p class="card-text fw-bold px-1 m-0">
-                                    {{ store_product.product.rating_avg }}
+                                <p class="card-text fw-bold px-1 mb-0">
+                                    {{ store_product.product.rating_avg }} <span class="fw-light">({{ store_product.product.rating_count }})</span>
                                 </p>
                             </div>
                         {% endif %}
                         <!-- rating -->
 
-                        <!-- discount -->
                         {% if store_product.store_discount %}
-                            <div class="bg-danger text-white fw-bold rounded-1 px-2  position-absolute bottom-0 start-0">
-                                <p class="card-text">{{ store_product.store_discount }}</p>
+                            <!-- discount -->
+                            <div>
+                                <p class="card-text text-center text-muted">
+                                    <del>{{ store_product.price }} تومان</del>
+                                </p>
                             </div>
-                        {% endif %}
-                        <!-- discount -->
-                        <div class="card-body" style="min-height: 100px">
-                            <h5 class="card-title text-center">{{ store_product.product.name }}</h5>
+                            <div>
+                                <p class="card-text text-center fw-bold">{{ store_product.get_discounted_price }}
+                                    تومان</p>
+                            </div>
+                            <!-- discount -->
+                        {% else %}
                             <div>
                                 <p class="card-text text-center">{{ store_product.price }} تومان</p>
                             </div>
-                            <!-- Edit and Delete buttons (only available from staff dashboard) -->
-                            {% if dashboard_store_product_section %}
-                                {% if is_owner or is_manager %}
-                                    <form class="d-flex my-3 justify-content-center">
-                                        <button type="button" class="btn btn-danger ms-1">حذف</button>
-                                        <button type="button" class="btn btn-info me-1">ویرایش</button>
-                                    </form>
-                                {% endif %}
+                        {% endif %}
 
-                            {% endif %}
-                            <!-- Edit and Delete buttons (only available from staff dashboard) -->
-                        </div>
                     </div>
                 </div>
+            </div>
 
-            </a>
-        {% endfor %}
-    </div>
-    <!-- card groups -->
+        </a>
+    {% endfor %}
+</div>
+<!-- card groups -->
 
-    <!-- pagination -->
-    {% if is_paginated %}
+<!-- pagination -->
+{% if is_paginated %}
 
-        <div class="row" dir="ltr">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-center">
-                    {% if page_obj.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link"
-                               href="{% url 'products:store-product-list' %}?page={{ page_obj.previous_page_number }}&{{ ordering }}"
-                               title="قبلی" aria-label="Previous">
-                                <span aria-hidden="true">قبلی</span>
-                            </a>
-                        </li>
-                    {% endif %}
-
-                    <li class="page-item active">
-                        <a class="page-link" href="#">
-                            <span class="current"
-                                  dir="rtl"> صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }} </span>
+    <div class="row" dir="ltr">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="{% url 'products:store-product-list' %}?page={{ page_obj.previous_page_number }}&{{ ordering }}"
+                           title="قبلی" aria-label="Previous">
+                            <span aria-hidden="true">قبلی</span>
                         </a>
                     </li>
+                {% endif %}
 
-                    {% if page_obj.has_next %}
-                        <li class="page-item ">
-                            <a class="page-link"
-                               href="{% url 'products:store-product-list' %}?page={{ page_obj.next_page_number }}&{{ ordering }}"
-                               title="بعدی"
-                               aria-label="Next">
-                                <span aria-hidden="true">بعدی</span>
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
-    {% endif %}
-    <!-- pagination -->
+                <li class="page-item active">
+                    <a class="page-link" href="#">
+                            <span class="current"
+                                  dir="rtl"> صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }} </span>
+                    </a>
+                </li>
+
+                {% if page_obj.has_next %}
+                    <li class="page-item ">
+                        <a class="page-link"
+                           href="{% url 'products:store-product-list' %}?page={{ page_obj.next_page_number }}&{{ ordering }}"
+                           title="بعدی"
+                           aria-label="Next">
+                            <span aria-hidden="true">بعدی</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+{% endif %}
+<!-- pagination -->

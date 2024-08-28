@@ -1,3 +1,7 @@
+from urllib.parse import unquote
+
+from django.db.models import Sum
+from django.urls import reverse
 from django.utils import timezone
 from rest_framework import serializers
 
@@ -17,16 +21,31 @@ class StoreProductVendorsSerializer(serializers.ModelSerializer):
 class StoreProductSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source='product.name')
     image = serializers.ImageField(source='product.get_default_image')
+    rating_avg = serializers.FloatField(source='product.rating_avg')
+    rating_count = serializers.IntegerField(source='product.rating_count')
+    store = serializers.SlugRelatedField(slug_field='slug', read_only=True)
+    discounted_price = serializers.IntegerField(source='get_discounted_price')
     color = serializers.SerializerMethodField()
+    url = serializers.SerializerMethodField()
+    order_count = serializers.SerializerMethodField()
 
     class Meta:
         model = StoreProduct
-        fields = ['id', 'name', 'price', 'store_discount', 'image', 'color']
+        fields = ['id', 'name', 'price', 'discounted_price', 'image', 'color', 'store', 'product', 'rating_avg',
+                  'rating_count', 'url', 'order_count']
 
     def get_color(self, instance):
         if instance.product_color:
             return instance.product_color.color.value
         return None
+
+    def get_url(self, instance):
+        request = self.context.get('request')
+        relative_url = reverse('products:product-detail', kwargs={'pk': instance.product.pk})
+        return request.build_absolute_uri(relative_url)
+
+    def get_order_count(self, instance):
+        return instance.order_items.aggregate(Sum('quantity', default=0))['quantity__sum']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -44,11 +63,17 @@ class StoreProductSerializer(serializers.ModelSerializer):
 
 class StoreSerializer(serializers.ModelSerializer):
     active_days = serializers.SerializerMethodField()
+    url = serializers.SerializerMethodField()
 
     class Meta:
         model = Store
-        fields = ['id', 'name', 'address', 'order_count', 'product_count', 'created_at', 'active_days']
+        fields = ['id', 'name', 'address', 'order_count', 'product_count', 'created_at', 'active_days', 'url']
 
     def get_active_days(self, instance):
         timedelta = timezone.now() - instance.created_at
         return timedelta.days
+
+    def get_url(self, instance):
+        request = self.context.get('request')
+        relative_url = reverse('products:store-product-list-in-store') + f'?store__slug={instance.slug}'
+        return unquote(request.build_absolute_uri(relative_url))

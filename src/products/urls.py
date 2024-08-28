@@ -1,4 +1,5 @@
 from django.urls import path, include
+from django.views.generic import TemplateView
 
 from . import views
 
@@ -11,6 +12,10 @@ urlpatterns = [
     path('store-products/',
          views.StoreProductListView.as_view(),
          name='store-product-list'),
+
+    path('store/store-products/',
+         TemplateView.as_view(template_name='products/store_product_list_in_store.html'),
+         name='store-product-list-in-store'),
 
     path('product/<int:pk>/',
          views.ProductDetailView.as_view(),

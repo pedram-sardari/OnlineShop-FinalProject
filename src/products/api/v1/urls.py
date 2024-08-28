@@ -12,4 +12,8 @@ urlpatterns = [
          views.StoreListAPIView.as_view(),
          name='store-list'),
 
+    path('store-product/',
+         views.StoreProductListAPIView.as_view(),
+         name='store-product-list'),
+
 ]

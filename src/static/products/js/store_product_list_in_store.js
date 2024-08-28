@@ -63,7 +63,7 @@ function fetchStoreProducts(event, url = storeProductsURL) {
         .then(data => {
             storeProductData = data
             createStoreProductsPaginator()
-            fillStoresContainer(data.results)
+            fillStoreProductContainer(data.results)
         })
         .catch(error => {
             console.error('Error:', error);
@@ -71,16 +71,16 @@ function fetchStoreProducts(event, url = storeProductsURL) {
 }
 
 
-function fillStoresContainer(store_list) {
-    console.log(store_list);
-    storeNameElem.innerHTML = store_list[0].store
+function fillStoreProductContainer(store_product_list) {
+    console.log(store_product_list);
+    storeNameElem.innerHTML = store_product_list[0].store
     cardGroup.innerHTML = ''
-    for (let i in store_list) {
-        cardGroup.innerHTML += createStoreCard(store_list[i])
+    for (let i in store_product_list) {
+        cardGroup.innerHTML += createStoreProductCard(store_product_list[i])
     }
 }
 
-function createStoreCard(storeProduct) {
+function createStoreProductCard(storeProduct) {
     return `
             <a href="${storeProduct.url}" style="text-decoration: none">
                 <div class="col">

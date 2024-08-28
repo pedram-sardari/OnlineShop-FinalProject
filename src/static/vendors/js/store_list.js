@@ -18,10 +18,10 @@ let paginationCurrentPageNumberStoresElem = document.getElementById('pagination-
 // urls
 let baseURL = `http://${window.location.host}/en/`
 let storesURL = baseURL + 'products/api/v1/store/'
-let bestSellerStoresURL = baseURL + 'products/api/v1/store/?ordering=-orders_count'
-let recentlyCreatedStoresURL = baseURL + 'products/api/v1/store/?ordering=-created_at'
+let bestSellerStoresURL = storesURL + '?ordering=-orders_count'
+let recentlyCreatedStoresURL = storesURL + '?ordering=-created_at'
+let topRatingStoresURL = storesURL + '?ordering=-orders_count'
 let storeDefaultImage = 'http://localhost:8000/static/products/img/product-default-image.png'
-let topRatingStoresURL = baseURL + 'products/api/v1/store/?ordering=-orders_count'
 
 
 // event listeners

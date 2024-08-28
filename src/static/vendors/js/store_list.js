@@ -3,14 +3,6 @@ let storeData;
 // containers
 let contentBlockElem = document.getElementById('content-block')
 let storesContainerElem = document.getElementById('stores-container')
-let categoriesContainerElem = document.getElementById('categories-container')
-let productsContainerElem = document.getElementById('products-container')
-
-// header
-let homeLink = document.getElementById('home-link')
-let storesLink = document.getElementById('stores-link')
-let productsLink = document.getElementById('products-link')
-let categoriesLink = document.getElementById('categories-link')
 
 // stores section
 let cardGroupStores = document.getElementById('card-group-stores')
@@ -28,12 +20,12 @@ let baseURL = `http://${window.location.host}/en/`
 let storesURL = baseURL + 'products/api/v1/store/'
 let bestSellerStoresURL = baseURL + 'products/api/v1/store/?ordering=-orders_count'
 let recentlyCreatedStoresURL = baseURL + 'products/api/v1/store/?ordering=-created_at'
+let storeDefaultImage = 'http://localhost:8000/static/products/img/product-default-image.png'
 let topRatingStoresURL = baseURL + 'products/api/v1/store/?ordering=-orders_count'
 
 
 // event listeners
-window.addEventListener('load', generateAllSections)
-homeLink.addEventListener('click', fetchStores)
+window.addEventListener('load', fetchStores)
 paginationNextBtnStores.addEventListener('click', goToNextPageStores)
 paginationPreviousBtnStores.addEventListener('click', goToPreviousPageStores)
 bestSellerLinkStores.addEventListener('click', (event) => {
@@ -50,9 +42,6 @@ recentlyCreatedLinkStores.addEventListener('click', (event) => {
     fetchStores(null, recentlyCreatedStoresURL)
 })
 
-function generateAllSections() {
-    fetchStores(null)
-}
 
 function fetchStores(event, url = storesURL) {
     console.log(event);
@@ -76,6 +65,10 @@ function fetchStores(event, url = storesURL) {
         });
 }
 
+function getStoreImage(store) {
+    return storeDefaultImage
+}
+
 function fillStoresContainer(store_list) {
     console.log(store_list);
     cardGroupStores.innerHTML = ''
@@ -86,12 +79,13 @@ function fillStoresContainer(store_list) {
 
 function createStoreCard(store) {
     return `
+            <a data-store-id="${store.id}" href="#" style="text-decoration: none">
                <div class="col">
                     <div class="card h-100 position-relative">
 
                         <!-- Image -->
                         <div class="p-auto" style="height: 200px">
-                            <img src="http://localhost:8000/static/products/img/product-default-image.png"
+                            <img src="${getStoreImage(store)}"
                                  class="card-img-top h-100 v-100"
                                  alt="...">
                         </div>
@@ -134,6 +128,7 @@ function createStoreCard(store) {
                         </div>
                     </div>
                 </div>
+            </a>
                 `
 }
 

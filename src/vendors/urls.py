@@ -19,6 +19,10 @@ urlpatterns = [
          views.OwnerRegisterByPhoneVerifyView.as_view(),
          name='register-owner-by-phone-verify'),
 
+    path('store/',
+         TemplateView.as_view(template_name='vendors/store_list.html'),
+         name='store_list'),
+
     path('store/create/',
          views.StoreCreateView.as_view(),
          name='store-create'),

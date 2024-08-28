@@ -9,54 +9,19 @@
     <div id="stores-container" class="container">
         <div class="row border rounded-3 mx-auto mt-5 pt-3 bg-white">
             <h2 class="text-center">فروشگاه ها</h2>
-            <!-- filtering -->
-            <div class="row">
-                <div class="d-flex ">
-                    <h6 class="my-auto">مرتب سازی: </h6>
-                    <ul class="nav nav-underline">
-                        <li class="nav-item">
-                            <a id="best-seller-link-stores" class="nav-link"
-                               aria-current="page"
-                               href="">
-                                پرفروش ترین
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a id="top-rating-link-stores" class="nav-link"
-                               aria-current="page"
-                               href="">
-                                بالاترین امتیاز
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a id="recently-created-link-stores" class="nav-link"
-                               aria-current="page"
-                               href="">
-                                جدید ترین
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <!-- filtering -->
-
             <!-- card groups -->
             <div id="card-group-stores" class="row row-cols-md-5 g-4 m-auto pb-4">
             </div>
             <!-- card groups -->
-            <div id="card-group-stores" class="row row-cols-md-5 g-4 m-auto pb-4 justify-content-center">
-                <nav aria-label="..." dir="ltr">
-                    <ul class="pagination">
-                        <li class="page-item">
-                            <button id="pagination-previous-btn-stores" class="page-link">Previous</button>
-                        </li>
-                        <li class="page-item"><a id="pagination-current-page-number-stores" class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <button id="pagination-next-btn-stores" class="page-link" href="#">Next</button>
-                        </li>
-                    </ul>
-                </nav>
+
+            <!-- view all -->
+            <div class="row container-fluid p-3 justify-content-start">
+                <div class="d-grid gap-2 col-6 mx-auto">
+                    <a href="{% url 'vendors:store_list' %}"
+                       class="btn btn-outline-primary">مشاهــــده همه</a>
+                </div>
             </div>
+            <!-- view all -->
         </div>
 
     </div>
@@ -75,6 +40,6 @@
     </div>
 {% endblock %}
 {% block js %}
-    <script src="{% static 'website/js/script.js' %}"></script>
+    <script src="{% static 'website/js/index.js' %}"></script>
 {% endblock %}
 

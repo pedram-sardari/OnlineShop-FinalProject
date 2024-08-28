@@ -79,7 +79,7 @@ function fillStoresContainer(store_list) {
 
 function createStoreCard(store) {
     return `
-            <a data-store-id="${store.id}" href="#" style="text-decoration: none">
+            <a href="${store.url}" style="text-decoration: none">
                <div class="col">
                     <div class="card h-100 position-relative">
 

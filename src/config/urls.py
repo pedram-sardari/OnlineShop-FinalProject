@@ -25,7 +25,6 @@ from rest_framework import permissions
 from rest_framework.documentation import include_docs_urls
 from django.conf.urls.i18n import i18n_patterns
 
-
 schema_view = get_schema_view(
     openapi.Info(
         title="Snippets API",
@@ -58,7 +57,8 @@ urlpatterns = i18n_patterns(
     path('vendors/', include('vendors.urls')),
     path('products/', include('products.urls')),
     path('orders/', include('orders.urls')),
-    path('', TemplateView.as_view(template_name='website/index.html'), name='home')
+    path('search/', TemplateView.as_view(template_name='website/search_result.html'), name='search-result'),
+    path('', TemplateView.as_view(template_name='website/index.html'), name='home'),
 )
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -281,7 +281,7 @@ class StoreProduct(CreateUpdateDateTimeFieldMixin, models.Model):
         verbose_name_plural = _("محصولات فروشگاه")
 
     def get_discounted_price(self):
-        return self.store_discount.get_discounted_price(self.price)
+        return self.store_discount.get_discounted_price(self.price) if self.store_discount else None
 
     def get_discount(self):
         return self.store_discount.percentage_discount if self.store_discount else None

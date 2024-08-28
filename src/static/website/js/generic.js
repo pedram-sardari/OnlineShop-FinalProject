@@ -3,6 +3,7 @@ let searchInput = document.getElementById('search-input')
 let searchURL = `http://${window.location.host}/en/` + 'search/'
 
 searchBtn.addEventListener('click', search)
+searchBtn.addEventListener('keypress', search)
 console.log(searchBtn)
 
 function search() {

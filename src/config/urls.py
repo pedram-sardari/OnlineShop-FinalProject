@@ -15,6 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
+from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
@@ -23,7 +24,6 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 from rest_framework.documentation import include_docs_urls
-from django.conf.urls.i18n import i18n_patterns
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -37,6 +37,10 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=[permissions.AllowAny, ],
 )
+
+admin.site.site_title = "Shop"
+admin.site.site_header = "✨✨My Shop✨✨"
+admin.site.index_title = "Ped"
 
 urlpatterns = i18n_patterns(
     # api documentations

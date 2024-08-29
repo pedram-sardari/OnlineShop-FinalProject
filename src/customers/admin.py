@@ -1,12 +1,16 @@
 from django.contrib import admin
-from .models import Customer
 from django.utils.translation import gettext_lazy as _
+
+import accounts.admin as accounts_admin
+import products.admin as product_admin
 from accounts.admin import CustomUserAdmin
+from .models import Customer
 
 
 @admin.register(Customer)
 class CustomerAdmin(CustomUserAdmin):
     model = Customer
+
     fieldsets = (
         (_("اطلاعات حساب کاربری"), {"fields": ("email", "phone", "password")}),
         (_("اطلاعات شخصی"), {
@@ -29,6 +33,8 @@ class CustomerAdmin(CustomUserAdmin):
         (_("تاریخ های مهم"), {"fields": ("last_login", 'date_joined', 'date_modified')}),
         (_("اطلاعات حساب"), {"fields": ("balance",)})
     )
+    inlines = [accounts_admin.UserAddressInline, product_admin.OrderInline,
+               product_admin.RatingInline, product_admin.CommentInline]
 
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)

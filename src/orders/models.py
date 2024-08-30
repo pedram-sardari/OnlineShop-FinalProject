@@ -8,12 +8,14 @@ from django.utils.translation import gettext_lazy as _
 from accounts.models import UserAddress
 from customers.models import Customer
 from products.models import StoreProduct
+from products.utils import generate_random_code
 from website.models import CreateUpdateDateTimeFieldMixin, Address
 from .managers import OrderManager, OrderItemManager, CartManager, CartItemManager
 
 
 class Order(CreateUpdateDateTimeFieldMixin, models.Model):
     cash_coupon_discount = models.PositiveIntegerField(_("کوپن تخفیف"), default=0)
+    order_number = models.CharField(_("order number"), max_length=10, unique=True, default=generate_random_code)
     is_paid = models.BooleanField(_("پرداخت شده"), default=False)
     total = models.PositiveIntegerField(_("جمع کل"), default=0)
     user_address = models.ForeignKey(

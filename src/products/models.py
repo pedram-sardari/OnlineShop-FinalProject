@@ -91,7 +91,7 @@ class Coupon(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.code:
-            self.code = utils.generate_random_code()
+            self.code = utils.generate_random_code(digits=True, letters=True, length=12)
         # todo: what if your code is duplicated
         # while True:
         #     if not self.code:

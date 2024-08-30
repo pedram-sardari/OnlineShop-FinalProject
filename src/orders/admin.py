@@ -23,10 +23,10 @@ def return_order_items(modeladmin, request, queryset):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'display_customer', 'total', 'is_paid', 'cash_coupon_discount', 'user_address')
+    list_display = ('id', 'display_customer', 'total', 'is_paid', 'cash_coupon_discount', 'user_address', 'order_number')
     list_select_related = ['user_address', 'customer']
-    fields = ['customer', 'is_paid', 'user_address', 'cash_coupon_discount', 'total']
-    readonly_fields = ['cash_coupon_discount', 'total']
+    fields = ['customer', 'is_paid', 'user_address', 'cash_coupon_discount', 'total', 'order_number']
+    readonly_fields = ['cash_coupon_discount', 'total', 'order_number']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "user_address":
@@ -51,7 +51,7 @@ class OrderItemsAdmin(admin.ModelAdmin):
     @admin.display(description='order', ordering='order__id')
     def display_order(self, obj):
         link = reverse('admin:orders_order_change', args=(obj.order.id,))
-        return format_html('<a href="{}">{}</a>', link, obj.order.id)
+        return format_html('<a href="{}">{}</a>', link, obj.order.order_number)
 
     @admin.display(description='is_paid', ordering='order__is_paid', boolean=True)
     def display_is_paid(self, obj):

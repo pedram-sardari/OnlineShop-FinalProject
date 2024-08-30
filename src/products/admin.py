@@ -36,7 +36,7 @@ class CommentInline(admin.TabularInline):
 
 class OrderInline(admin.TabularInline):
     model = Order
-    readonly_fields = ('is_paid', 'created_at',)
+    readonly_fields = ('is_paid', 'created_at','order_number')
     extra = 1
 
 

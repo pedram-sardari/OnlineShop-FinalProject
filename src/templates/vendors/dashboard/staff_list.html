@@ -32,9 +32,9 @@
         <tr>
             <th scope="row">{{ forloop.counter }}</th>
             <td>
-                {% if request.user.image %}
+                {% if staff.image %}
                     <img class="rounded-circle"
-                         src="{{ request.user.image.url }}" alt="photo"
+                         src="{{ staff.image.url }}" alt="photo"
                          width="25">
                 {% else %}
                     <img class="rounded-circle"

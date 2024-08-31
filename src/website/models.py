@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 import jdatetime
@@ -33,3 +34,26 @@ class Address(CreateUpdateDateTimeFieldMixin, models.Model):
 
     def __str__(self):
         return f"{self.province}-{self.city}-{self.neighborhood}-{self.street}-{self.alley}-{self.no}-{self.zipcode}"
+
+
+class RatingFieldsAndMethodsMixin(models.Model):
+    rating_count = models.PositiveIntegerField(_("تعداد امتیازات"), default=0)
+    rating_sum = models.PositiveIntegerField(_("مجموع امتیازات"), default=0)
+    rating_avg = models.DecimalField(
+        verbose_name=_("میانگین امتیازات"),
+        max_digits=2,
+        decimal_places=1,
+        validators=[MinValueValidator(0), MaxValueValidator(5)],
+        blank=True,
+        default=0.0,
+    )
+
+    class Meta:
+        abstract = True
+
+    def update_rating_avg(self):
+        if self.rating_count > 0:
+            self.rating_avg = round(self.rating_sum / self.rating_count, 1)
+        else:
+            self.rating_avg = 0
+        self.save()  # NOQA

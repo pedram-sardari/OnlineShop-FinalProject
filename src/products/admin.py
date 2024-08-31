@@ -36,7 +36,7 @@ class CommentInline(admin.TabularInline):
 
 class OrderInline(admin.TabularInline):
     model = Order
-    readonly_fields = ('is_paid', 'created_at','order_number')
+    readonly_fields = ('is_paid', 'created_at', 'order_number')
     extra = 1
 
 
@@ -70,7 +70,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'display_category', 'is_available')
+    list_display = ('id', 'name', 'display_category', 'is_available', 'rating_avg')
     list_select_related = ['category']
     inlines = [ProductImageInline, ProductColorInline]
     list_filter = ['category__name']
@@ -145,9 +145,11 @@ class CouponAdmin(admin.ModelAdmin):
 
 @admin.register(StoreProduct)
 class StoreProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'display_product', 'display_store', 'display_store_discount', 'price',
+    list_display = ('id', 'display_product', 'display_store', 'rating_avg', 'display_store_discount', 'price',
                     'inventory', 'product_color', 'is_available', 'is_deleted')
     actions = [website_admin.soft_delete, website_admin.remove_soft_delete]
+    readonly_fields = ['rating_avg', 'rating_count', 'rating_sum']
+    exclude = ['rating_sum']
 
     def name(self, instance):
         return instance.product.name

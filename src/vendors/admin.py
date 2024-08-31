@@ -96,11 +96,11 @@ class OperatorAdmin(StaffAdmin):
 
 @admin.register(Store)
 class StoreAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'owner', 'manager', 'operator')
-    fields = ['name', 'description', 'address', 'order_count', 'slug']
+    list_display = ('id', 'name', 'owner', 'manager', 'operator', 'rating_avg')
+    fields = ['name', 'description', 'address', 'order_count', 'slug', 'rating_avg', 'rating_count']
     list_filter = ['created_at']
     search_fields = ['name']
-    readonly_fields = ['order_count', 'slug']
+    readonly_fields = ['order_count', 'slug','rating_avg', 'rating_count']
     inlines = [StaffInline, products_admin.StoreDiscountInline]
 
     def owner(self, obj):

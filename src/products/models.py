@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.text import slugify
@@ -7,9 +6,10 @@ from django.utils.translation import gettext_lazy as _
 
 from customers.models import Customer
 from vendors.models import Store
-from website.models import Address, CreateUpdateDateTimeFieldMixin
-from . import utils
 from website.manager import SoftDeleteManager
+from website.models import Address, CreateUpdateDateTimeFieldMixin, RatingFieldsAndMethodsMixin
+from website.constants import RATING_CHOICES
+from . import utils
 
 User = get_user_model()
 
@@ -153,7 +153,7 @@ class Category(CreateUpdateDateTimeFieldMixin, models.Model):
         return self.name
 
 
-class Product(CreateUpdateDateTimeFieldMixin, models.Model):
+class Product(CreateUpdateDateTimeFieldMixin, RatingFieldsAndMethodsMixin, models.Model):
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
@@ -172,16 +172,6 @@ class Product(CreateUpdateDateTimeFieldMixin, models.Model):
     slug = models.SlugField(max_length=150, unique=True, blank=True, allow_unicode=True)
     description = models.TextField(_("توضیحات"), null=True, blank=True)
     is_available = models.BooleanField(_("موجود است؟"), default=True)
-    rating_count = models.PositiveIntegerField(_("تعداد امتیازات"), default=0)
-    rating_sum = models.PositiveIntegerField(_("مجموع امتیازات"), default=0)
-    rating_avg = models.DecimalField(
-        verbose_name=_("میانگین امتیازات"),
-        max_digits=2,
-        decimal_places=1,
-        validators=[MinValueValidator(0), MaxValueValidator(5)],
-        blank=True,
-        default=0.0,
-    )
 
     class Meta:
         verbose_name = _("محصول")
@@ -196,13 +186,6 @@ class Product(CreateUpdateDateTimeFieldMixin, models.Model):
     @property
     def inventory(self):
         return  # todo: implementation
-
-    def update_rating_avg(self):
-        if self.rating_count > 0:
-            self.rating_avg = round(self.rating_sum / self.rating_count, 1)
-        else:
-            self.rating_avg = 0
-        self.save()
 
     def set_slug(self):
         if not self.id or self.slug != slugify(self.name, allow_unicode=True):
@@ -244,7 +227,7 @@ class ProductImage(models.Model):
         return str(self.image)
 
 
-class StoreProduct(CreateUpdateDateTimeFieldMixin, models.Model):
+class StoreProduct(CreateUpdateDateTimeFieldMixin, RatingFieldsAndMethodsMixin, models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="store_products",
                                 verbose_name=_("محصول"))
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="store_products", verbose_name=_("فروشگاه"))
@@ -372,14 +355,15 @@ class Rating(CreateUpdateDateTimeFieldMixin, models.Model):
         related_name="ratings",
         verbose_name=_("کاربر"),
     )
-    product = models.ForeignKey(
-        Product,
+    store_product = models.ForeignKey(
+        StoreProduct,
         on_delete=models.CASCADE,
         related_name="ratings",
-        verbose_name=_("محصول")
+        verbose_name=_("محصول فروشگاهی")
     )
     score = models.PositiveSmallIntegerField(
         _("امتیاز"),
+        choices=RATING_CHOICES,
         default=1,
         validators=[
             MinValueValidator(1),
@@ -390,33 +374,37 @@ class Rating(CreateUpdateDateTimeFieldMixin, models.Model):
     class Meta:
         verbose_name = _("امتیاز")
         verbose_name_plural = _("امتیازات")
-        unique_together = ("customer", "product")
+        unique_together = ("customer", "store_product")
 
-    def add_rating_to_product(self):
+    def add_rating(self, related_obj):
         if self.id:
             # todo: handle invalid id!
             old_rating = Rating.objects.get(id=self.id)
-            self.product.rating_sum -= old_rating.score
+            related_obj.rating_sum -= old_rating.score
         else:
-            self.product.rating_count += 1
-        self.product.rating_sum += self.score
-        self.product.update_rating_avg()
+            related_obj.rating_count += 1
+        related_obj.rating_sum += self.score
+        related_obj.update_rating_avg()
 
-    def remove_rating_from_product(self):
+    def remove_rating(self, related_obj):
         if self.id:
             # todo: handle invalid id!
             old_rating = Rating.objects.get(id=self.id)
-            self.product.rating_sum -= old_rating.score
-            self.product.rating_count -= 1
-            self.product.update_rating_avg()
+            related_obj.rating_sum -= old_rating.score
+            related_obj.rating_count -= 1
+            related_obj.update_rating_avg()
 
     def save(self, *args, **kwargs):
-        self.add_rating_to_product()
+        self.add_rating(related_obj=self.store_product)
+        self.add_rating(related_obj=self.store_product.product)
+        self.add_rating(related_obj=self.store_product.store)
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        self.remove_rating_from_product()
+        self.remove_rating(related_obj=self.store_product)
+        self.remove_rating(related_obj=self.store_product.product)
+        self.remove_rating(related_obj=self.store_product.store)
         super().delete(*args, **kwargs)
 
     def __str__(self):
-        return f"{str(self.customer)} | {self.product.name} | {self.score}"
+        return f"{str(self.customer)} | {self.store_product.product.name} | {self.score}"

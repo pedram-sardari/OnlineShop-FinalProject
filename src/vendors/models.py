@@ -1,18 +1,19 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models import Sum
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
 from website.constants import UserType
-from website.models import Address, CreateUpdateDateTimeFieldMixin
+from website.models import Address, CreateUpdateDateTimeFieldMixin, RatingFieldsAndMethodsMixin
 from .managers import OwnerStaffManager, ManagerStaffManager, OperatorStaffManager
 
 User = get_user_model()
 
 
-class Store(CreateUpdateDateTimeFieldMixin, models.Model):
+class Store(CreateUpdateDateTimeFieldMixin, RatingFieldsAndMethodsMixin, models.Model):
     name = models.CharField(_("نام فروشگاه"), max_length=100, unique=True)
     slug = models.SlugField(max_length=150, unique=True, blank=True, allow_unicode=True)
     description = models.TextField(verbose_name=_("توضیحات"), null=True, blank=True)

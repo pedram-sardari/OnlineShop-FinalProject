@@ -6,6 +6,26 @@
 {% endblock %}
 
 {% block content %}
+    <div id="products-container" class="container">
+        <div class="row border rounded-3 mx-auto mt-5 pt-3 bg-white">
+            <h2 class="text-center">محصولات</h2>
+
+            <!-- card groups -->
+            <div id="card-group-store-products" class="row row-cols-md-5 g-4 m-auto pb-4">
+            </div>
+            <!-- card groups -->
+
+            <!-- view all -->
+            <div class="row container-fluid p-3 justify-content-start">
+                <div class="d-grid gap-2 col-6 mx-auto">
+                    <a href="{% url 'products:store-product-list' %}"
+                       class="btn btn-outline-primary">مشاهــــده همه</a>
+                </div>
+            </div>
+            <!-- view all -->
+        </div>
+    </div>
+
     <div id="stores-container" class="container">
         <div class="row border rounded-3 mx-auto mt-5 pt-3 bg-white">
             <h2 class="text-center">فروشگاه ها</h2>
@@ -32,13 +52,8 @@
         </div>
     </div>
 
-    <div id="products-container" class="container">
-        <div class="row border rounded-3 mx-auto mt-5 pt-3 bg-white">
-            <h2 class="text-center">محصولات</h2>
-            {% include 'products/store_product_list.html' %}
-        </div>
-    </div>
 {% endblock %}
+
 {% block js %}
     <script src="{% static 'website/js/index.js' %}"></script>
 {% endblock %}

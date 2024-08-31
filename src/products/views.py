@@ -13,7 +13,7 @@ from .models import Product, StoreProduct, Comment, Rating
 
 class StoreProductListView(ListView):
     model = StoreProduct
-    template_name = 'website/index.html'
+    template_name = 'products/store_product_list.html'
     context_object_name = 'store_product_list'
     sort_by = {
         'best_seller': '-order_count',

@@ -11,6 +11,7 @@ let mostExpensiveLink = document.getElementById('recently-created-link')
 let cardGroupStores = document.getElementById('card-group-stores')
 let bestSellerLinkStores = document.getElementById('best-seller-link-stores')
 let recentlyCreatedLinkStores = document.getElementById('recently-created-link-stores')
+let topRatingLinkStores = document.getElementById('top-rating-link-stores')
 
 
 //pagination
@@ -35,6 +36,7 @@ let topRatingURL = storeProductsURL + '&ordering=-product__rating_avg'
 let storesURL = baseURL + `products/api/v1/store/${queryParams}`
 let bestSellerStoresURL = storesURL + '&ordering=-orders_count'
 let recentlyCreatedStoresURL = storesURL + '&ordering=-created_at'
+let topRatingStoresURL = storesURL + '?ordering=-rating_avg'
 let storeDefaultImage = 'http://localhost:8000/static/products/img/product-default-image.png'
 
 // event listeners
@@ -79,6 +81,12 @@ recentlyCreatedLinkStores.addEventListener('click', (event) => {
     fetchStores(null, recentlyCreatedStoresURL)
 })
 
+topRatingLinkStores.addEventListener('click', (event) => {
+    event.preventDefault()
+    deactivateOrderings()
+    topRatingLinkStores.classList.add('active')
+    fetchStores(null, topRatingStoresURL)
+})
 
 function fetchStores(event, url = storesURL) {
     console.log(event);

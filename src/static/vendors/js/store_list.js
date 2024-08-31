@@ -20,7 +20,7 @@ let baseURL = `http://${window.location.host}/en/`
 let storesURL = baseURL + 'products/api/v1/store/'
 let bestSellerStoresURL = storesURL + '?ordering=-orders_count'
 let recentlyCreatedStoresURL = storesURL + '?ordering=-created_at'
-let topRatingStoresURL = storesURL + '?ordering=-orders_count'
+let topRatingStoresURL = storesURL + '?ordering=-rating_avg'
 let storeDefaultImage = 'http://localhost:8000/static/products/img/product-default-image.png'
 
 
@@ -42,6 +42,12 @@ recentlyCreatedLinkStores.addEventListener('click', (event) => {
     fetchStores(null, recentlyCreatedStoresURL)
 })
 
+topRatingLinkStores.addEventListener('click', (event) => {
+    event.preventDefault()
+    deactivateOrderings()
+    topRatingLinkStores.classList.add('active')
+    fetchStores(null, topRatingStoresURL)
+})
 
 function fetchStores(event, url = storesURL) {
     console.log(event);

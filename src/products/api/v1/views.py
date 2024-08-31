@@ -37,7 +37,7 @@ class StoreListAPIView(ListAPIView):
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_fields = ['name']
     search_fields = ['name']
-    ordering_fields = ['id', 'created_at', 'orders_count']
+    ordering_fields = ['id', 'created_at', 'orders_count', 'rating_avg']
     ordering = ['id']
 
 

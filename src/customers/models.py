@@ -27,7 +27,8 @@ class Customer(User):
         return self.orders.filter(is_paid=True, order_items__store_product__product=product).exists()
 
     def has_rated_product(self, product):
-        return product.ratings.filter(customer=self).exists()
+        from products.models import Rating
+        return Rating.objects.filter(customer=self, store_product__product=product).exists()
 
     def set_group(self):
         group = Group.objects.get(name=UserType.CUSTOMER)

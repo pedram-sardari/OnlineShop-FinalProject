@@ -65,10 +65,6 @@ class ProductDetailView(DetailView):
         context['rating_form'] = RatingForm()
         context['comment_list'] = Comment.objects.filter(product=product,
                                                          status=Comment.Status.APPROVED)
-        customer = Customer.get_customer(user=self.request.user)
-        if customer:
-            context['can_rate'] = (customer.has_ordered_product(product)
-                                   and not customer.has_rated_product(product))
         return context
 
 
@@ -113,23 +109,22 @@ class RatingCreateView(PermissionRequiredMixin, CreateView):
 
     def test_func(self):
         customer = Customer.get_customer(user=self.request.user)
-        product = get_object_or_404(Product, pk=self.kwargs.get('product_id'))
-        return (customer.has_ordered_product(product)
-                and not customer.has_ordered_customer(product))
+        store_product = get_object_or_404(StoreProduct, pk=self.kwargs.get('store_product_id'))
+        return customer.has_ordered_product(store_product.product)
 
     def get_success_url(self):
         if next_url := self.request.GET.get('next'):
             return next_url
-        return reverse_lazy('products:product-detail', kwargs={'pk': self.kwargs.get('product_id')})
+        return reverse_lazy('home')
 
     def form_valid(self, form):
         rating = form.save(commit=False)
-        product = get_object_or_404(Product, pk=self.kwargs.get('product_id'))
+        store_product = get_object_or_404(StoreProduct, pk=self.kwargs.get('store_product_id'))
         self.model.objects.update_or_create(
-            product=product,
+            store_product=store_product,
             customer=Customer.get_customer(user=self.request.user),
             defaults={'score': rating.score},
         )
         response = HttpResponseRedirect(self.get_success_url())
-        messages.success(self.request, f"CommentCreateView")
+        messages.success(self.request, f"RatingCreateView")
         return response

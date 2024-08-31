@@ -33,8 +33,6 @@ class ProductColorForm(FormatFormFieldsMixin, forms.ModelForm):
 
 
 class RatingForm(FormatFormFieldsMixin, forms.ModelForm):
-    score = forms.ChoiceField(label=_("امتیاز"), choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)])
-
     class Meta:
         model = Rating
         fields = ['score']

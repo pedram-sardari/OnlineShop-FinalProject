@@ -98,7 +98,7 @@
                             </div>
 
                             <div class="modal-footer">
-                                <form action="{% url 'products:rating-create' order_item.store_product.product.id %}?next={{ next_url }}"
+                                <form action="{% url 'products:rating-create' order_item.store_product.id %}?next={{ next_url }}"
                                       method="post" class="flex-grow-1">
                                     {% csrf_token %}
                                     {{ rating_form.as_p }}
@@ -126,10 +126,12 @@
                     {% endif %}
                 </div>
                 <div class="d-flex align-items-center me-2">
-                    {{ order_item.store_product }}
-                    {% if order_item.store_product.product_color %}
-                        ({{ order_item.store_product.product_color.color.value }})
-                    {% endif %}
+                    <a href="{% url 'products:product-detail' order_item.store_product.product.id %}">
+                        {{ order_item.store_product }}
+                        {% if order_item.store_product.product_color %}
+                            ({{ order_item.store_product.product_color.color.value }})
+                        {% endif %}
+                    </a>
                 </div>
             </td>
             <td>{{ order_item.get_status_display }}</td>

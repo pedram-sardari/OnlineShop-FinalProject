@@ -29,7 +29,7 @@ urlpatterns = [
          views.MyCommentsListView.as_view(),
          name='my-comment-list'),
 
-    path('product/<int:product_id>/rating/create/',
+    path('store-product/<int:store_product_id>/rating/create/',
          views.RatingCreateView.as_view(),
          name='rating-create'),
 

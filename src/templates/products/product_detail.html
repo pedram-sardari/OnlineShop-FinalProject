@@ -104,19 +104,6 @@
                     </div>
                     <!-- product detail -->
 
-                    <!-- rating form -->
-                    {% if can_rate %}
-                        <div class="col-4">
-                            <form action="{% url 'products:rating-create' product.id %}" method="post">
-                                {% csrf_token %}
-                                {{ rating_form.as_p }}
-                                <div class="d-grid gap-2 mt-3">
-                                    <button type="submit" class="btn btn-success fw-bold fs-5">ثبت</button>
-                                </div>
-                            </form>
-                        </div>
-                    {% endif %}
-                    <!-- rating form -->
                 </div>
             </div>
         </div>
@@ -129,7 +116,7 @@
     <div id="" class="container border rounded-3 mx-auto mt-5 py-3 bg-white">
         <h4 class="text-center mb-4">فروشندگان این محصول</h4>
         <section id="vendors-container">
-            
+
         </section>
     </div>
     <!-- vendors section -->

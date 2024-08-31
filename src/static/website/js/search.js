@@ -148,7 +148,7 @@ function createStoreCard(store) {
                                 </svg>
                                 <!-- star icon -->
                                 <p class="card-text fw-bold px-1 mb-0">
-                                    <span class="fw-light">4.2(3)</span>
+                                    <span class="fw-light">${store.rating_avg} (<span class="text-muted">${store.rating_count}</span>)</span>
                                 </p>
                             </div>
                             <!-- rating -->

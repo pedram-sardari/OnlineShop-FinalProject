@@ -67,7 +67,8 @@ class StoreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Store
-        fields = ['id', 'name', 'address', 'order_count', 'product_count', 'created_at', 'active_days', 'url']
+        fields = ['id', 'name', 'address', 'order_count', 'product_count', 'rating_avg', 'rating_count', 'created_at',
+                  'active_days', 'url']
 
     def get_active_days(self, instance):
         timedelta = timezone.now() - instance.created_at

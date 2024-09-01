@@ -1,6 +1,7 @@
 **/migrations/*.py
 !**/migrations/__init__.py
 
+*.sql
 .env
 otp-pg.py
 

@@ -13,6 +13,12 @@ let submitOrderBtn = document.getElementById('submitOrderButton')
 let confirmSubmitOrderModalBtn = document.getElementById('confirm-submit-order-modal-button')
 let yesBtn = document.getElementById('yes-button')
 let closeSubmitOrderModalBtn = document.getElementById('closeSubmitOrderModal')
+
+//cart status
+let goodsTotalAmountElem = document.getElementById('goods-total-amount')
+let profitAmountElem = document.getElementById('profit-amount')
+let finalAmountElem = document.getElementById('final-amount')
+
 let cart;
 
 // urls
@@ -23,9 +29,9 @@ let submitOrderURL = baseURL + 'orders/api/v1/submit-order/'
 let loginURL = baseURL + `accounts/login-email/?next=${baseURL + 'orders/cart/'}`
 let userAddressURL = baseURL + 'accounts/api/v1/user-address/'
 let cartItemURL = baseURL + 'orders/api/v1/cart-item/'
-const payloadCartItem = {
-    'store_product': null,
-    'quantity': 1,
+const payloadCartItemSample = {
+    'store_product': null, //store product id
+    'quantity': 0,
 }
 
 window.addEventListener('load', fetchCart)
@@ -88,7 +94,7 @@ function sendCreateNewAddressFormData(event) {
     event.preventDefault();
     let formData = new FormData(this);
     let payload = generateFormDataPayload(formData)
-    console.log(payload);
+    // console.log(payload);
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     fetch(userAddressURL, {
         method: 'POST',
@@ -117,7 +123,6 @@ function generateFormDataPayload(formData) {
     let payload = {}
     for (let pair of formData.entries()) {
         if (pair[0] !== "csrfmiddlewaretoken") {
-            // console.log(pair);
             payload[pair[0]] = pair[1]
         }
     }
@@ -126,11 +131,11 @@ function generateFormDataPayload(formData) {
 
 function saveSelectedAddress(event) {
     if (changeAddressSelectElement.value) {
-        console.log(changeAddressSelectElement.value)
+        // console.log(changeAddressSelectElement.value)
         // update the cart address in backend and reassign the updated cart to the `cart` var
         updateBackendCartAddress(changeAddressSelectElement.value)
     } else {
-        console.log('else')
+        // console.log('else')
     }
 }
 
@@ -179,7 +184,7 @@ function fetchCart() {
 }
 
 function processCart() {
-    console.log(cart);
+    // console.log(cart);
     // process user cart address
     if (cart.user_address) {
         displayCartAddress(cart.user_address)
@@ -190,10 +195,11 @@ function processCart() {
 
     // process user cart items
     fillCartItemContainer(cart.cart_items)
+    updateCartSatus()
 }
 
 function displayCartAddress(address) {
-    console.log(address);
+    // console.log(address);
     if (address && stringifyAddress(address).trim() !== '') {
         delete address.id
         cartAddress.innerHTML = stringifyAddress(address)
@@ -237,7 +243,7 @@ function fillCartItemContainer(cartItems) {
     cartItemContainerElement.innerHTML = ''
     if (cartItems.length) {
         for (let i in cartItems) {
-            console.log(cartItems[i]);
+            // console.log(cartItems[i]);
             let cartItemCard = createCartItemElem(cartItems[i])
             cartItemContainerElement.innerHTML = cartItemCard + cartItemContainerElement.innerHTML
         }
@@ -263,14 +269,7 @@ function createCartItemElem(cartItem) {
                                         </a>
                                     </h5>
                                     
-                                    <p class="text-muted mb-0">
-                                        <i class="bx bxs-star text-warning"></i>
-                                        <i class="bx bxs-star text-warning"></i>
-                                        <i class="bx bxs-star text-warning"></i>
-                                        <i class="bx bxs-star text-warning"></i>
-                                        <i class="bx bxs-star-half text-warning"></i>
-                                    </p>
-                                    <p class="mb-0 mt-1">رنگ : <span class="color fw-medium">${cartItem.store_product.color}</span></p>
+                                    <p class="mb-0 mt-1">رنگ : <span class="color fw-medium">${displayColor(cartItem.store_product.color)}</span></p>
                                 </div>
                             </div>
                             <div class="flex-shrink-0 ms-2">
@@ -292,13 +291,7 @@ function createCartItemElem(cartItem) {
                                     <div class="mt-3">
                                         <p class="text-muted mb-2">قیمت</p>
                                         <h6 class="mb-0 mt-2">
-<!--                                            <span class="text-muted ms-2">-->
-<!--                                                <del class="font-size-16 fw-normal">${2000}</del>-->
-<!--                                            </span>-->
-                                            <span class="price">
-                                                ${numberWithCommas(cartItem.store_product.price)}
-                                            </span>
-                                            تومان
+                                            ${createDiscountElem(cartItem.store_product)}
                                         </h6>
                                     </div>
                                 </div>
@@ -313,7 +306,7 @@ function createCartItemElem(cartItem) {
                                 <div class="col-md-3">
                                     <div class="mt-3">
                                         <p class="text-muted mb-2">جمع</p>
-                                        <h6 class="cart-item-sum">${numberWithCommas(cartItem.quantity * cartItem.store_product.price)} تومان</h6>
+                                        <h6 ><span class="cart-item-total">${numberWithCommas(cartItem.quantity * cartItem.store_product.price)} </span>تومان</h6>
                                     </div>
                                 </div>
                             </div>
@@ -325,6 +318,36 @@ function createCartItemElem(cartItem) {
 `
 }
 
+
+function createDiscountElem(storeProduct) {
+    if (storeProduct.discounted_price) {
+        return `
+            <div>
+                <p class="card-text  text-muted">
+                    <del>${numberWithCommas(storeProduct.price)} تومان</del>
+                </p>
+            </div>
+            <div>
+                <p class="card-text  fw-bold">${numberWithCommas(storeProduct.discounted_price)}
+                    تومان</p>
+            </div>
+`
+    } else {
+        return `
+            <div>
+                <p class="card-text ">${numberWithCommas(storeProduct.price)} تومان</p>
+            </div>
+`
+    }
+}
+
+function displayColor(color) {
+    if (color) {
+        return color
+    } else {
+        return '-'
+    }
+}
 
 function removeCartItem(event) {
     event.preventDefault()
@@ -338,7 +361,7 @@ function removeCartItem(event) {
         .parentElement.remove()
 
     let storeProductID = deleteBtn.getAttribute('data-store-product-id')
-    console.log(storeProductID)
+    // console.log(storeProductID)
     let cartItem = getCartItemByStoreProductID(storeProductID)
     // console.log(cartItem);
     let newPayloadCartItem = convertToPayloadCartItem(cartItem)
@@ -349,7 +372,7 @@ function removeCartItem(event) {
 }
 
 function deleteBackendCartItem(cartItem) {
-    console.log(cartItem);
+    // console.log(cartItem);
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     fetch(cartItemURL, {
         method: 'DELETE',
@@ -380,39 +403,37 @@ function quantityChanged(event) {
     // console.log(inputElem.getAttribute('data-store-product-id'))
     let storeProductID = inputElem.getAttribute('data-store-product-id')
     let cartItem = getCartItemByStoreProductID(storeProductID)
+    cartItem.quantity = inputElem.value
     // console.log(cartItem);
     let newPayloadCartItem = convertToPayloadCartItem(cartItem)
     // console.log(newPayloadCartItem);
-    let updatedPayloadCartItem = updateCartItemQuantity(newPayloadCartItem, Number(inputElem.value));
-    console.log(updatedPayloadCartItem);
 
-    updateBackendCartItem(updatedPayloadCartItem)
-    // updateCartTotal()
+    updateBackendCartItem(newPayloadCartItem)
+    updateCartSatus()
+    updateCartItemTotalElem(event)
 }
 
 function getCartItemByStoreProductID(storeProductID) {
-    console.log(storeProductID);
+    // console.log(storeProductID);
     for (let i in cart.cart_items) {
-        console.log(cart.cart_items[i].quantity);
+        // console.log(cart.cart_items[i].quantity);
         if (cart.cart_items[i].store_product.id === Number(storeProductID)) {
             return cart.cart_items[i]
         }
     }
 }
 
-function updateCartItemQuantity(cartItem, newQuantity) {
-    cartItem.quantity = newQuantity
-    return cartItem
-}
 
 function convertToPayloadCartItem(cartItem) {
-    let payloadCartItemCopy = {...payloadCartItem}
+    let payloadCartItemCopy = {...payloadCartItemSample}
+
     payloadCartItemCopy.store_product = JSON.stringify(cartItem.store_product.id)
+    payloadCartItemCopy.quantity = cartItem.quantity
     return payloadCartItemCopy
 }
 
 function updateBackendCartItem(cartItem) {
-    console.log(cartItem)
+    // console.log(cartItem)
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     fetch(cartItemURL, {
         method: 'PUT',
@@ -434,20 +455,55 @@ function updateBackendCartItem(cartItem) {
 
 }
 
-function updateCartTotal() {
-    let cartItemContainer = document.getElementsByClassName('cart-items')[0]
-    let cartItems = cartItemContainer.getElementsByClassName('cart-item')
-    let total = 0
-    for (let i = 0; i < cartItems.length; i++) {
-        let cartItem = cartItems[i]
-        let priceElement = cartItem.getElementsByClassName('cart-price')[0]
-        let quantityElement = cartItem.getElementsByClassName('cart-quantity-input')[0]
-        let price = parseFloat(priceElement.innerText.replace('$', ''))
-        let quantity = quantityElement.value
-        total = total + (price * quantity)
+function updateCartSatus() {
+    calculateFinalAmount()
+    calculateGoodsTotalAmount()
+    calculateProfitAmount()
+}
+
+function calculateFinalAmount() {
+    let result = 0
+    let price;
+    for (const i in cart.cart_items) {
+        if (cart.cart_items[i].store_product.discounted_price) {
+            price = cart.cart_items[i].store_product.discounted_price
+        } else {
+            price = cart.cart_items[i].store_product.price
+        }
+        result += price * cart.cart_items[i].quantity
     }
-    total = Math.round(total * 100) / 100
-    document.getElementsByClassName('cart-total-price')[0].innerText = '$' + total
+    finalAmountElem.innerHTML = numberWithCommas(result)
+}
+
+function calculateGoodsTotalAmount() {
+    let result = 0
+    for (const i in cart.cart_items) {
+        result += cart.cart_items[i].store_product.price * cart.cart_items[i].quantity
+    }
+    goodsTotalAmountElem.innerHTML = numberWithCommas(result)
+
+}
+
+function calculateProfitAmount() {
+    let finalAmount = finalAmountElem.innerHTML.replace(/,/g, '')
+    let goodsTotalAmount = goodsTotalAmountElem.innerHTML.replace(/,/g, '')
+    profitAmountElem.innerHTML = numberWithCommas(parseInt(goodsTotalAmount) - parseInt(finalAmount))
+}
+
+function updateCartItemTotalElem(event) {
+    let quantityInputElem = event.target
+    let storeProductID = quantityInputElem.getAttribute('data-store-product-id')
+    let cartItem = getCartItemByStoreProductID(storeProductID)
+
+    let cartItemTotalElem = quantityInputElem
+        .parentElement
+        .parentElement
+        .parentElement
+        .parentElement
+        .getElementsByClassName('cart-item-total')[0]
+    let price = cartItem.store_product.discounted_price ? cartItem.store_product.discounted_price : cartItem.store_product.price
+    cartItemTotalElem.innerHTML = numberWithCommas(price * cartItem.quantity)
+
 }
 
 function numberWithCommas(x) {
@@ -459,4 +515,3 @@ function stringifyAddress(address) {
         .filter(value => value !== null && value !== '')
         .join('-')
 }
-

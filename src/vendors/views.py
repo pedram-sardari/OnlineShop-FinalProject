@@ -500,13 +500,13 @@ class SelectCategoryListView(PermissionRequiredMixin, ListView):
     permission_required = ['products.add_product']
     model = Category
     template_name = 'accounts/dashboard/dashboard.html'
-    extra_context = {'dashboard_category_list_section': True}
+    extra_context = {'dashboard_category_select_section': True}
 
     def get(self, request, *args, **kwargs):
         if category_slug := self.request.GET.get('category_slug'):
             category = get_object_or_404(self.model, slug=category_slug)
             if not self.model.objects.filter(parent_category=category).exists():
-                return redirect(f"{reverse('vendors:store-product-create')}?category_slug={category.slug}")
+                return redirect(f"{reverse('vendors:product-create')}?category_slug={category.slug}")
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):

@@ -172,10 +172,10 @@
             {% include 'vendors/dashboard/store_product_list.html' %}
         </div>
 
-    {% elif dashboard_category_list_section %}
+    {% elif dashboard_category_select_section %}
 
         <div>
-            {% include 'products/category_list.html' %}
+            {% include 'vendors/dashboard/category_select.html' %}
         </div>
 
     {% elif store_discount_section %}
@@ -227,7 +227,9 @@
     {% endif %}
 
     {% if create_new_product_link_section %}
-        <p class="text-right mt-4">اگر محصول مورد نظر شما در سایت وجود ندارد میتوانید <a href="">اضافه کنید</a>. </p>
+        <p class="text-right mt-4">اگر محصول مورد نظر شما در سایت وجود ندارد میتوانید
+            <a href="{% url 'vendors:product-create--select-category' %}">اضافه کنید</a>
+            . </p>
     {% endif %}
 
 {% endblock %}

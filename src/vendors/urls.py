@@ -1,9 +1,7 @@
-from django.urls import path, reverse_lazy
-from . import views
-from accounts import views as accounts_views
-
+from django.urls import path
 from django.views.generic import TemplateView
-from django.contrib.auth.views import LogoutView
+
+from . import views
 
 app_name = 'vendors'
 urlpatterns = [
@@ -93,11 +91,12 @@ urlpatterns = [
 
     path('panel/store-product/create/select-product/',
          views.SelectProductView.as_view(),
-         name='store-product-create-select-product'),
+         name='store-product-create--select-product'),
 
     path('panel/store-product/create/select-category/',
+    path('panel/product/create/select-category/',
          views.SelectCategoryListView.as_view(),
-         name='store-product-create-select-category'),
+         name='product-create--select-category'),
 
     path('panel/order-item/',
          views.OrderItemListView.as_view(),

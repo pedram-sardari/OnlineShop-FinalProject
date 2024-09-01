@@ -1,5 +1,5 @@
 from orders.models import Order, OrderItem
-from products.models import Comment, StoreProduct, Discount, StoreDiscount, Rating
+from products.models import Comment, StoreProduct, Discount, StoreDiscount, Rating, Product
 from vendors.models import Staff, Store
 from .constants import UserType
 
@@ -17,6 +17,7 @@ GROUPS = {
         Staff: [1, 2, 3, 4],
 
         # others
+        Product: [1, 2, 3, 4],
         StoreProduct: [1, 2, 3, 4],
         Discount: [1, 2, 3, 4],
         StoreDiscount: [1, 2, 3, 4],
@@ -26,6 +27,7 @@ GROUPS = {
     UserType.MANAGER: {
         Staff: [1,],
         Store: [1, ],
+        Product: [1, 2, 3, 4],
         StoreProduct: [1, 2, 3, 4],
         Discount: [1, 2, 3, 4],
         StoreDiscount: [1, 2, 3, 4],

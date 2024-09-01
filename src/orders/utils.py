@@ -25,11 +25,11 @@ def sync_session_and_db_carts(request: HttpRequest, customer):
                                                                 store_product_id=session_cart_item.get(
                                                                     'store_product'))  # todo: LM How to update without getting
             if created:
-                print('!' * 50, session_cart_item)
-                print('!' * 50, cart_item)
-                cart_item.quantity = session_cart_item['quantity']
+                # print('!' * 50, session_cart_item)
+                # print('!' * 50, cart_item)
+                cart_item.quantity = int(session_cart_item['quantity'])
             else:
-                print('9' * 50, session_cart_item)
-                print('9' * 50, cart_item)
-                cart_item.quantity += session_cart_item['quantity']
+                # print('9' * 50, session_cart_item)
+                # print('9' * 50, cart_item)
+                cart_item.quantity += int(session_cart_item['quantity'])
             cart_item.save()

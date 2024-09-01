@@ -95,7 +95,7 @@ class OrderItem(CreateUpdateDateTimeFieldMixin, models.Model):
         self.price = self.store_product.price
         if self.store_product.store_discount:
             self.cash_discount = self.store_product.store_discount.get_cash_discount(self.price)
-        self.total = self.price * self.quantity - self.cash_discount
+        self.total = (self.price - self.cash_discount) * self.quantity
 
     def save(self, *args, **kwargs):
         self.update_calculative_fields()

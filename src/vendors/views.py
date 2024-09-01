@@ -4,6 +4,7 @@ from django.contrib.auth import login
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import transaction
 from django.db.models import Sum
 from django.forms.models import model_to_dict
@@ -17,9 +18,10 @@ from accounts.forms import RegisterPhoneForm
 from accounts.views_base import SendOTPView, VerifyOTPView
 from orders.models import OrderItem
 from products.forms import StoreProductForm, SelectProductForm, StoreDiscountForm
-from products.models import StoreProduct, Category, StoreDiscount, Product
+from products.models import StoreProduct, Category, StoreDiscount, Product, ProductImage
 from website.mixins import IsStaffOfOwnerStore, IsNotAuthenticated
-from .forms import OwnerRegisterEmailForm, StaffRegistrationForm, StaffUpdateForm, StoreForm, OrderItemStatusUpdateForm
+from .forms import (OwnerRegisterEmailForm, StaffRegistrationForm, StaffUpdateForm, StoreForm,
+                    OrderItemStatusUpdateForm, ProductForm)
 from .models import Owner, Store, Staff
 
 
@@ -513,6 +515,41 @@ class SelectCategoryListView(PermissionRequiredMixin, ListView):
         if category_slug := self.request.GET.get('category_slug'):
             return self.model.objects.filter(parent_category__slug=category_slug)
         return self.model.objects.filter(parent_category=None)
+
+
+class ProductCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = ['products.add_product']
+    model = Product
+    form_class = ProductForm
+    template_name = 'accounts/dashboard/dashboard.html'
+    success_url = reverse_lazy('vendors:store-product-create--select-product')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # this prevents to open 'form section' in the dashboard.html
+        context.pop('form', None)
+
+        context['product_form'] = ProductForm()
+        return context
+
+    def get_category(self):
+        return get_object_or_404(Category, slug=self.request.GET.get('category_slug'))
+
+    @transaction.atomic
+    def form_valid(self, form):
+        product = form.save(commit=False)
+        product.category = self.get_category()
+        product.save()
+        for field, value in form.cleaned_data.items():
+            if isinstance(value, InMemoryUploadedFile):
+                ProductImage.objects.create(product=product, image=value)
+        messages.success(self.request, f"ProductCreateView")
+        return HttpResponseRedirect(self.success_url)
+
+    def form_invalid(self, form):
+        for error, message in form.errors.items():
+            messages.error(self.request, message)
+        return super().form_invalid(form)
 
 
 class OrderItemListView(PermissionRequiredMixin, ListView):  # todo : ddddoinnngg

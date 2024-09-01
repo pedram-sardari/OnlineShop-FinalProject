@@ -93,7 +93,10 @@ urlpatterns = [
          views.SelectProductView.as_view(),
          name='store-product-create--select-product'),
 
-    path('panel/store-product/create/select-category/',
+    path('panel/product/create/',
+         views.ProductCreateView.as_view(),
+         name='product-create'),
+
     path('panel/product/create/select-category/',
          views.SelectCategoryListView.as_view(),
          name='product-create--select-category'),

@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from accounts.forms import RegisterEmailForm
 from orders.models import OrderItem
+from products.models import Product
 from website.forms import FormatFormFieldsMixin
 from website.models import Address
 from .models import Owner, Store, Staff
@@ -65,3 +66,18 @@ class OrderItemStatusUpdateForm(forms.ModelForm):
     class Meta:
         model = OrderItem
         fields = ['status']
+
+
+class ProductForm(FormatFormFieldsMixin, forms.ModelForm):
+    image1 = forms.ImageField()
+
+    class Meta:
+        model = Product
+        fields = ['name', 'description']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if hasattr(self, 'files'):
+            for field, img in self.files.items():
+                self.fields[field] = forms.ImageField(required=False)
+        self.format_fields()

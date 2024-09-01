@@ -95,6 +95,10 @@
 
         {% include 'website/sections/form.html' %}
 
+    {% elif product_form %}
+
+        {% include 'vendors/dashboard/product_create_form.html' %}
+
     {% elif account_info %}
         <div>
             <ul class="nav nav-pills border-bottom pb-3 ">
@@ -232,4 +236,8 @@
             . </p>
     {% endif %}
 
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'vendors/js/product_create.js' %}"></script>
 {% endblock %}

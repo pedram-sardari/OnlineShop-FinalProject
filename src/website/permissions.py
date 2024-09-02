@@ -25,7 +25,7 @@ GROUPS = {
         OrderItem: [1, 2, 3, 4],
     },
     UserType.MANAGER: {
-        Staff: [1,],
+        Staff: [1, ],
         Store: [1, ],
         Product: [1, 2, 3, 4],
         StoreProduct: [1, 2, 3, 4],
@@ -35,7 +35,7 @@ GROUPS = {
         OrderItem: [1, 2, 3, 4],
     },
     UserType.OPERATOR: {
-        Staff: [1,],
+        Staff: [1, ],
         Store: [1, ],
         StoreProduct: [1, ],
         Discount: [1, ],
@@ -47,6 +47,8 @@ GROUPS = {
     UserType.CUSTOMER: {
         Comment: [1, 2],
         Rating: [1, 2],
+        Order: [1, ],
+        OrderItem: [1, ],
     }
 
 }

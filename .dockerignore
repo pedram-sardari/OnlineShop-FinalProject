@@ -1,0 +1,4 @@
+venv/
+*.sql
+opt-pg.py
+/**/.idea/

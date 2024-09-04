@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.test import TestCase
 from django.utils import timezone
@@ -106,3 +105,77 @@ class TestUserModel(TestCase):
         address2.is_default = False
         address2.save()
         self.assertEqual(self.user.get_default_user_address(), address1)
+
+
+class TestUserAddressModel(TestCase):
+    def setUp(self):
+        self.user = User.objects.create(
+            first_name="John",
+            last_name="Doe",
+            email="john.doe@example.com",
+            phone="09123456789",
+            national_id="1234567890",
+            date_of_birth="1990-01-01",
+            gender=User.Gender.MALE,
+        )
+
+        self.address1 = UserAddress.objects.create(
+            user=self.user,
+            label="Home",
+            is_default=True,
+        )
+
+        self.address2 = UserAddress.objects.create(
+            user=self.user,
+            label="Work",
+        )
+
+    def test_default_address_enforcement(self):
+        self.assertTrue(self.address1.is_default)
+        self.assertFalse(self.address2.is_default)
+
+        self.address2.is_default = True
+        self.address2.save()
+
+        self.address1.refresh_from_db()
+        self.address2.refresh_from_db()
+
+        # Ensure that address1 is no longer the default and address2 is now the default
+        self.assertFalse(self.address1.is_default)
+        self.assertTrue(self.address2.is_default)
+
+    def test_only_one_default_address_per_user(self):
+        self.assertEqual(
+            UserAddress.objects.filter(user=self.user, is_default=True).count(), 1
+        )
+
+    def test_delete_method_soft_delete(self):
+        self.address1.delete(soft_delete=True)
+
+        self.address1.refresh_from_db()
+
+        self.assertTrue(self.address1.is_deleted)
+        self.assertFalse(self.address1.is_default)
+
+    def test_delete_method_hard_delete(self):
+        address_id = self.address1.id
+        self.address1.delete()
+
+        with self.assertRaises(UserAddress.DoesNotExist):
+            UserAddress.objects.get(id=address_id)
+
+    def test_set_default_when_saving_new_default_address(self):
+        address3 = UserAddress.objects.create(
+            user=self.user,
+            label="Vacation Home",
+            is_default=True,
+        )
+
+        self.address1.refresh_from_db()
+        self.address2.refresh_from_db()
+        address3.refresh_from_db()
+
+        # address3 should be the only default address
+        self.assertFalse(self.address1.is_default)
+        self.assertFalse(self.address2.is_default)
+        self.assertTrue(address3.is_default)

@@ -15,22 +15,21 @@ User = get_user_model()
 
 
 class Discount(CreateUpdateDateTimeFieldMixin, models.Model):
-    cash_discount = models.PositiveIntegerField(verbose_name=_("تخفیف نقدی"), default=0, blank=True)
+    cash_discount = models.PositiveIntegerField(verbose_name=_("cash discount"), default=0, blank=True)
     percentage_discount = models.PositiveIntegerField(
-        verbose_name=_("تخفیف درصدی"),
+        verbose_name=_("percentage discount"),
         validators=[MinValueValidator(0), MaxValueValidator(100)],
         blank=True,
         default=0,
-        help_text=_("عدد وارد شده باید بین 0 و 100 باشد.")
+        help_text=_("The entered number must be between 0 and 100.")
     )
-    expiration_date = models.DateTimeField(verbose_name=_("زمان انقضا"))
-    is_active = models.BooleanField(verbose_name=_("فعال"), default=True)
+    expiration_date = models.DateTimeField(verbose_name=_("expiration date"))
+    is_active = models.BooleanField(verbose_name=_("is active"), default=True)
 
     # todo: validate both 'cash_discount' and 'percentage_discount' are not set 0
 
     class Meta:
-        verbose_name = _("تخفیف")
-        verbose_name_plural = _("تخفیفات")
+        verbose_name = _("Discount")
 
     def get_cash_discount(self, price=0):
         final_cash_discount = self.cash_discount or round((self.percentage_discount / 100) * price)
@@ -51,7 +50,7 @@ class Discount(CreateUpdateDateTimeFieldMixin, models.Model):
     def __str__(self):
         if self.percentage_discount:
             return f"{self.percentage_discount}%"
-        return f"{self.cash_discount}تومان"
+        return f"{self.cash_discount}{_("Toman")}"
 
 
 # todo: discount !< product price
@@ -61,29 +60,29 @@ class StoreDiscount(Discount):
         Store,
         on_delete=models.CASCADE,
         related_name='store_discounts',
-        verbose_name=_("فروشگاه")
+        verbose_name=_("store")
     )
 
     class Meta:
-        verbose_name = _("تخفیف فروشگاه")
-        verbose_name_plural = _("تخفیفات فروشگاه")
+        verbose_name = _("Store Discount")
 
 
 class Coupon(models.Model):
     code = models.CharField(
-        verbose_name=_("کد تخفیف"),
+        verbose_name=_("Coupon"),
         max_length=100,
         null=True,
         blank=True,
         unique=True,
-        help_text=_("این کد تخفیف باید یگانه باشد و در صورتی که خالی در نظر گرفته شود سیستم یک کد رندوم میسازد")
+        help_text=_("This discount code must be unique and if "
+                    "it is considered empty, the system will create a random code")
+
     )
-    discount = models.ForeignKey(Discount, on_delete=models.CASCADE, related_name="coupons", verbose_name=_("تخفیف"))
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="coupons", verbose_name=_("مشتری"))
+    discount = models.ForeignKey(Discount, on_delete=models.CASCADE, related_name="coupons", verbose_name=_("discount"))
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="coupons", verbose_name=_("customer"))
 
     class Meta:
-        verbose_name = _("کوپن تخفیف")
-        verbose_name_plural = _("کوپن های تخفیف")
+        verbose_name = _("Coupon")
         unique_together = ("discount", "customer")
 
     def get_final_cash_discount(self, price):
@@ -116,21 +115,21 @@ class Category(CreateUpdateDateTimeFieldMixin, models.Model):
     def upload_to(instance, filename):  # todo: create directory
         return f"category_images/{filename}"
 
-    name = models.CharField(_("نام دسته بندی"), max_length=100, unique=True)
+    name = models.CharField(_("category name"), max_length=100, unique=True)
     slug = models.SlugField(max_length=150, unique=True, blank=True, allow_unicode=True)
-    description = models.TextField(_("توضیحات"), null=True, blank=True)
+    description = models.TextField(_("description"), null=True, blank=True)
     parent_category = models.ForeignKey(
         "self",
         on_delete=models.CASCADE,
         related_name="sub_categories",
         null=True, blank=True,
-        verbose_name=_("دسته بندی والد")
+        verbose_name=_("parent category")
     )
-    image = models.ImageField(verbose_name=_("عکس"), upload_to=upload_to, null=True, blank=True)
+    image = models.ImageField(verbose_name=_("image"), upload_to=upload_to, null=True, blank=True)
 
     class Meta:
-        verbose_name = _("دسته بندی")
-        verbose_name_plural = _("دسته بندی ها")
+        verbose_name = _("Category")
+        verbose_name_plural = _("Categories")
 
     def can_be_a_subcategory(self, max_depth=3):
         pass  # todo: implementation
@@ -162,24 +161,23 @@ class Product(CreateUpdateDateTimeFieldMixin, RatingFieldsAndMethodsMixin, model
         Category,
         on_delete=models.CASCADE,
         related_name="products",
-        verbose_name=_("دسته بندی")
+        verbose_name=_("category")
     )
     colors = models.ManyToManyField(
         "Color",
         related_name="products",
         blank=True,
-        verbose_name=_("رنگ ها"),
+        verbose_name=_("colors"),
         through='ProductColor'
     )
 
-    name = models.CharField(_("نام محصول"), max_length=100, unique=True)
+    name = models.CharField(_("product name"), max_length=100, unique=True)
     slug = models.SlugField(max_length=150, unique=True, blank=True, allow_unicode=True)
-    description = models.TextField(_("توضیحات"), null=True, blank=True)
-    is_available = models.BooleanField(_("موجود است؟"), default=True)
+    description = models.TextField(_("description"), null=True, blank=True)
+    is_available = models.BooleanField(_("is available"), default=True)
 
     class Meta:
-        verbose_name = _("محصول")
-        verbose_name_plural = _("محصولات")
+        verbose_name = _("Product")
 
     def get_default_image(self):
         default_product_image = self.images.filter(is_default=True).first() or self.images.all().first()
@@ -207,14 +205,13 @@ class ProductImage(models.Model):
     def profile_image_upload_to(instance, filename):
         return f"product_images/{filename}"  # todo: create directory
 
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images", verbose_name=_("محصول"))
-    image = models.ImageField(_("تصویر"), upload_to=profile_image_upload_to)  # todo: multiple image with content type
-    is_default = models.BooleanField(verbose_name=_("تصویر پیش فرض"),
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images", verbose_name=_("product"))
+    image = models.ImageField(_("image"), upload_to=profile_image_upload_to)  # todo: multiple image with content type
+    is_default = models.BooleanField(verbose_name=_("is default"),
                                      default=False)  # todo: each product should only have ONE default address
 
     class Meta:
-        verbose_name = _("تصویر محصول")
-        verbose_name_plural = _("تصاویر محصولات")
+        verbose_name = _("Product Image")
 
     def set_default(self):
         if default_product_image := self.product.images.filter(is_default=True).first():
@@ -233,7 +230,7 @@ class ProductImage(models.Model):
 
 class StoreProduct(CreateUpdateDateTimeFieldMixin, RatingFieldsAndMethodsMixin, models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="store_products",
-                                verbose_name=_("محصول"))
+                                verbose_name=_("product"))
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="store_products", verbose_name=_("فروشگاه"))
     store_discount = models.ForeignKey(
         StoreDiscount,
@@ -241,11 +238,11 @@ class StoreProduct(CreateUpdateDateTimeFieldMixin, RatingFieldsAndMethodsMixin, 
         related_name="store_products",
         null=True,
         blank=True,
-        verbose_name=_("تخفیف")
+        verbose_name=_("store discount")
     )
-    price = models.PositiveIntegerField(_('قیمت'), default=0)
-    is_available = models.BooleanField(_("موجود است؟"), default=True)
-    inventory = models.PositiveIntegerField(_("تعداد موجودی"), default=1, validators=[MinValueValidator(1)])
+    price = models.PositiveIntegerField(_('price'), default=0)
+    is_available = models.BooleanField(_("is available"), default=True)
+    inventory = models.PositiveIntegerField(_("inventory"), default=1, validators=[MinValueValidator(1)])
     # todo: if an order finished, it must be decreased by 1
     # todo: if an order canceled, it must be increased by 1
     product_color = models.ForeignKey(
@@ -254,7 +251,7 @@ class StoreProduct(CreateUpdateDateTimeFieldMixin, RatingFieldsAndMethodsMixin, 
         related_name='store_products',
         null=True,
         blank=True,
-        verbose_name=_("رنگ محصول")
+        verbose_name=_("product color")
     )
     is_deleted = models.BooleanField(
         default=False,
@@ -264,8 +261,7 @@ class StoreProduct(CreateUpdateDateTimeFieldMixin, RatingFieldsAndMethodsMixin, 
     objects = SoftDeleteManager()
 
     class Meta:
-        verbose_name = _("محصول فروشگاه")
-        verbose_name_plural = _("محصولات فروشگاه")
+        verbose_name = _("Store Product")
 
     def get_discounted_price(self):
         return self.store_discount.get_discounted_price(self.price) if self.store_discount else None
@@ -288,11 +284,10 @@ class StoreProduct(CreateUpdateDateTimeFieldMixin, RatingFieldsAndMethodsMixin, 
 
 
 class Color(models.Model):
-    value = models.CharField(_("رنگ"), max_length=50, unique=True)
+    value = models.CharField(_("color name"), max_length=50, unique=True)
 
     class Meta:
-        verbose_name = _("رنگ")
-        verbose_name_plural = _("رنگ ها")
+        verbose_name = _("Color")
 
     def __str__(self):
         return self.value
@@ -303,18 +298,17 @@ class ProductColor(models.Model):
         Product,
         on_delete=models.CASCADE,
         related_name="product",
-        verbose_name=_("محصول")
+        verbose_name=_("product")
     )
     color = models.ForeignKey(
         Color,
         on_delete=models.CASCADE,
         related_name="product_color",
-        verbose_name=_("رنگ")
+        verbose_name=_("color")
     )
 
     class Meta:
-        verbose_name = _("رنگ محصول")
-        verbose_name_plural = _("رنگ های محصولات")
+        verbose_name = _("Product Color")
         unique_together = ("product", "color")
 
     def __str__(self):
@@ -323,30 +317,29 @@ class ProductColor(models.Model):
 
 class Comment(CreateUpdateDateTimeFieldMixin, models.Model):
     class Status(models.TextChoices):
-        SUBMITTED = "submitted", _("ثبت شده")
-        UNDER_REVIEW = "under review", _("درحال بررسی")
-        APPROVED = "approved", _("تائید شده")
-        REJECTED = "rejected", _("رد شده")
+        SUBMITTED = "submitted", _("submitted")
+        UNDER_REVIEW = "under review", _("under review")
+        APPROVED = "approved", _("under review")
+        REJECTED = "rejected", _("rejected")
 
-    title = models.CharField(_("عنوان نظر"), max_length=100)
-    text = models.TextField(_("متن نظر"))
-    status = models.CharField(_("وضعیت"), choices=Status.choices, max_length=15, default=Status.SUBMITTED)
+    title = models.CharField(_("title"), max_length=100)
+    text = models.TextField(_("text"))
+    status = models.CharField(_("status"), choices=Status.choices, max_length=15, default=Status.SUBMITTED)
     customer = models.ForeignKey(
         Customer,
         on_delete=models.CASCADE,
         related_name="comments",
-        verbose_name=_("کاربر"),
+        verbose_name=_("customer"),
     )
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
         related_name="comments",
-        verbose_name=_("محصول")
+        verbose_name=_("product")
     )
 
     class Meta:
-        verbose_name = _("نظر")
-        verbose_name_plural = _("نظرات")
+        verbose_name = _("Comment")
 
     def __str__(self):
         return self.title
@@ -357,7 +350,7 @@ class Rating(CreateUpdateDateTimeFieldMixin, models.Model):
         Customer,
         on_delete=models.CASCADE,
         related_name="ratings",
-        verbose_name=_("کاربر"),
+        verbose_name=_("customer"),
     )
     store_product = models.ForeignKey(
         StoreProduct,
@@ -366,7 +359,7 @@ class Rating(CreateUpdateDateTimeFieldMixin, models.Model):
         verbose_name=_("محصول فروشگاهی")
     )
     score = models.PositiveSmallIntegerField(
-        _("امتیاز"),
+        _("score"),
         choices=RATING_CHOICES,
         default=1,
         validators=[
@@ -376,8 +369,7 @@ class Rating(CreateUpdateDateTimeFieldMixin, models.Model):
     )
 
     class Meta:
-        verbose_name = _("امتیاز")
-        verbose_name_plural = _("امتیازات")
+        verbose_name = _("Rating")
         unique_together = ("customer", "store_product")
 
     def add_rating(self, related_obj):

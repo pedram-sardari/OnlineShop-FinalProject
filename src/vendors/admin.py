@@ -26,12 +26,12 @@ class StaffInline(admin.TabularInline):
 class StaffAdmin(CustomUserAdmin):
     model = Staff
     fieldsets = (
-        (_("اطلاعات حساب کاربری"), {"fields": ("email", "phone", "password")}),
-        (_("اطلاعات شخصی"), {
+        (_("Account Info"), {"fields": ("email", "phone", "password")}),
+        (_("Personal Info"), {
             "fields": ("first_name", "last_name", "date_of_birth", "national_id",
                        "gender", "image")}),
         (
-            _("دسترسی ها"),
+            _("Access"),
             {
                 "fields": (
                     "is_active",
@@ -44,8 +44,8 @@ class StaffAdmin(CustomUserAdmin):
                 ),
             },
         ),
-        (_("تاریخ های مهم"), {"fields": ("last_login", 'date_joined', 'date_modified')}),
-        (_("اطلاعات کارمند"), {"fields": ("role", "store")})
+        (_("Important Dates"), {"fields": ("last_login", 'date_joined', 'date_modified')}),
+        (_("Staff Info"), {"fields": ("role", "store")})
     )
 
     add_fieldsets = (
@@ -106,14 +106,14 @@ class StoreAdmin(admin.ModelAdmin):
     def owner(self, obj):
         return obj.staffs.filter(role=Staff.Roles.OWNER).first()
 
-    owner.short_description = 'مدیر فروشگاه'
+    owner.short_description = _('Store Owner')
 
     def manager(self, obj):
         return [str(manager_obj) for manager_obj in obj.staffs.filter(role=Staff.Roles.MANAGER)]
 
-    manager.short_description = 'مدیران محصول'
+    manager.short_description = _('Product Manager')
 
     def operator(self, obj):
         return [str(operator_obj) for operator_obj in obj.staffs.filter(role=Staff.Roles.OPERATOR)]
 
-    operator.short_description = 'ناظر'
+    operator.short_description = _('Operator')

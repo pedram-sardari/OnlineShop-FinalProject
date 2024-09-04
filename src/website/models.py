@@ -3,8 +3,8 @@ from django.utils.translation import gettext_lazy as _
 from django.db import models
 import jdatetime
 
-CITIES = [('tehran', _('تهران')), ('yazd', _('یزد'))]
-PROVINCES = [('tehran', _('تهران')), ('yazd', _('یزد'))]
+CITIES = [('tehran', _('Tehran')), ('yazd', _('Yazd'))]
+PROVINCES = [('tehran', _('Tehran')), ('yazd', _('Yazd'))]
 
 
 class CreateUpdateDateTimeFieldMixin(models.Model):
@@ -21,26 +21,26 @@ class Address(CreateUpdateDateTimeFieldMixin, models.Model):
         max_length=100,
         choices=PROVINCES
     )  # todo: province should defines the list of cities
-    city = models.CharField(_("شهر"), max_length=100, choices=CITIES)  # todo: complete the list of cities
-    neighborhood = models.CharField(_("محله"), max_length=100, blank=True)
-    street = models.CharField(_("خیابان"), max_length=100, blank=True)
-    alley = models.CharField(_("کوچه"), max_length=100, blank=True)
-    no = models.CharField(_("پلاک"), max_length=100, blank=True)
-    zipcode = models.CharField(_("کد پستی"), max_length=100, blank=True)
+    city = models.CharField(_("city"), max_length=100, choices=CITIES)  # todo: complete the list of cities
+    neighborhood = models.CharField(_("neighborhood"), max_length=100, blank=True)
+    street = models.CharField(_("street"), max_length=100, blank=True)
+    alley = models.CharField(_("alley"), max_length=100, blank=True)
+    no = models.CharField(_("no"), max_length=100, blank=True)
+    zipcode = models.CharField(_("zipcode"), max_length=100, blank=True)
 
     class Meta:
-        verbose_name = _("آدرس")
-        verbose_name_plural = _("آدرس ها")
+        verbose_name = _("Address")
+        verbose_name_plural = _("Addresses")
 
     def __str__(self):
         return f"{self.province}-{self.city}-{self.neighborhood}-{self.street}-{self.alley}-{self.no}-{self.zipcode}"
 
 
 class RatingFieldsAndMethodsMixin(models.Model):
-    rating_count = models.PositiveIntegerField(_("تعداد امتیازات"), default=0)
-    rating_sum = models.PositiveIntegerField(_("مجموع امتیازات"), default=0)
+    rating_count = models.PositiveIntegerField(_("rating count"), default=0)
+    rating_sum = models.PositiveIntegerField(_("rating sum"), default=0)
     rating_avg = models.DecimalField(
-        verbose_name=_("میانگین امتیازات"),
+        verbose_name=_("rating avg"),
         max_digits=2,
         decimal_places=1,
         validators=[MinValueValidator(0), MaxValueValidator(5)],

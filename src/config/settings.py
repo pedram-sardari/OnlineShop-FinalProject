@@ -90,7 +90,6 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'website.context_processors.header_section_parameters',
-                'website.context_processors.store_products_list',
             ],
         },
     },

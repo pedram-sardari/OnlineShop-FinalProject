@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView
+from django.utils.translation import gettext_lazy as _
 
 from accounts.forms import RegisterPhoneForm
 from accounts.views import SendOTPView, VerifyOTPView
@@ -31,7 +32,7 @@ class CustomerRegisterByEmailView(IsNotAuthenticated, CreateView):
         user = User.objects.get(id=customer.id)
         self.request.session.flush()
         login(self.request, user)
-        messages.success(self.request, f"Your account has been created successfully!")
+        messages.success(self.request, _(f"Your account has been created successfully!"))
         return redirect(self.success_url)
 
     def form_invalid(self, form):
@@ -49,7 +50,7 @@ class CustomerRegisterByPhoneView(IsNotAuthenticated, SendOTPView):
         'by_email_link': reverse_lazy('customers:register-by-email'),
         'by_phone_link': reverse_lazy('customers:register-by-phone'),
         'by_phone': 'active',
-        'submit_button_content': 'دریافت کد تائید'
+        'submit_button_content': _('Get Verification Code')
     }
 
 

@@ -13,6 +13,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import FormView, CreateView, ListView, DetailView, UpdateView, DeleteView
+from django.utils.translation import gettext_lazy as _
 
 from accounts.forms import RegisterPhoneForm
 from accounts.views_base import SendOTPView, VerifyOTPView
@@ -34,7 +35,7 @@ class OwnerRegisterByEmailView(IsNotAuthenticated, FormView):
         'by_phone_link': reverse_lazy('vendors:register-owner-by-phone'),
         'by_email_link': reverse_lazy('vendors:register-owner-by-email'),
         'by_email': 'active',
-        'submit_button_content': 'ادامه'
+        'submit_button_content': _('Continue')
     }
 
     def form_valid(self, form):
@@ -60,7 +61,7 @@ class OwnerRegisterByPhoneView(IsNotAuthenticated, SendOTPView):
         'by_email_link': reverse_lazy('vendors:register-owner-by-email'),
         'by_phone_link': reverse_lazy('vendors:register-owner-by-phone'),
         'by_phone': 'active',
-        'submit_button_content': 'دریافت کد تائید'
+        'submit_button_content': _('Get verification code')
     }
 
 
@@ -74,7 +75,7 @@ class OwnerRegisterByPhoneVerifyView(IsNotAuthenticated, VerifyOTPView):
         'by_email_link': reverse_lazy('vendors:register-owner-by-email'),
         'by_phone_link': reverse_lazy('vendors:register-owner-by-phone'),
         'by_phone': 'active',
-        'submit_button_content': 'ادامه'
+        'submit_button_content': _('continue')
     }
 
     def form_valid(self, form):

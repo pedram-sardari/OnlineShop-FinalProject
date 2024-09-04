@@ -14,21 +14,20 @@ User = get_user_model()
 
 
 class Store(CreateUpdateDateTimeFieldMixin, RatingFieldsAndMethodsMixin, models.Model):
-    name = models.CharField(_("نام فروشگاه"), max_length=100, unique=True)
+    name = models.CharField(_("store name"), max_length=100, unique=True)
     slug = models.SlugField(max_length=150, unique=True, blank=True, allow_unicode=True)
-    description = models.TextField(verbose_name=_("توضیحات"), null=True, blank=True)
+    description = models.TextField(verbose_name=_("description"), null=True, blank=True)
     address = models.OneToOneField(
         Address,
         on_delete=models.SET_NULL,
         related_name="store",
-        verbose_name=_('آدرس'),
+        verbose_name=_('address'),
         null=True,
         blank=True
     )
 
     class Meta:
-        verbose_name = _("فروشگاه")
-        verbose_name_plural = _("فروشگاه ها")
+        verbose_name = _("Store")
 
     @property
     def order_count(self):
@@ -61,16 +60,15 @@ class Store(CreateUpdateDateTimeFieldMixin, RatingFieldsAndMethodsMixin, models.
 
 class Staff(User):
     class Roles(models.TextChoices):
-        OWNER = UserType.OWNER, _("مدیر فروشگاه")
-        MANAGER = UserType.MANAGER, _("مدیر محصول")
-        OPERATOR = UserType.OPERATOR, _("ناظر")
+        OWNER = UserType.OWNER, _("Owner")
+        MANAGER = UserType.MANAGER, _("Product Manager")
+        OPERATOR = UserType.OPERATOR, _("Operator")
 
-    role = models.CharField(_("عنوان شغلی"), max_length=12, choices=Roles.choices, default=Roles.OPERATOR)
-    store = models.ForeignKey(Store, on_delete=models.CASCADE, verbose_name=_("فروشگاه"), related_name='staffs')
+    role = models.CharField(_("role"), max_length=12, choices=Roles.choices, default=Roles.OPERATOR)
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, verbose_name=_("store"), related_name='staffs')
 
     class Meta:
-        verbose_name = _("کارمند")
-        verbose_name_plural = _("کارمندان")
+        verbose_name = _("Staff")
 
     @classmethod
     def get_staff(cls, user):
@@ -101,8 +99,7 @@ class Owner(Staff):
 
     class Meta:
         proxy = True
-        verbose_name = _("مدیر فروشگاه")
-        verbose_name_plural = _("مدیران فروشگاه")
+        verbose_name = _("Owner")
 
     @classmethod
     def get_owner(cls, user):
@@ -122,8 +119,7 @@ class Manager(Staff):
 
     class Meta:
         proxy = True
-        verbose_name = _("مدیر محصول")
-        verbose_name_plural = _("مدیران محصول")
+        verbose_name = _("Product Manager")
 
     @classmethod
     def get_manager(cls, user):
@@ -143,8 +139,7 @@ class Operator(Staff):
 
     class Meta:
         proxy = True
-        verbose_name = _("ناظر")
-        verbose_name_plural = _("ناظران")
+        verbose_name = _("Operator")
 
     @classmethod
     def get_operator(cls, user):

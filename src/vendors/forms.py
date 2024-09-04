@@ -17,7 +17,7 @@ class OwnerRegisterEmailForm(RegisterEmailForm):
 
 
 class StoreForm(FormatFormFieldsMixin, forms.ModelForm):
-    store_name = forms.CharField(label=_("نام فروشگاه"), max_length=100)
+    store_name = forms.CharField(label=_("store name"), max_length=100)
 
     class Meta:
         model = Address
@@ -32,12 +32,12 @@ class StoreForm(FormatFormFieldsMixin, forms.ModelForm):
         old_store = Store.objects.filter(name=store_name).first()
         # self.instance == new_store
         if old_store and self.instance and old_store.id != self.instance.id:
-            raise forms.ValidationError(_(f"«{store_name}» قبلا ثبت شده است. "))
+            raise forms.ValidationError(_(f" This name already is submitted «{store_name}»"))
         return store_name
 
 
 class StaffRegistrationForm(FormatFormFieldsMixin, BaseUserCreationForm):
-    role = forms.ChoiceField(label=_("عنوان شغلی"), choices=Staff.Roles.choices[1:])
+    role = forms.ChoiceField(label=_("role"), choices=Staff.Roles.choices[1:])
 
     class Meta:
         model = Staff
@@ -50,7 +50,7 @@ class StaffRegistrationForm(FormatFormFieldsMixin, BaseUserCreationForm):
 
 
 class StaffUpdateForm(FormatFormFieldsMixin, forms.ModelForm):
-    role = forms.ChoiceField(label=_("عنوان شغلی"), choices=Staff.Roles.choices[1:])
+    role = forms.ChoiceField(label=_("role"), choices=Staff.Roles.choices[1:])
 
     class Meta:
         model = Staff

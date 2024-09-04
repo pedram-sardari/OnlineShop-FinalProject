@@ -20,12 +20,12 @@ class UserAddressInline(admin.TabularInline):
 class CustomUserAdmin(UserAdmin):
     model = User
     fieldsets = (
-        (_("اطلاعات حساب کاربری"), {"fields": ("email", "phone", "password")}),
-        (_("اطلاعات شخصی"), {
+        (_("Account Info"), {"fields": ("email", "phone", "password")}),
+        (_("Personal Info"), {
             "fields": ("first_name", "last_name", "date_of_birth", "national_id",
                        "gender", "image")}),
         (
-            _("دسترسی ها"),
+            _("Access"),
             {
                 "fields": (
                     "is_active",
@@ -38,7 +38,7 @@ class CustomUserAdmin(UserAdmin):
                 ),
             },
         ),
-        (_("تاریخ های مهم"), {"fields": ("last_login", 'date_joined', 'date_modified')}),
+        (_("Important Dates"), {"fields": ("last_login", 'date_joined', 'date_modified')}),
     )
     add_fieldsets = (
         (

@@ -14,15 +14,15 @@ from .managers import OrderManager, OrderItemManager, CartManager, CartItemManag
 
 
 class Order(CreateUpdateDateTimeFieldMixin, models.Model):
-    cash_coupon_discount = models.PositiveIntegerField(_("کوپن تخفیف"), default=0)
+    cash_coupon_discount = models.PositiveIntegerField(_("cash coupon discount"), default=0)
     order_number = models.CharField(_("order number"), max_length=10, unique=True, default=generate_random_code)
-    is_paid = models.BooleanField(_("پرداخت شده"), default=False)
-    total = models.PositiveIntegerField(_("جمع کل"), default=0)
+    is_paid = models.BooleanField(_("is paid"), default=False)
+    total = models.PositiveIntegerField(_("total"), default=0)
     user_address = models.ForeignKey(
         UserAddress,
         on_delete=models.CASCADE,
         related_name="orders",
-        verbose_name=_("آدرس"),
+        verbose_name=_("address"),
         null=True,
         blank=True
     )
@@ -30,15 +30,14 @@ class Order(CreateUpdateDateTimeFieldMixin, models.Model):
         Customer,
         on_delete=models.CASCADE,
         related_name="orders",
-        verbose_name=_("مشتری")
+        verbose_name=_("customer")
     )
     created_at = models.DateTimeField(_("Date of submitting"), default=timezone.now)
 
     objects = OrderManager()
 
     class Meta:
-        verbose_name = _("سفارش")
-        verbose_name_plural = _("سفارشات")
+        verbose_name = _("order")
 
     def update_total(self):
         self.total = self.order_items.aggregate(
@@ -57,29 +56,28 @@ class OrderItem(CreateUpdateDateTimeFieldMixin, models.Model):
         CANCELED = "canceled", _("Canceled")
 
     status = models.CharField(_("status"), choices=Status.choices, max_length=15, default=Status.ACTIVE)
-    price = models.PositiveIntegerField(_('قیمت'), default=0)
-    cash_discount = models.PositiveIntegerField(_("تخفیف (به تومان)"), default=0)
-    quantity = models.PositiveSmallIntegerField(_("تعداد"), default=1,
+    price = models.PositiveIntegerField(_('price'), default=0)
+    cash_discount = models.PositiveIntegerField(_("discount (Toman)"), default=0)
+    quantity = models.PositiveSmallIntegerField(_("quantity"), default=1,
                                                 validators=[MinValueValidator(1)])  # todo: check quantity
-    total = models.PositiveIntegerField(_("جمع"), default=0)
+    total = models.PositiveIntegerField(_("total"), default=0)
     store_product = models.ForeignKey(
         StoreProduct,
         on_delete=models.CASCADE,
         related_name="order_items",
-        verbose_name=_("محصول فروشگاه")
+        verbose_name=_("store product")
     )
     order = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
         related_name='order_items',
-        verbose_name=_("سفارش")
+        verbose_name=_("order")
     )
     created_at = models.DateTimeField(_("Date of submitting"), default=timezone.now)
     objects = OrderItemManager()
 
     class Meta:
-        verbose_name = _("قلم سفارش")
-        verbose_name_plural = _("اقلام سفارشات")
+        verbose_name = _("order item")
 
     def increase_quantity_by_one(self):
         if (self.quantity + 1) <= 100:
@@ -109,8 +107,7 @@ class Cart(Order):
 
     class Meta:
         proxy = True
-        verbose_name = _("سبد خرید")
-        verbose_name_plural = _("سبد های خرید")
+        verbose_name = _("cart")
 
     @classmethod
     def get_user_cart(cls, user):
@@ -134,5 +131,4 @@ class CartItem(OrderItem):
 
     class Meta:
         proxy = True
-        verbose_name = _("قلم سبد خرید")
-        verbose_name_plural = _("اقلام سبدهای خرید")
+        verbose_name = _("cart item")

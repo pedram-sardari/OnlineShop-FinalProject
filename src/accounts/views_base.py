@@ -4,6 +4,7 @@ from django.contrib.auth import login
 from django.core.exceptions import ImproperlyConfigured
 from django.shortcuts import redirect
 from django.views.generic import FormView
+from django.utils.translation import gettext_lazy as _
 
 from accounts.forms import OTPForm
 from accounts.utils import generate_otp, send_otp
@@ -51,7 +52,7 @@ class VerifyOTPView(FormView):
 
         self.request.session.flush()
         login(self.request, user)
-        messages.success(self.request, f"شما با موفقیت وارد شدید `{phone}`")
+        messages.success(self.request, _(f"You've successfully logged in `{phone}`"))
 
         return super().form_valid(form)
 

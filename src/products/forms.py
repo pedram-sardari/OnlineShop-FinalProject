@@ -81,7 +81,7 @@ class StoreDiscountForm(FormatFormFieldsMixin, forms.ModelForm):
 
 
 class SelectProductForm(FormatFormFieldsMixin, forms.Form):
-    product = forms.ModelChoiceField(label=_("محصول مورد نظر"), queryset=Product.objects.filter(is_available=True))
+    product = forms.ModelChoiceField(label=_("product"), queryset=Product.objects.filter(is_available=True))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

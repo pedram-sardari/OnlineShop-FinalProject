@@ -5,6 +5,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, UpdateView, ListView, CreateView, DetailView, DeleteView
+from django.utils.translation import gettext_lazy as _
 
 from customers.models import Customer
 from orders.utils import sync_session_and_db_carts
@@ -24,7 +25,7 @@ class EmailLoginView(CustomRedirectURLMixin, LoginView):
         response = super().form_valid(form)
         if customer := Customer.get_customer(user=form.get_user()):
             sync_session_and_db_carts(self.request, customer)
-        messages.success(self.request, f"Welcome dear '{str(self.request.user)}'")
+        messages.success(self.request, _(f"Welcome dear '{str(self.request.user)}'"))
         return response
 
     def form_invalid(self, form):
@@ -177,7 +178,7 @@ class PhoneUpdateVerifyView(LoginRequiredMixin, VerifyOTPView):
         self.request.user.save()
 
         self.request.session.flush()
-        messages.success(self.request, f"شماره تماس شما به `{phone} تغییر پیدا کرد.`")
+        messages.success(self.request, _(f"Your phone has changed into `{phone}`."))
 
         return HttpResponseRedirect(self.get_success_url())
 

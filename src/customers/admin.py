@@ -12,12 +12,12 @@ class CustomerAdmin(CustomUserAdmin):
     model = Customer
 
     fieldsets = (
-        (_("اطلاعات حساب کاربری"), {"fields": ("email", "phone", "password")}),
-        (_("اطلاعات شخصی"), {
+        (_("Account Info"), {"fields": ("email", "phone", "password")}),
+        (_("Personal Info"), {
             "fields": ("first_name", "last_name", "date_of_birth", "national_id",
                        "gender", "image")}),
         (
-            _("دسترسی ها"),
+            _("Access"),
             {
                 "fields": (
                     "is_active",
@@ -30,8 +30,8 @@ class CustomerAdmin(CustomUserAdmin):
                 ),
             },
         ),
-        (_("تاریخ های مهم"), {"fields": ("last_login", 'date_joined', 'date_modified')}),
-        (_("اطلاعات حساب"), {"fields": ("balance",)})
+        (_("Important Dates"), {"fields": ("last_login", 'date_joined', 'date_modified')}),
+        (_("Financial Info"), {"fields": ("balance",)})
     )
     inlines = [accounts_admin.UserAddressInline, product_admin.OrderInline,
                product_admin.RatingInline, product_admin.CommentInline]

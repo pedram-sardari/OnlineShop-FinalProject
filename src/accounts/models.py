@@ -1,6 +1,3 @@
-import datetime
-from datetime import datetime
-
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.core.mail import send_mail
@@ -19,15 +16,15 @@ class User(AbstractBaseUser, PermissionsMixin):
         return f"user_images/{filename}"
 
     class Gender(models.TextChoices):
-        MALE = 'M', 'Male'
-        FEMALE = 'F', 'Female'
-        OTHER = 'O', 'Other'
+        MALE = 'M', _('Male')
+        FEMALE = 'F', _('Female')
+        OTHER = 'O', _('Other')
 
-    password = models.CharField(_("رمز عبور"), max_length=128, null=True, blank=True)
-    first_name = models.CharField(_("نام"), max_length=150, blank=True)
-    last_name = models.CharField(_("نام خانوادگی"), max_length=150, blank=True)  # todo: last name >> نام خانوادگی
+    password = models.CharField(_("password"), max_length=128, null=True, blank=True)
+    first_name = models.CharField(_("first name"), max_length=150, blank=True)
+    last_name = models.CharField(_("last name"), max_length=150, blank=True)  # todo: last name >> نام خانوادگی
     email = models.EmailField(
-        _("آدرس ایمیل"),
+        _("email"),
         unique=True,
         null=True,
         blank=True,
@@ -37,7 +34,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         },
     )
     phone = models.CharField(
-        _("موبایل"),
+        _("phone"),
         max_length=11,
         unique=True,
         null=True,
@@ -49,7 +46,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         },
     )
     national_id = models.CharField(
-        _("کد ملی"),
+        _("national id"),
         max_length=24,
         unique=True,
         null=True,
@@ -61,12 +58,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     gender = models.CharField(max_length=1, choices=Gender.choices, null=True, blank=True)
     is_staff = models.BooleanField(
-        _("کارمند"),
+        _("is staff"),
         default=False,
         help_text=_("Designates whether the user can log into this admin site."),
     )
     is_active = models.BooleanField(
-        _("فعال"),
+        _("is active"),
         default=True,
         help_text=_(
             "Designates whether this user should be treated as active. "
@@ -76,10 +73,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_deleted = models.BooleanField(default=False,
                                      help_text=_("Designates whether this user has deleted its account."))
-    date_of_birth = models.DateField(_("تاریخ تولد"), null=True, blank=True)
-    date_joined = models.DateTimeField(_("تاریخ ایجاد"), auto_now_add=True)
-    date_modified = models.DateTimeField(_("تاریخ ویرایش"), auto_now=True)
-    image = models.ImageField(verbose_name=_("عکس"), upload_to=profile_image_upload_to, null=True, blank=True)
+    date_of_birth = models.DateField(_("date of birth"), null=True, blank=True)
+    date_joined = models.DateTimeField(_("date joined"), auto_now_add=True)
+    date_modified = models.DateTimeField(_("date modified"), auto_now=True)
+    image = models.ImageField(verbose_name=_("image"), upload_to=profile_image_upload_to, null=True, blank=True)
 
     objects = UserManager()
 
@@ -87,8 +84,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["phone"]
 
     class Meta:
-        verbose_name = _("کاربر")
-        verbose_name_plural = _("کاربران")
+        verbose_name = _("user")
         indexes = [
             models.Index(fields=['is_deleted'])
         ]
@@ -159,17 +155,17 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class UserAddress(Address):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses", verbose_name=_("کاربر"))
-    label = models.CharField(verbose_name=_("عنوان آدرس"), max_length=100, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="addresses", verbose_name=_("user"))
+    label = models.CharField(verbose_name=_("label"), max_length=100, null=True, blank=True)
     is_deleted = models.BooleanField(default=False)
-    is_default = models.BooleanField(verbose_name=_("آدرس پیش فرض"),
+    is_default = models.BooleanField(verbose_name=_("is_default"),
                                      default=False)  # todo: each user should only have ONE default address
 
     objects = SoftDeleteManager()
 
     class Meta:
-        verbose_name = _("آدرس کاربر")
-        verbose_name_plural = _("آدرس های کاربران")
+        verbose_name = _("user address")
+        verbose_name_plural = _("user addresses")
 
     def set_default(self):
         if default_address := self.user.addresses.filter(is_default=True).first():

@@ -71,7 +71,7 @@ class RegisterEmailForm(FormatFormFieldsMixin, BaseUserCreationForm):
 
 
 class PhoneForm(FormatFormFieldsMixin, forms.Form):
-    phone = forms.CharField(max_length=11, label=_("شماره تماس"), validators=[phone_validator])
+    phone = forms.CharField(max_length=11, label=_("phone number"), validators=[phone_validator])
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -87,7 +87,7 @@ class LoginPhoneForm(PhoneForm):
         phone = self.cleaned_data.get('phone')
         # Try to retrieve the user associated with the session phone number
         if not User.objects.filter(phone=phone).exists():
-            raise forms.ValidationError('شما ثبتنام نکرده اید')
+            raise forms.ValidationError(_("You haven't register"))
         return phone
 
 
@@ -95,7 +95,7 @@ class RegisterPhoneForm(PhoneForm):
     def clean_phone(self):
         phone = self.cleaned_data.get('phone')
         if User.objects.filter(phone=phone).exists():
-            raise forms.ValidationError('این شماره تماس قبلا ثبت شده است.')
+            raise forms.ValidationError(_('This phone number is already registered.'))
         return phone
 
 
@@ -108,12 +108,12 @@ class UpdatePhoneForm(PhoneForm):
         phone = self.cleaned_data.get('phone')
         user = User.objects.filter(phone=phone).first()
         if user and user.phone != self.user.phone:
-            raise forms.ValidationError('این شماره تماس قبلا ثبت شده است.')
+            raise forms.ValidationError(_('This phone number is already registered.'))
         return phone
 
 
 class OTPForm(FormatFormFieldsMixin, forms.Form):
-    otp = forms.CharField(max_length=settings.OTP_LENGTH, label="کد تایید")
+    otp = forms.CharField(max_length=settings.OTP_LENGTH, label=_("verification code"))
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
@@ -127,9 +127,9 @@ class OTPForm(FormatFormFieldsMixin, forms.Form):
 
         # If OTP session is missing or expired, redirect back to login
         if not session_otp:
-            raise forms.ValidationError('کد تایید منقضی شده است')
+            raise forms.ValidationError(_('The verification code has expired.'))
 
         # If the provided OTP does not match the session OTP
         if user_otp != session_otp:
-            raise forms.ValidationError('کد تایید اشتباه است')
+            raise forms.ValidationError(_('The verification code is incorrect'))
         return user_otp

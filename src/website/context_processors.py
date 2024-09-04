@@ -20,6 +20,3 @@ def header_section_parameters(request):
     return context
 
 
-def store_products_list(request):
-    context = {"store_product_list": StoreProduct.objects.filter(inventory__gt=0)}
-    return context

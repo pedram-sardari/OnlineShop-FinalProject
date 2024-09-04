@@ -12,8 +12,7 @@ class Customer(User):
     balance = models.PositiveIntegerField(default=0)
 
     class Meta:
-        verbose_name = _("مشتری")
-        verbose_name_plural = _("مشتریان")
+        verbose_name = _("customer")
 
     @classmethod
     def is_customer(cls, user):

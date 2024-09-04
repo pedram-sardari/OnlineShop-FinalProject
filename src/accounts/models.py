@@ -188,9 +188,6 @@ class UserAddress(Address):
         else:
             super().delete(*args, *kwargs)
 
-    def is_there_any_order(self):
-        return self.orders.all().exists()
-
     def save(self, *args, **kwargs):
         if self.is_default:
             self.set_default()

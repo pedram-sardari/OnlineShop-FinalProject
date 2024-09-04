@@ -1,4 +1,5 @@
 {% extends 'website/base.html' %}
+{% load i18n %}
 {% load static %}
 
 {% block body %}
@@ -10,7 +11,7 @@
         <div class="row justify-content-md-center h-100">
             <div class="col-sm-4 col-md-11 col-lg-8 col-xl-7 col-xxl-6 ">
                 <div class="p-5 mt-5 align-middle border rounded-3">
-                    <h2 class="text-center mb-5">ورود با موبایل</h2>
+                    <h2 class="text-center mb-5">{% trans "Log in by mobile number" %}</h2>
                     <form action="" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {% for field in form %}
@@ -24,30 +25,29 @@
                         {% endfor %}
                         <div class="d-grid gap-2">
                             {% if login_button %}
-                                <button type="submit" class="btn btn-success my-3 fw-bold fs-5"> ورود</button>
+                                <button type="submit" class="btn btn-success my-3 fw-bold fs-5"> {% trans "Log in" %}</button>
                                 <div class="my-2 text-center fs-5">
-                                    <a href="{% url 'accounts:login-phone' %}?next={{ next }}" class="btn btn-outline-warning">ویرایش
-                                        شماره</a>
+                                    <a href="{% url 'accounts:login-phone' %}?next={{ next }}" class="btn btn-outline-warning">
+                                        {% trans "Edit phone Number" %}</a>
                                 </div>
                             {% elif get_otp_button %}
-                                <button type="submit" class="btn btn-info my-3 fw-bold fs-5">دریافت کد</button>
+                                <button type="submit" class="btn btn-info my-3 fw-bold fs-5">{% trans "Get Verification Code" %}</button>
                             {% endif %}
                         </div>
                     </form>
                     <div class="my-2 text-center fs-5">
-                        <a href="{% url 'accounts:login-email' %}?next={{ next }}" class="btn btn-outline-primary">ورود
-                            با ایمیل و رمز
-                            عبور
+                        <a href="{% url 'accounts:login-email' %}?next={{ next }}" class="btn btn-outline-primary">
+                            {% trans "Log in by email and password" %}
                         </a>
                     </div>
 
                     <div class="my-2">
-                        <a href="#!" class="link-secondary text-decoration-none">فراموشی رمز عبور</a>
+                        <a href="#!" class="link-secondary text-decoration-none">{% trans "Forgot Password" %}</a>
                     </div>
                     <div class="my-2">
                         <a href="{% url 'vendors:register-owner-by-email' %}"
-                           class="link-secondary text-decoration-none">ساختن
-                            حساب جدید</a>
+                           class="link-secondary text-decoration-none">
+                            {% trans "Create a new account" %}</a>
                     </div>
                 </div>
             </div>

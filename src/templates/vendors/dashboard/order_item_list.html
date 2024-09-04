@@ -1,14 +1,14 @@
-{% load static  template_filters %}
+{% load static i18n template_filters %}
 <table class="table table-striped align-middle">
     <thead>
     <tr>
         <th scope="col">#</th>
-        <th scope="col">شماره سفارش</th>
-        <th scope="col">نام محصول</th>
-        <th scope="col">تاریخ ثبت</th>
-        <th scope="col">قیمت نهایی</th>
-        <th scope="col">وضعیت سفارش</th>
-        <th scope="col">جزئیات سفارش</th>
+        <th scope="col">{% trans "Order Number" %}</th>
+        <th scope="col">{% trans "Product Name" %}</th>
+        <th scope="col">{% trans "Submit Date" %}</th>
+        <th scope="col">{% trans "Total Price" %}</th>
+        <th scope="col">{% trans "Status" %}</th>
+        <th scope="col">{% trans "Detail" %}</th>
     </tr>
     </thead>
     <tbody>

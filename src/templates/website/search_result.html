@@ -1,5 +1,5 @@
 {% extends 'website/base.html' %}
-{% load static %}
+{% load static i18n %}
 
 {% block css %}
 {% endblock %}
@@ -7,31 +7,31 @@
 {% block content %}
     <div id="stores-container" class="container">
         <div class="row border rounded-3 mx-auto mt-5 pt-3 bg-white">
-            <h2 class="text-center">فروشگاه ها</h2>
+            <h2 class="text-center">{% trans "Stores" %}</h2>
             <!-- filtering -->
             <div class="row">
                 <div class="d-flex ">
-                    <h6 class="my-auto">مرتب سازی: </h6>
+                    <h6 class="my-auto">{% trans "Order By" %}: </h6>
                     <ul class="nav nav-underline">
                         <li class="nav-item">
                             <a id="best-seller-link-stores" class="nav-link"
                                aria-current="page"
                                href="">
-                                پرفروش ترین
+                                {% trans "Best Seller" %}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a id="top-rating-link-stores" class="nav-link"
                                aria-current="page"
                                href="">
-                                بالاترین امتیاز
+                                {% trans "Highest Rating" %}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a id="recently-created-link-stores" class="nav-link"
                                aria-current="page"
                                href="">
-                                جدید ترین
+                                {% trans "Newest" %}
                             </a>
                         </li>
                     </ul>
@@ -66,31 +66,31 @@
 
     <div id="store-product-container" class="container">
         <div class="row border rounded-3 mx-auto mt-5 pt-3 bg-white">
-            <h2 class="text-center">محصولات <span id="store-name"></span></h2>
+            <h2 class="text-center">{% trans "Products" %} <span id="store-name"></span></h2>
             <!-- filtering -->
             <div class="row">
                 <div class="d-flex ">
-                    <h6 class="my-auto">مرتب سازی: </h6>
+                    <h6 class="my-auto">{% trans "Order By" %}: </h6>
                     <ul class="nav nav-underline">
                         <li class="nav-item">
                             <a id="best-seller-link" class="nav-link"
                                aria-current="page"
                                href="">
-                                پرفروش ترین
+                                {% trans "Best Seller" %}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a id="top-rating-link" class="nav-link"
                                aria-current="page"
                                href="">
-                                بالاترین امتیاز
+                                {% trans "Highest Rating" %}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a id="recently-created-link" class="nav-link"
                                aria-current="page"
                                href="">
-                                گرانترین
+                                {% trans "Most Expensive" %}
                             </a>
                         </li>
                     </ul>

@@ -1,6 +1,7 @@
-{% load static %}
+{% load static i18n %}
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+{% get_current_language as CURRENT_LANGUAGE %}
+<html lang="fa" dir="{% if CURRENT_LANGUAGE == 'en' %}ltr{% else %}rtl{% endif %}">
 <head>
     <meta charset="utf-8">
     <title>Aurum - Bootstrap 4 Ecommerce Template</title>

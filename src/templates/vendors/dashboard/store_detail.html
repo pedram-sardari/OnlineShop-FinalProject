@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load template_filters %}
 <div class=" p-5">
     <div class="row">
@@ -11,7 +12,7 @@
     <hr>
     <div class="row">
         <div class="col-sm-3">
-            <h6 class="mb-0">توضیحات</h6>
+            <h6 class="mb-0">{% trans "Description" %}</h6>
         </div>
         <div class="col-sm-8 text-secondary">
             {{ store.description|default_if_none }}
@@ -20,7 +21,7 @@
     <hr>
     <div class="row">
         <div class="col-sm-3">
-            <h6 class="mb-0">تاریخ عضویت</h6>
+            <h6 class="mb-0">{% trans "Joined Date" %}</h6>
         </div>
         <div class="col-sm-8 text-secondary">
             {{ store.created_at|date }}
@@ -29,7 +30,7 @@
     <hr>
     <div class="row">
         <div class="col-sm-3">
-            <h6 class="mb-0">آدرس</h6>
+            <h6 class="mb-0">{% trans "Address" %}</h6>
         </div>
         <div class="col-sm-8 text-secondary">
             {{ store.address|default_if_none }}
@@ -38,7 +39,7 @@
     <hr>
     <div class="row">
         <div class="col-sm-3">
-            <h6 class="mb-0">میانگین امتیاز</h6>
+            <h6 class="mb-0">{% trans "Rating Average" %}</h6>
         </div>
         <div class="col-sm-8 text-secondary">
             {{ store.rate }}
@@ -50,7 +51,7 @@
     {% if is_owner %}
         <div class="d-grid gap-2">
             <a class="btn btn-info fw-bold fs-5"
-               href="{% url 'vendors:store-update' %}">ویرایش</a>
+               href="{% url 'vendors:store-update' %}">{% trans "Edit" %}</a>
         </div>
     {% endif %}
     <!-- edit button -->

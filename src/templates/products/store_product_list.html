@@ -1,4 +1,5 @@
 {% extends 'website/base.html' %}
+{% load i18n %}
 {% load static %}
 
 {% block css %}
@@ -9,31 +10,31 @@
 
     <div id="products-container" class="container">
         <div class="row border rounded-3 mx-auto mt-5 pt-3 bg-white">
-            <h2 class="text-center">همه محصولات</h2>
+            <h2 class="text-center">{% trans "All Stores" %}</h2>
             <!-- filtering -->
             <div class="row">
                 <div class="d-flex ">
-                    <h6 class="my-auto">مرتب سازی: </h6>
+                    <h6 class="my-auto">{% trans "Order By" %}: </h6>
                     <ul class="nav nav-underline">
                         <li class="nav-item">
                             <a class="nav-link {% if ordering == 'sort=best_seller' %} active {% endif %}"
                                aria-current="page"
                                href="{% url 'products:store-product-list' %}?sort=best_seller">
-                                پرفروش ترین
+                                {% trans "Best Seller" %}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {% if ordering == 'sort=highest_rating' %} active {% endif %}"
                                aria-current="page"
                                href="{% url 'products:store-product-list' %}?sort=highest_rating">
-                                بالاترین امتیاز
+                                {% trans "Highest Rating" %}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {% if ordering == 'sort=most_expensive' %} active {% endif %}"
                                aria-current="page"
                                href="{% url 'products:store-product-list' %}?sort=most_expensive">
-                                گرانترین
+                                {% trans "Most Expensive" %}
                             </a>
                         </li>
                     </ul>
@@ -94,12 +95,12 @@
                                         <!-- discount -->
                                         <div>
                                             <p class="card-text text-center text-muted">
-                                                <del>{{ store_product.price }} تومان</del>
+                                                <del>{{ store_product.price }} {% trans "Toman" %}</del>
                                             </p>
                                         </div>
                                         <div>
                                             <p class="card-text text-center fw-bold">{{ store_product.get_discounted_price }}
-                                                تومان</p>
+                                                {% trans "Toman" %}</p>
                                         </div>
                                         <!-- discount -->
                                     {% else %}
@@ -127,8 +128,8 @@
                                 <li class="page-item">
                                     <a class="page-link"
                                        href="{% url 'products:store-product-list' %}?page={{ page_obj.previous_page_number }}&{{ ordering }}"
-                                       title="قبلی" aria-label="Previous">
-                                        <span aria-hidden="true">قبلی</span>
+                                       title="{% trans "Previous" %}" aria-label="Previous">
+                                        <span aria-hidden="true">{% trans "Previous" %}</span>
                                     </a>
                                 </li>
                             {% endif %}
@@ -136,7 +137,7 @@
                             <li class="page-item active">
                                 <a class="page-link" href="#">
                             <span class="current"
-                                  dir="rtl"> صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }} </span>
+                                  dir="rtl"> {% trans "Page" %} {{ page_obj.number }} {% trans "of" %} {{ page_obj.paginator.num_pages }} </span>
                                 </a>
                             </li>
 
@@ -144,9 +145,9 @@
                                 <li class="page-item ">
                                     <a class="page-link"
                                        href="{% url 'products:store-product-list' %}?page={{ page_obj.next_page_number }}&{{ ordering }}"
-                                       title="بعدی"
+                                       title="{% trans "Next" %}"
                                        aria-label="Next">
-                                        <span aria-hidden="true">بعدی</span>
+                                        <span aria-hidden="true">{% trans "Next" %}</span>
                                     </a>
                                 </li>
                             {% endif %}

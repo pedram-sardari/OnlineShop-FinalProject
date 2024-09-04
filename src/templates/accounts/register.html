@@ -1,14 +1,15 @@
 {% extends 'website/template_sidebar_page.html' %}
+{% load i18n %}
 {% load static %}
 
 
 
 {% block side-bar %}
     <a href="{% url 'vendors:register-owner-by-email' %}" class="list-group-item list-group-item-action {{ owner_register }}">
-        ثبت نام فروشنده
+        {% trans "Owners Registration" %}
     </a>
     <a href="{% url 'customers:register-by-email' %} " class="list-group-item list-group-item-action {{ customer_register }}">
-        ثبت نام مشتری
+        {% trans "Customers Registration" %}
     </a>
 {% endblock %}
 
@@ -18,12 +19,12 @@
         <li class="nav-item">
             <a href="{{ by_email_link }}" class="nav-link {{ by_email }}"
                aria-current="page">
-                با ایمیل
+                {% trans "By Email" %}
             </a>
         </li>
         <li class="nav-item">
             <a href="{{ by_phone_link }}" class="nav-link {{ by_phone }}">
-                با شماره موبایل
+                {% trans "By Phone Number" %}
             </a>
         </li>
     </ul>

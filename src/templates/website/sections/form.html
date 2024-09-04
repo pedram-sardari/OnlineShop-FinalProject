@@ -1,3 +1,4 @@
+{% load i18n %}
 <div class="p-5 mt-5 align-middle">
     <form action="{{ form_link }}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -19,7 +20,7 @@
                 {% if submit_button_content %}
                     {{ submit_button_content }}
                 {% else %}
-                    ثبت
+                    {% trans "submit" %}
                 {% endif %}
             </button>
         </div>

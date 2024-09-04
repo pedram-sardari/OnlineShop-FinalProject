@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load static  template_filters %}
 
 <h3 class="box-title mb-3">Order No. {{ order.order_number }}</h3>
@@ -7,13 +8,13 @@
     <thead>
     <tr>
         <th scope="col">#</th>
-        <th scope="col">نظر و امتیاز</th>
-        <th scope="col">محصول</th>
-        <th scope="col">وضعیت</th>
-        <th scope="col">قیمت</th>
-        <th scope="col">تعداد</th>
-        <th scope="col">تخفیف</th>
-        <th scope="col">قیمت نهایی</th>
+        <th scope="col">{% trans "Comment and Rating" %}</th>
+        <th scope="col">{% trans "Product" %}</th>
+        <th scope="col">{% trans "Status" %}</th>
+        <th scope="col">{% trans "Price" %}</th>
+        <th scope="col">{% trans "Inventory" %}</th>
+        <th scope="col">{% trans "Discount" %}</th>
+        <th scope="col">{% trans "Total Price" %}</th>
     </tr>
     </thead>
     <tbody>
@@ -43,7 +44,7 @@
                         <div class="modal-content">
                             <div class="modal-header text-dark d-flex">
                                 <h1 class="modal-title fs-5 flex-grow-1 text-end" id="rateModal">
-                                    ثبت نظر
+                                    {% trans "Submit Comment" %}
                                 </h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
@@ -55,7 +56,7 @@
                                     {% csrf_token %}
                                     {{ comment_form.as_p }}
                                     <button type="submit" class="btn btn-success">
-                                        ارسال
+                                        {% trans "Send" %}
                                     </button>
                                 </form>
                             </div>
@@ -91,7 +92,7 @@
                         <div class="modal-content">
                             <div class="modal-header text-dark d-flex">
                                 <h1 class="modal-title fs-5 flex-grow-1 text-end" id="rateModal">
-                                    ثبت امتیاز
+                                    {% trans "Submit Rating" %}
                                 </h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
@@ -103,7 +104,7 @@
                                     {% csrf_token %}
                                     {{ rating_form.as_p }}
                                     <button type="submit" class="btn btn-success">
-                                        ارســـــــــال
+                                        {% trans "Send" %}
                                     </button>
                                 </form>
                             </div>
@@ -144,16 +145,16 @@
     </tbody>
     <tfoot class="">
     <tr class="fs-5 table-success fw-bold">
-        <td colspan="7" class="text-start">تخـــــــفیف کــــــــل</td>
+        <td colspan="7" class="text-start">{% trans "Total Discount" %}</td>
         <td>{{ order.cash_coupon_discount }}</td>
     </tr>
     <tr class="table-success fs-4 fw-bold">
-        <td colspan="7" class="text-start">جمــــــــــــــع</td>
+        <td colspan="7" class="text-start">{% trans "Total" %}</td>
         <td>{{ order.total }}</td>
     </tr>
     </tfoot>
 </table>
 <p class="text-end mt-3">
-    آدرس:
+    {% trans "Address" %}:
     {{ order.user_address }}
 </p>

@@ -1,17 +1,18 @@
+{% load i18n %}
 {% load template_filters %}
 <table class="table table-striped align-middle">
     <thead>
     <tr>
         <th scope="col">#</th>
-        <th scope="col">عنوان آدرس</th>
-        <th scope="col">استان</th>
-        <th scope="col">شهر</th>
-        <th scope="col">محله</th>
-        <th scope="col">خیابان</th>
-        <th scope="col">کوچه</th>
-        <th scope="col">پلاک</th>
-        <th scope="col">کد پستی</th>
-        <th scope="col">پیش فرض</th>
+        <th scope="col">{% trans "Label" %}</th>
+        <th scope="col">{% trans "Province" %}</th>
+        <th scope="col">{% trans "City" %}</th>
+        <th scope="col">{% trans "Neighborhood" %}</th>
+        <th scope="col">{% trans "Street" %}</th>
+        <th scope="col">{% trans "Alley" %}</th>
+        <th scope="col">{% trans "No." %}</th>
+        <th scope="col">{% trans "Zipcode" %}</th>
+        <th scope="col">{% trans "Default" %}</th>
         <th scope="col">
             <a href="{% url 'accounts:user-address-create' %}">
                 <button type="button" class="btn btn-success py-0">
@@ -22,7 +23,7 @@
                                   d="M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4v4a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-4H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h4zm4 0h-2v5a1 1 0 0 1-1 1H5v2h5a1 1 0 0 1 1 1v5h2v-5a1 1 0 0 1 1-1h5v-2h-5a1 1 0 0 1-1-1z"></path>
                         </g>
                     </svg>
-                    آدرس جدید
+                    {% trans "New Address" %}
                 </button>
             </a>
         </th>
@@ -94,27 +95,27 @@
                         <div class="modal-content">
                             <div class="modal-header text-dark ">
                                 <h1 class="modal-title fs-5" id="exampleModalLabel">
-                                    حذف آدرس
+                                    {% trans "Deleting Address" %}
                                 </h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                             </div>
                             <div class="modal-body text-dark"
                                  style="font-family:'Open Sans', sans-serif">
-                                آیا از حذف کردن آدرس
+                                {% trans "Are you sure to delete?" %}
                                 <span class="text-danger font-weight-bold">
                                 "{{ address }}" 
-                                </span> مطمئن هستید؟
+                                </span> 
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                    لغو
+                                    {% trans "Cancel" %}
                                 </button>
                                 <form action="{% url 'accounts:user-address-delete' address.id %}"
                                       method="post">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-danger">
-                                        حذف
+                                        {% trans "Delete" %}
                                     </button>
                                 </form>
 

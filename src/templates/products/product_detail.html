@@ -1,4 +1,5 @@
 {% extends 'website/base.html' %}
+{% load i18n %}
 {% load static %}
 {% block content %}
     {% csrf_token %}
@@ -66,13 +67,13 @@
                             </svg>
                             <!-- star icon -->
                             <span class="fw-bold my-4"> {{ product.rating_avg }} </span><span
-                                class="text-muted">(امتیاز {{ product.rating_count }} خریدار) </span>
+                                class="text-muted">( {{ product.rating_count }} ) </span>
                         </p>
                         <div class="my-3" style="width: 180px">
                             {{ color_form }}
                         </div>
                         <div class="my-4">
-                            <p>توضیحات:</p>
+                            <p>{% trans "Description" %}:</p>
                             <p>{{ product.description }}</p>
                         </div>
 
@@ -90,7 +91,7 @@
 
     <!-- vendors section -->
     <div id="" class="container border rounded-3 mx-auto mt-5 py-3 bg-white">
-        <h4 class="text-center mb-4">فروشندگان این محصول</h4>
+        <h4 class="text-center mb-4">{% trans "Vendors of this Product" %}</h4>
         <section id="vendors-container">
 
         </section>
@@ -107,7 +108,7 @@
                     {% csrf_token %}
                     {{ comment_form.as_p }}
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-success fw-bold fs-5">ثبت</button>
+                        <button type="submit" class="btn btn-success fw-bold fs-5">{% trans "Submit" %}</button>
                     </div>
                 </form>
             </div>
@@ -132,8 +133,8 @@
                         <li class="page-item">
                             <a class="page-link"
                                href="{% url 'products:store-product-list' %}?page={{ page_obj.previous_page_number }}&{{ ordering }}"
-                               title="قبلی" aria-label="Previous">
-                                <span aria-hidden="true">قبلی</span>
+                               title="{% trans "Previous" %}" aria-label="Previous">
+                                <span aria-hidden="true">{% trans "Previous" %}</span>
                             </a>
                         </li>
                     {% endif %}
@@ -141,7 +142,7 @@
                     <li class="page-item active">
                         <a class="page-link" href="#">
                             <span class="current"
-                                  dir="rtl"> صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }} </span>
+                                  dir="rtl"> {% trans "Page" %} {{ page_obj.number }} {% trans "Of" %} {{ page_obj.paginator.num_pages }} </span>
                         </a>
                     </li>
 
@@ -149,9 +150,9 @@
                         <li class="page-item ">
                             <a class="page-link"
                                href="{% url 'products:store-product-list' %}?page={{ page_obj.next_page_number }}&{{ ordering }}"
-                               title="بعدی"
+                               title="{% trans "Next" %}"
                                aria-label="Next">
-                                <span aria-hidden="true">بعدی</span>
+                                <span aria-hidden="true">{% trans "Next" %}</span>
                             </a>
                         </li>
                     {% endif %}

@@ -1,4 +1,5 @@
 {% extends 'website/base.html' %}
+{% load i18n %}
 {% load static %}
 
 {% block css %}
@@ -19,7 +20,7 @@
                     <div class="card-body d-flex">
                         <div class="d-flex flex-grow-1 align-items-center">
                             <p id="address-title" class="mb-0 fw-bold ps-2">
-                                آدرس:
+                                {% trans "Address" %}:
                             </p>
                             <p id="cart-address" class="mb-0 ">
                                 daf
@@ -35,8 +36,7 @@
                                 <div class="modal-dialog modal-dialog-scrollable">
                                     <div class="modal-content">
                                         <div class="modal-header d-flex">
-                                            <h1 class="modal-title fs-5 flex-grow-1" id="exampleModalLabel">افزودن
-                                                آدرس</h1>
+                                            <h1 class="modal-title fs-5 flex-grow-1" id="exampleModalLabel">{% trans "Add Address" %}</h1>
                                             <button id="closeAddAddressModal" type="button" class="btn-close"
                                                     data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
@@ -51,7 +51,7 @@
                                             </form>
                                         </div>
                                         <div class="modal-footer">
-                                            <button id="send-form-button" type="button" class="btn btn-success">ارسال
+                                            <button id="send-form-button" type="button" class="btn btn-success">{% trans "Send" %}
                                             </button>
                                         </div>
                                     </div>
@@ -63,7 +63,7 @@
                             <!-- Button trigger changeAddressModal modal -->
                             <button id="change-address-button" type="button" class="btn btn-info"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#changeAddressModal">انتخاب آدرس
+                                    data-bs-target="#changeAddressModal">{% trans "Choosing Address" %}
                             </button>
 
                             <!-- changeAddressModal Modal -->
@@ -73,8 +73,7 @@
                                 <div class="modal-dialog modal-dialog-scrollable">
                                     <div class="modal-content">
                                         <div class="modal-header d-flex">
-                                            <h1 class="modal-title fs-5 flex-grow-1" id="exampleModalLabel">انتخاب
-                                                آدرس
+                                            <h1 class="modal-title fs-5 flex-grow-1" id="exampleModalLabel">{% trans "Choosing Address" %}
                                             </h1>
                                             <button id="closeChangeAddressModal" type="button" class="btn-close"
                                                     data-bs-dismiss="modal"
@@ -89,7 +88,7 @@
                                         <div class="modal-footer d-flex justify-content-between">
                                             <button id="add-address-button" type="button" class="btn btn-success"
                                                     data-bs-toggle="modal"
-                                                    data-bs-target="#addAddress">افزودن آدرس جدید
+                                                    data-bs-target="#addAddress">{% trans "Add New Address" %}
                                             </button>
                                             <button id="save-selected-address" type="button" class="btn btn-primary">
                                                 ذخیره
@@ -121,7 +120,7 @@
                 <div class="mt-5 mt-lg-0 ">
                     <div class="card border shadow-none">
                         <div class="card-header bg-transparent border-bottom py-3 px-4">
-                            <h5 class="font-size-16 mb-0">وضعیت سبد</h5>
+                            <h5 class="font-size-16 mb-0">{% trans "Cart Status" %}</h5>
                         </div>
                         <div class="card-body p-4 pt-2">
 
@@ -129,18 +128,18 @@
                                 <table class="table mb-0">
                                     <tbody>
                                     <tr>
-                                        <td>قیمت کالاها :</td>
-                                        <td class="text-end"><span id="goods-total-amount">0</span> تومان</td>
+                                        <td>{% trans "Goods Price" %} :</td>
+                                        <td class="text-end"><span id="goods-total-amount">0</span> {% trans "Toman" %}</td>
                                     </tr>
                                     <tr>
-                                        <td>سود شما :</td>
-                                        <td class="discount text-end"><span id="profit-amount">0</span> تومان</td>
+                                        <td>{% trans "Your Profit" %} :</td>
+                                        <td class="discount text-end"><span id="profit-amount">0</span> {% trans "Toman" %}</td>
                                     </tr>
                                     <tr class="bg-light ">
-                                        <th>جمع سبد خرید :</th>
+                                        <th>{% trans "Cart Total" %} :</th>
                                         <td class="text-end">
                                             <span class="price fw-bold">
-                                                <span id="final-amount">0</span> تومان
+                                                <span id="final-amount">0</span> {% trans "Toman" %}
                                             </span>
                                         </td>
                                     </tr>
@@ -151,7 +150,7 @@
                                 <!-- Button trigger submitOrderModal modal -->
                                 <button id="confirm-submit-order-modal-button" hidden type="button" class="btn btn-info"
                                         data-bs-toggle="modal"
-                                        data-bs-target="#submitOrderModal">انتخاب آدرس
+                                        data-bs-target="#submitOrderModal">{% trans "Choosing Address" %}
                                 </button>
 
                                 <!-- submitOrderModal Modal -->
@@ -162,19 +161,19 @@
                                         <div class="modal-content">
                                             <div class="modal-header d-flex">
                                                 <h1 class="modal-title fs-5 flex-grow-1" id="exampleModalLabel">
-                                                    تائید ثبت سفارش
+                                                    {% trans "Submit Order" %}
                                                 </h1>
                                                 <button id="closeSubmitOrderModal" type="button" class="btn-close"
                                                         data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <p> از ثبت سفارش خود مطمئن هستید؟ </p>
+                                                <p> {% trans "Are you sure?" %} </p>
                                             </div>
                                             <div class="modal-footer d-flex justify-content-end">
                                                 <button id="yes-button" type="button"
                                                         class="btn btn-success">
-                                                    بله
+                                                    {% trans "Yes" %}
                                                 </button>
                                             </div>
                                         </div>
@@ -184,7 +183,7 @@
                                 <div class="d-grid gap-2">
                                     <button id="submitOrderButton" href="#" class="btn btn-success mt-3">
                                         <i class="mdi mdi-cart-outline me-1"></i>
-                                        ثبت سفارش
+                                        {% trans "Submit Order" %}
                                     </button>
                                 </div> <!-- end col -->
                             </div>

@@ -25,7 +25,7 @@
     <a href="{% url 'accounts:user-address-list' %} "
        class="list-group-item list-group-item-action {{ user_address_list }} {{ user_address_create }} 
              {{ user_address_update }} {{ user_address_detail }}">
-        آدرس های من
+        {% trans "Addresses" %}
     </a>
     <!-- user_address_list -->
 
@@ -34,7 +34,7 @@
     {% if is_staff %}
         <a href="{% url 'vendors:store-detail' %} "
            class="list-group-item list-group-item-action {{ store_section }}">
-            فروشگاه
+            {% trans "Store" %}
         </a>
     {% endif %}
     <!-- staff_selected -->
@@ -44,13 +44,13 @@
         <a href="{% url 'vendors:order-item-list' %}"
            class="list-group-item list-group-item-action {{ staff_dashboard__order_section }}">
             <!-- orders -->
-            سفارشات مشتریان
+            {% trans "Orders" %}
         </a><!-- orders -->
     {% else %}
         <a href="{% url 'customers:order-list' %}"
            class="list-group-item list-group-item-action {{ customer_dashboard__order_section }}">
             <!-- orders -->
-            تاریچه سفارشات
+            {% trans "Orders" %}
         </a><!-- orders -->
     {% endif %}
 
@@ -58,7 +58,7 @@
     {% if is_staff %} <!-- store product list -->
         <a href="{% url 'vendors:store-product-list' %} "
            class="list-group-item list-group-item-action {{ dashboard_store_product_section }}">
-            محصولات
+            {% trans "Products" %}
         </a>
     {% endif %} <!-- store product list -->
 
@@ -66,7 +66,7 @@
     {% if is_staff %}<!-- store discount list -->
         <a href="{% url 'vendors:store-discount-list' %} "
            class="list-group-item list-group-item-action {{ store_discount_section }}">
-            تخفیفات
+            {% trans "Discounts" %}
         </a>
     {% endif %}<!-- store discount list -->
 
@@ -74,15 +74,15 @@
     {% if is_customer %} <!-- my comments and rates -->
         <a href="{% url 'products:my-comment-list' %} "
            class="list-group-item list-group-item-action {{ my_comment_list_section }}">
-            نظرات و امتیازات من
+            {% trans "Comments and Ratings" %}
         </a>
     {% endif %}<!-- my comments and rates -->
 
 
     {% if is_owner or is_superuser %} <!-- reports -->
-        <a href="{% url 'home' %} "
+        <a href="#"
            class="list-group-item list-group-item-action {{ customer_register }}">
-            گزارشات
+            {% trans "Reports" %}
         </a>
     {% endif %}<!-- reports -->
 
@@ -105,18 +105,18 @@
                 <li class="nav-item">
                     <a href="{% url 'accounts:personal-info-detail' %}" class="nav-link {{ personal_info_detail }}"
                        aria-current="page">
-                        اطلاعات شخصی
+                        {% trans "Personal Info" %}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'accounts:phone-detail' %}" class="nav-link {{ phone_detail }}">
-                        شماره تماس
+                        {% trans "Phone Number" %}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'accounts:email-and-password-detail' %}"
                        class="nav-link {{ email_and_password_detail }}">
-                        ایمیل و رمز عبور
+                        {% trans "Email and Password" %}
                     </a>
                 </li>
             </ul>
@@ -147,11 +147,11 @@
                 <li class="nav-item">
                     <a href="{% url 'vendors:store-detail' %}" class="nav-link {{ store_detail_section }}"
                        aria-current="page">
-                        اطلاعات فروشگاه
+                        {% trans "Store Info" %}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'vendors:staff-list' %}" class="nav-link {{ staff_selected }}">کارمندان</a>
+                    <a href="{% url 'vendors:staff-list' %}" class="nav-link {{ staff_selected }}">{% trans "Staff" %}</a>
                 </li>
             </ul>
 
@@ -231,8 +231,8 @@
     {% endif %}
 
     {% if create_new_product_link_section %}
-        <p class="text-right mt-4">اگر محصول مورد نظر شما در سایت وجود ندارد میتوانید
-            <a href="{% url 'vendors:product-create--select-category' %}">اضافه کنید</a>
+        <p class="text-right mt-4">{% trans "Can't you find you product on the list? Add it " %}
+            <a href="{% url 'vendors:product-create--select-category' %}">{% trans "here" %}</a>
             . </p>
     {% endif %}
 

@@ -1,4 +1,5 @@
 {% extends 'website/base.html' %}
+{% load i18n %}
 {% load static %}
 
 {% block body %}
@@ -10,7 +11,7 @@
         <div class="row justify-content-md-center h-100">
             <div class="col-sm-4 col-md-11 col-lg-8 col-xl-7 col-xxl-6 ">
                 <div class="p-5 mt-5 align-middle border rounded-3">
-                    <h2 class="text-center mb-5">ورود با ایمیل</h2>
+                    <h2 class="text-center mb-5">{% trans "Log in by phone number" %}</h2>
                     <form action="" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {% for field in form %}
@@ -23,20 +24,20 @@
 
                         {% endfor %}
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-success my-3 fw-bold fs-5">ورود</button>
+                            <button type="submit" class="btn btn-success my-3 fw-bold fs-5">{% trans "Log in" %}</button>
                         </div>
                     </form>
                     <div class="my-2 text-center fs-5">
-                        <a href="{% url 'accounts:login-phone' %}?next={{ next }}" class="btn btn-outline-primary">ورورد با شماره
-                            موبایل</a>
+                        <a href="{% url 'accounts:login-phone' %}?next={{ next }}" class="btn btn-outline-primary">{% trans "Log in by phone number" %}
+                            </a>
                     </div>
 
                     <div class="my-2">
-                        <a href="#!" class="link-secondary text-decoration-none">فراموشی رمز عبور</a>
+                        <a href="#!" class="link-secondary text-decoration-none">{% trans "Forgot password" %}</a>
                     </div>
                     <div class="my-2">
-                        <a href="{% url 'vendors:register-owner-by-email' %}" class="link-secondary text-decoration-none">ساختن
-                            حساب جدید</a>
+                        <a href="{% url 'vendors:register-owner-by-email' %}" class="link-secondary text-decoration-none">
+                            {% trans "Create a new account" %}</a>
                     </div>
                 </div>
             </div>

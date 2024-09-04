@@ -1,8 +1,9 @@
+{% load i18n %}
 {% load template_filters %}
 <div class=" p-5">
     <div class="row">
         <div class="col-sm-3">
-            <h6 class="mb-0">نام</h6>
+            <h6 class="mb-0">{% trans "First Name" %}</h6>
         </div>
         <div class="col-sm-8 text-secondary">
             {{ request.user.first_name|default_if_none }}
@@ -11,7 +12,7 @@
     <hr>
     <div class="row">
         <div class="col-sm-3">
-            <h6 class="mb-0">نام خانوادگی</h6>
+            <h6 class="mb-0">{% trans "Last Name" %}</h6>
         </div>
         <div class="col-sm-8 text-secondary">
             {{ request.user.last_name|default_if_none }}
@@ -20,7 +21,7 @@
     <hr>
     <div class="row">
         <div class="col-sm-3">
-            <h6 class="mb-0">تاریخ عضویت</h6>
+            <h6 class="mb-0">{% trans "Joined Date" %}</h6>
         </div>
         <div class="col-sm-8 text-secondary">
             {{ request.user.date_joined|date }}
@@ -29,7 +30,7 @@
     <hr>
     <div class="row">
         <div class="col-sm-3">
-            <h6 class="mb-0">کد ملی</h6>
+            <h6 class="mb-0">{% trans "National ID" %}</h6>
         </div>
         <div class="col-sm-8 text-secondary">
             {{ request.user.national_id|default_if_none }}
@@ -38,7 +39,7 @@
     <hr>
     <div class="row">
         <div class="col-sm-3">
-            <h6 class="mb-0">جنسیت</h6>
+            <h6 class="mb-0">{% trans "Gender" %}</h6>
         </div>
         <div class="col-sm-8 text-secondary">
             {{ request.user.get_gender_display }}
@@ -47,7 +48,7 @@
     <hr>
     <div class="row">
         <div class="col-sm-3">
-            <h6 class="mb-0">تاریخ تولد</h6>
+            <h6 class="mb-0">{% trans "Birth Date" %}</h6>
         </div>
         <div class="col-sm-8 text-secondary">
             {{ request.user.date_of_birth|default_if_none }}
@@ -59,7 +60,7 @@
     <!-- edit button -->
     <div class="d-grid gap-2">
         <a class="btn btn-info fw-bold fs-5"
-           href="{% url 'accounts:personal-info-update' %}">ویرایش</a>
+           href="{% url 'accounts:personal-info-update' %}">{% trans "Edit" %}</a>
     </div>
     <!-- edit button -->
 </div>

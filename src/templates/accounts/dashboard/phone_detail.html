@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load template_filters %}
 <div class=" p-5">
     <div class="row">
@@ -13,7 +14,7 @@
     <!-- edit button -->
     <div class="d-grid gap-2">
         <a class="btn btn-info fw-bold fs-5"
-           href="{% url 'accounts:phone-update' %}">ویرایش</a>
+           href="{% url 'accounts:phone-update' %}">{% trans "Edit" %}</a>
     </div>
     <!-- edit button -->
 </div>

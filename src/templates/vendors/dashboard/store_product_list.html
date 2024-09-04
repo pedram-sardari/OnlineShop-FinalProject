@@ -1,16 +1,17 @@
+{% load i18n %}
 {% load static template_filters %}
 <table class="table table-striped align-middle">
     <thead>
     <tr>
         <th scope="col">#</th>
         <th scope="col"></th>
-        <th scope="col">نام محصول</th>
-        <th scope="col">رنگ محصول</th>
-        <th scope="col">قیمت</th>
-        <th scope="col">تخفیف نقدی</th>
-        <th scope="col">تخفیف درصدی</th>
-        <th scope="col">تعداد موجود</th>
-        <th scope="col">موجود</th>
+        <th scope="col">{% trans "Product Name" %}</th>
+        <th scope="col">{% trans "Color" %}</th>
+        <th scope="col">{% trans "Price" %}</th>
+        <th scope="col">{% trans "Cash Discount" %}</th>
+        <th scope="col">{% trans "Percentage Discount" %}</th>
+        <th scope="col">{% trans "Inventory" %}</th>
+        <th scope="col">{% trans "Is Available" %}</th>
         {% if is_owner %}
             <th scope="col">
                 <a href="{% url 'vendors:store-product-create--select-product' %}">
@@ -22,7 +23,7 @@
                                       d="M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4v4a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-4H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h4zm4 0h-2v5a1 1 0 0 1-1 1H5v2h5a1 1 0 0 1 1 1v5h2v-5a1 1 0 0 1 1-1h5v-2h-5a1 1 0 0 1-1-1z"></path>
                             </g>
                         </svg>
-                        افزودن محصول به فروشگاه
+                        {% trans "New Product" %}
                     </button>
                 </a>
             </th>
@@ -120,20 +121,20 @@
                                 </div>
                                 <div class="modal-body text-dark"
                                      style="font-family:'Open Sans', sans-serif">
-                                    آیا از حذف کردن محصول
+                                    {% trans "Are you sure to delete?" %}
                                     <span class="text-danger font-weight-bold">
                                 "{{ store_product.product.name }}" 
-                                </span> مطمئن هستید؟
+                                </span>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                        لغو
+                                        {% trans "Cancel" %}
                                     </button>
                                     <form action="{% url 'vendors:store-product-delete' store_product.id %}"
                                           method="post">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-danger">
-                                            حذف
+                                            {% trans "Delete" %}
                                         </button>
                                     </form>
 

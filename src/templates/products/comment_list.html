@@ -1,6 +1,7 @@
+{% load i18n %}
 {% load static %}
 <div class="row mx-2">
-    <h4 class="text-center">نظرات</h4>
+    <h4 class="text-center">{% trans "Comments" %}</h4>
     {% for comment in comment_list %}
         <div class="border border-primary bg-info bg-opacity-10 rounded-3 p-2 mb-4">
             <div>
@@ -10,9 +11,9 @@
             <div class="d-flex justify-content-between border-top">
                 <p class="text-muted m-0 fs-6">{{ comment.created_at|date }}</p>
                 {% if my_comment_list_section and is_customer %}
-                    <p class="text-muted m-0 fs-6">وضعیت: {{ comment.status }}</p>
+                    <p class="text-muted m-0 fs-6">{% trans "Status" %}: {{ comment.status }}</p>
                     <p class="mb-0">
-                        محصول:
+                        {% trans "Product" %}:
                         <a href="{% url 'products:product-detail' comment.product.id %}">
                             {{ comment.product.name }}
                         </a>

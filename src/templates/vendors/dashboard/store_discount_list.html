@@ -1,12 +1,13 @@
+{% load i18n %}
 {% load static  template_filters %}
 <table class="table table-striped align-middle">
     <thead>
     <tr>
         <th scope="col">#</th>
-        <th scope="col">تخفیف نقدی</th>
-        <th scope="col">تخفیف درصدی</th>
-        <th scope="col">تاریخ انقضا</th>
-        <th scope="col">فعال</th>
+        <th scope="col">{% trans "Cash Discount" %}</th>
+        <th scope="col">{% trans "Percentage Discount" %}</th>
+        <th scope="col">{% trans "Expiration Date" %}</th>
+        <th scope="col">{% trans "Is Active" %}</th>
         {% if is_owner %}
             <th scope="col">
                 <a href="{% url 'vendors:store-discount-create' %}">
@@ -18,7 +19,7 @@
                                       d="M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4h4a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-4v4a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-4H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h4zm4 0h-2v5a1 1 0 0 1-1 1H5v2h5a1 1 0 0 1 1 1v5h2v-5a1 1 0 0 1 1-1h5v-2h-5a1 1 0 0 1-1-1z"></path>
                             </g>
                         </svg>
-                        تخفیف جدید
+                        {% trans "New Discount" %}
                     </button>
                 </a>
             </th>
@@ -95,27 +96,27 @@
                             <div class="modal-content">
                                 <div class="modal-header text-dark ">
                                     <h1 class="modal-title fs-5" id="exampleModalLabel">
-                                        حذف آدرس
+                                        {% trans "Delete Discount" %}
                                     </h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body text-dark"
                                      style="font-family:'Open Sans', sans-serif">
-                                    آیا از حذف کردن تخفیف
+                                    {% trans "Are you sure to delete?" %}
                                     <span class="text-danger font-weight-bold">
                                 "{{ store_discount }}" 
-                                </span> مطمئن هستید؟
+                                </span>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                        لغو
+                                        {% trans "Cancel" %}
                                     </button>
                                     <form action="{% url 'vendors:store-discount-delete' store_discount.id %}"
                                           method="post">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-danger">
-                                            حذف
+                                            {% trans "Delete" %}
                                         </button>
                                     </form>
 

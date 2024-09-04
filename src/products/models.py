@@ -113,6 +113,9 @@ class Coupon(models.Model):
 
 
 class Category(CreateUpdateDateTimeFieldMixin, models.Model):
+    def upload_to(instance, filename):  # todo: create directory
+        return f"category_images/{filename}"
+
     name = models.CharField(_("نام دسته بندی"), max_length=100, unique=True)
     slug = models.SlugField(max_length=150, unique=True, blank=True, allow_unicode=True)
     description = models.TextField(_("توضیحات"), null=True, blank=True)
@@ -123,6 +126,7 @@ class Category(CreateUpdateDateTimeFieldMixin, models.Model):
         null=True, blank=True,
         verbose_name=_("دسته بندی والد")
     )
+    image = models.ImageField(verbose_name=_("عکس"), upload_to=upload_to, null=True, blank=True)
 
     class Meta:
         verbose_name = _("دسته بندی")

@@ -88,7 +88,7 @@ class StoreProductInline(admin.TabularInline):
 class CategoryAdmin(admin.ModelAdmin):
     inlines = [ProductInline]
     list_display = ('id', 'name')
-    fields = ['name', 'description', 'parent_category', 'slug']
+    fields = ['name', 'description', 'parent_category', 'image', 'slug']
     readonly_fields = ['slug']
 
 

@@ -318,7 +318,7 @@ class ProductColor(models.Model):
         unique_together = ("product", "color")
 
     def __str__(self):
-        return f"{self.product} - {self.color}"
+        return f"{self.color} - {self.product}"
 
 
 class Comment(CreateUpdateDateTimeFieldMixin, models.Model):

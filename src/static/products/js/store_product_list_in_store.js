@@ -96,7 +96,7 @@ function createStoreProductCard(storeProduct) {
 
 
                         <div class="card-body" style="height: 130px">
-                            <h5 class="card-title text-center">${storeProduct.name}</h5>
+                            <h5 class="card-title text-center" style="white-space: nowrap; overflow: hidden">${storeProduct.name}</h5>
                             <!-- rating -->
                             <div class="d-flex justify-content-center my-2">
                                 <!-- star icon -->

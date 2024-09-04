@@ -18,59 +18,35 @@
         <!-- store product detail -->
         <div class="row container g-4 m-auto pb-4">
             <!-- image carousel -->
-            <div class="col-3 ps-3">
-                <div id="carouselExampleIndicators" class="carousel slide">
-                    {% if product.images.all %}
-                        <div class="carousel-indicators">
-                            {% for product_image in product.images.all %}
-                                <button type="button" data-bs-target="#carouselExampleIndicators"
-                                        data-bs-slide-to="{{ forloop.counter }}"
-                                        class{% if product_image.is_default or forloop.last %}="active"
-                                        aria-current="true"{% endif %}
-                                        aria-label="Slide {{ forloop.counter }}"></button>
-                            {% endfor %}
-                        </div>
-                        <!-- image part -->
-                        <div class="carousel-inner">
-                            {% for product_image in product.images.all %}
-                                <div class="carousel-item {% if product_image.is_default or forloop.last %}active{% endif %}">
-                                    <img src="{{ product_image.image.url }}" class="d-block w-100" alt="..."
-                                         height="220" width="220"
-                                    >
-                                </div>
-                            {% endfor %}
-                        </div>
-                        <!-- image part -->
-                        {% if product.images.count > 1 %}
-                            <button class="carousel-control-prev" type="button"
-                                    data-bs-target="#carouselExampleIndicators"
-                                    data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button"
-                                    data-bs-target="#carouselExampleIndicators"
-                                    data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
-                        {% endif %}
-                    {% else %}
-                        <img src="{% static 'products/img/product-default-image.png' %}"
-                             class="d-block w-100"
-                             alt="..."
-                             height="220" width="220"
-                        >
-                    {% endif %}
+            <div class="col-6 ps-3">
+                <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for product_image in product.images.all %}
+                            <div class="carousel-item {% if product_image.is_default or forloop.last %}active{% endif %}">
+                                <img src="{{ product_image.image.url }}" class="d-block w-100" alt="..."
+                                >
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
+                            data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
+                            data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
             </div>
             <!-- image carousel -->
 
-            <div class="col-9">
+            <div class="col">
                 <!-- product name -->
                 <div class="row">
                     <!-- DO NOT change value of this field. Js uses the content text to fetch data-->
-                    <h1 id="product-name" class="border-bottom">{{ product.name }}</h1>
+                    <h3 id="product-name" class="border-bottom pb-4">{{ product.name }}</h3>
                 </div>
                 <!-- product name -->
 
@@ -78,7 +54,7 @@
                 <div class="row pt-4">
                     <!-- product detail -->
                     <div class="col">
-                        <p class="">
+                        <p class="my-4">
                             <!-- star icon -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em"
                                  viewBox="0 0 72 72">
@@ -89,13 +65,13 @@
                                       d="M35.993 10.736L27.791 27.37L9.439 30.044l13.285 12.94l-3.128 18.28l16.412-8.636l16.419 8.624l-3.142-18.278l13.276-12.95l-18.354-2.66z"></path>
                             </svg>
                             <!-- star icon -->
-                            <span class="fw-bold"> {{ product.rating_avg }} </span><span
+                            <span class="fw-bold my-4"> {{ product.rating_avg }} </span><span
                                 class="text-muted">(امتیاز {{ product.rating_count }} خریدار) </span>
                         </p>
-                        <div style="width: 180px">
-                        {{ color_form }}
-                            </div>
-                        <div class="mt-4">
+                        <div class="my-3" style="width: 180px">
+                            {{ color_form }}
+                        </div>
+                        <div class="my-4">
                             <p>توضیحات:</p>
                             <p>{{ product.description }}</p>
                         </div>

@@ -178,7 +178,7 @@ class Product(CreateUpdateDateTimeFieldMixin, RatingFieldsAndMethodsMixin, model
         verbose_name_plural = _("محصولات")
 
     def get_default_image(self):
-        default_product_image = self.images.filter(is_default=True).first()
+        default_product_image = self.images.filter(is_default=True).first() or self.images.all().first()
         if default_product_image:
             return default_product_image.image
         return None

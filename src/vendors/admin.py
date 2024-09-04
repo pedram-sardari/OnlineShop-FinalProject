@@ -101,7 +101,7 @@ class StoreAdmin(admin.ModelAdmin):
     list_filter = ['created_at']
     search_fields = ['name']
     readonly_fields = ['order_count', 'slug','rating_avg', 'rating_count']
-    inlines = [StaffInline, products_admin.StoreDiscountInline]
+    inlines = [StaffInline, products_admin.StoreDiscountInline, products_admin.StoreProductInline]
 
     def owner(self, obj):
         return obj.staffs.filter(role=Staff.Roles.OWNER).first()

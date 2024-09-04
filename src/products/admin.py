@@ -55,9 +55,33 @@ class ProductColorInline(admin.TabularInline):
     extra = 1
 
 
-class ProductInline(admin.StackedInline):
+class ProductInline(admin.TabularInline):
     model = Product
+    extra = 1
     raw_id_fields = ('category',)
+
+
+class StoreProductInline(admin.TabularInline):
+    model = StoreProduct
+    extra = 1
+    readonly_fields = ['rating_avg', 'rating_count', 'rating_sum']
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "store_discount":
+            # Get the store from the current Product instance if it exists
+            if request.resolver_match.kwargs.get('object_id'):
+                # product_id = request.resolver_match.kwargs['object_id']
+                store_id = request.resolver_match.kwargs['object_id']
+                # store_id = StoreProduct.objects.get(id=product_id).store_id
+            # If the Product instance is being created, get the store_id from the request
+            else:
+                store_id = request.GET.get('store_id')  # This assumes that the store is passed in the URL
+
+            # Filter the discounts based on the store
+            kwargs["queryset"] = StoreDiscount.objects.filter(store_id=store_id)
+
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
 
 
 @admin.register(Category)

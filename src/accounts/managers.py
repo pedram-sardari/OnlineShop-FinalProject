@@ -32,5 +32,9 @@ class UserManager(BaseUserManager):
 
         return self._create_user(email, phone, password, **extra_fields)
 
+    def all_objects(self):
+        """ Returns all objects, including all 'is_deleted=True' abjects"""
+        return super().get_queryset()
+
     def get_queryset(self):
         return super().get_queryset().filter(is_deleted=False)

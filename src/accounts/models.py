@@ -188,12 +188,6 @@ class UserAddress(Address):
         else:
             super().delete(*args, *kwargs)
 
-    # def create_copy(self):
-    #     print('%' * 50)
-    #     old_address = UserAddress.objects.get(id=self.id)
-    #     old_address.soft_delete()
-    #     self.id = None
-
     def is_there_any_order(self):
         return self.orders.all().exists()
 
@@ -201,9 +195,6 @@ class UserAddress(Address):
         if self.is_default:
             self.set_default()
 
-        # if self.id and not self.is_deleted: todo:
-        #     if self.is_there_any_order():
-        #         self.create_copy()
         super().save(*args, **kwargs)
 
     def __str__(self):

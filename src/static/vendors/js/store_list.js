@@ -89,15 +89,6 @@ function createStoreCard(store) {
                <div class="col">
                     <div class="card h-100 position-relative">
 
-                        <!-- Image -->
-                        <div class="p-auto" style="height: 200px">
-                            <img src="${getStoreImage(store)}"
-                                 class="card-img-top h-100 v-100"
-                                 alt="...">
-                        </div>
-                        <!-- Image -->
-
-
                         <div class="card-body" style="height: 160px">
                             <h5 class="card-title text-center">${store.name}</h5>
                             <!-- rating -->

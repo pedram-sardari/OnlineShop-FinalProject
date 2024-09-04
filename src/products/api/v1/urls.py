@@ -16,4 +16,8 @@ urlpatterns = [
          views.StoreProductListAPIView.as_view(),
          name='store-product-list'),
 
+    path('store-product/index-page/',
+         views.StoreProductListIndexPageAPIView.as_view(),
+         name='store-product-list-index-page'),
+
 ]

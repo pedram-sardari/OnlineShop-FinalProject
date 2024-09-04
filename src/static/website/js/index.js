@@ -16,7 +16,7 @@ let cardGroupStoreProducts = document.getElementById('card-group-store-products'
 let baseURL = `http://${window.location.host}/en/`
 let storesURL = baseURL + `products/api/v1/store/?page_size=${pageSize}`
 let storeDefaultImage = 'http://localhost:8000/static/products/img/product-default-image.png'
-let storeProductsURL = baseURL + `products/api/v1/store-product/?page_size=${pageSize}`
+let storeProductsURL = baseURL + `products/api/v1/store-product/index-page/?page_size=${pageSize}`
 
 // event listeners
 window.addEventListener('load', generateAllSections)
@@ -64,15 +64,6 @@ function createStoreCard(store) {
             <a href="${store.url}" style="text-decoration: none">
                <div class="col">
                     <div class="card h-100 position-relative">
-
-                        <!-- Image -->
-                        <div class="p-auto" style="height: 200px">
-                            <img src="${getStoreImage(store)}"
-                                 class="card-img-top h-100 v-100"
-                                 alt="...">
-                        </div>
-                        <!-- Image -->
-
 
                         <div class="card-body" style="height: 160px">
                             <h5 class="card-title text-center">${store.name}</h5>

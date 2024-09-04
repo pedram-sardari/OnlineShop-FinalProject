@@ -1,4 +1,5 @@
-from django.db.models import Sum
+from django.db.models import Sum, F, Min
+from django.urls import reverse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework.generics import ListAPIView
@@ -49,3 +50,17 @@ class StoreProductListAPIView(ListAPIView):
     filterset_fields = ['store__slug']
     search_fields = ['product__name']
     ordering_fields = ['order_count', 'price', 'product__rating_avg']
+
+
+class StoreProductListIndexPageAPIView(StoreProductListAPIView):
+
+    def get_queryset(self):
+        return self.queryset.filter(
+            inventory__gt=0
+        ).annotate(
+            min_price=Min('product__store_products__price')
+        ).filter(
+            price=F('min_price')
+        ).annotate(
+            order_count=Sum('order_items__quantity')
+        ).distinct()

@@ -6,7 +6,6 @@ from orders.models import Cart, CartItem
 
 def sync_session_and_db_carts(request: HttpRequest, customer):
     session_cart_items = request.session.get(settings.SESSION_CART_KEY)
-    print('?' * 50, session_cart_items)
 
     db_cart, created = Cart.objects.get_or_create(customer=customer)
     # if the current cart doesn't have any address and the user has default address
@@ -25,11 +24,7 @@ def sync_session_and_db_carts(request: HttpRequest, customer):
                                                                 store_product_id=session_cart_item.get(
                                                                     'store_product'))  # todo: LM How to update without getting
             if created:
-                # print('!' * 50, session_cart_item)
-                # print('!' * 50, cart_item)
                 cart_item.quantity = int(session_cart_item['quantity'])
             else:
-                # print('9' * 50, session_cart_item)
-                # print('9' * 50, cart_item)
                 cart_item.quantity += int(session_cart_item['quantity'])
             cart_item.save()

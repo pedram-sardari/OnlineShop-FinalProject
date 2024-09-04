@@ -58,7 +58,6 @@ INSTALLED_APPS = [
     # custom
     'accounts',
     'customers',
-    'admin_panel',
     'orders',
     'vendors',
     'website',

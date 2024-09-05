@@ -28,7 +28,7 @@ function selectFirstOption() {
 
 
 function fetchVendors(event) {
-    let url = `http://${window.location.host}/en/products/api/v1/store-product-vendor/?${getQueryString()}`
+    let url = `${window.location.protocol}//${window.location.host}/en/products/api/v1/store-product-vendor/?${getQueryString()}`
     fetch(url)
         .then(response => {
             if (!response.ok) {
@@ -112,7 +112,7 @@ function sendCartItemToServer(newCartItem) {
 
     console.log('sendCartItemToServer');
     console.log(newCartItem);
-    let url = `http://${window.location.host}/en/orders/api/v1/cart-item/`
+    let url = `${window.location.protocol}//${window.location.host}/en/orders/api/v1/cart-item/`
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     fetch(url, {
         method: 'POST',

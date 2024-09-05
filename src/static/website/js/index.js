@@ -13,9 +13,9 @@ let cardGroupStoreProducts = document.getElementById('card-group-store-products'
 
 
 // urls
-let baseURL = `http://${window.location.host}/en/`
+let baseURL = `${window.location.protocol}//${window.location.host}/en/`
 let storesURL = baseURL + `products/api/v1/store/?page_size=${pageSize}`
-let storeDefaultImage = 'http://localhost:8000/static/products/img/product-default-image.png'
+let storeDefaultImage = `${window.location.protocol}//${window.location.host}/static/products/img/product-default-image.png`
 let storeProductsURL = baseURL + `products/api/v1/store-product/index-page/?page_size=${pageSize}`
 
 // event listeners

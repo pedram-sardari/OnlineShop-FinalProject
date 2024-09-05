@@ -16,12 +16,12 @@ let paginationNextBtnStores = document.getElementById('pagination-next-btn-store
 let paginationCurrentPageNumberStoresElem = document.getElementById('pagination-current-page-number-stores')
 
 // urls
-let baseURL = `http://${window.location.host}/en/`
+let baseURL = `${window.location.protocol}//${window.location.host}/en/`
 let storesURL = baseURL + 'products/api/v1/store/'
 let bestSellerStoresURL = storesURL + '?ordering=-orders_count'
 let recentlyCreatedStoresURL = storesURL + '?ordering=-created_at'
 let topRatingStoresURL = storesURL + '?ordering=-rating_avg'
-let storeDefaultImage = 'http://localhost:8000/static/products/img/product-default-image.png'
+let storeDefaultImage = `${window.location.protocol}//${window.location.host}/static/products/img/product-default-image.png`
 
 
 // event listeners

@@ -19,7 +19,7 @@ let paginationCurrentPageNumberElem = document.getElementById('pagination-curren
 
 // urls
 let store__slugParam = window.location.search
-let baseURL = `http://${window.location.host}/en/`
+let baseURL = `${window.location.protocol}//${window.location.host}/en/`
 let storeProductsURL = baseURL + `products/api/v1/store-product/${store__slugParam}`
 let bestSellerURL = storeProductsURL + '&ordering=-order_count'
 let mostExpensiveURL = storeProductsURL + '&ordering=-price'

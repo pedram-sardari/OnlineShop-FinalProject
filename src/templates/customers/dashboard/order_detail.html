@@ -128,7 +128,7 @@
                 </div>
                 <div class="d-flex align-items-center me-2">
                     <a href="{% url 'products:product-detail' order_item.store_product.product.id %}">
-                        {{ order_item.store_product }}
+                        {{ order_item.store_product.product.name|slice_string }}
                         {% if order_item.store_product.product_color %}
                             ({{ order_item.store_product.product_color.color.value }})
                         {% endif %}
@@ -144,13 +144,15 @@
     {% endfor %}
     </tbody>
     <tfoot class="">
-    <tr class="fs-5 table-success fw-bold">
-        <td colspan="7" class="text-start">{% trans "Total Discount" %}</td>
-        <td>{{ order.cash_coupon_discount }}</td>
+    <tr class="fs-5 fw-bold" style="border: 0 solid white ">
+        <td colspan="6"></td>
+        <td class="table-dark" colspan="1" class="text-start">{% trans "Total Discount" %}</td>
+        <td class="table-dark" >{{ order.cash_coupon_discount }}</td>
     </tr>
-    <tr class="table-success fs-4 fw-bold">
-        <td colspan="7" class="text-start">{% trans "Total" %}</td>
-        <td>{{ order.total }}</td>
+    <tr class=" fs-4 fw-bold" style="border: 0 solid white ">
+        <td colspan="6"></td>
+        <td class="table-dark" colspan="1" class="text-start">{% trans "Total" %}</td>
+        <td class="table-dark" >{{ order.total }}</td>
     </tr>
     </tfoot>
 </table>

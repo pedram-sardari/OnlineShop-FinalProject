@@ -28,6 +28,7 @@ class Store(CreateUpdateDateTimeFieldMixin, RatingFieldsAndMethodsMixin, models.
 
     class Meta:
         verbose_name = _("Store")
+        verbose_name_plural = _("Stores")
 
     @property
     def order_count(self):
@@ -69,6 +70,7 @@ class Staff(User):
 
     class Meta:
         verbose_name = _("Staff")
+        verbose_name_plural = _("Staffs")
 
     @classmethod
     def get_staff(cls, user):
@@ -100,6 +102,7 @@ class Owner(Staff):
     class Meta:
         proxy = True
         verbose_name = _("Owner")
+        verbose_name_plural = _("Owners")
 
     @classmethod
     def get_owner(cls, user):
@@ -120,6 +123,7 @@ class Manager(Staff):
     class Meta:
         proxy = True
         verbose_name = _("Product Manager")
+        verbose_name_plural = _("Product Managers")
 
     @classmethod
     def get_manager(cls, user):
@@ -140,6 +144,7 @@ class Operator(Staff):
     class Meta:
         proxy = True
         verbose_name = _("Operator")
+        verbose_name_plural = _("Operators")
 
     @classmethod
     def get_operator(cls, user):

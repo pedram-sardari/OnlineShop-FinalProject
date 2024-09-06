@@ -13,6 +13,7 @@ class Customer(User):
 
     class Meta:
         verbose_name = _("customer")
+        verbose_name_plural = _("customers")
 
     @classmethod
     def is_customer(cls, user):

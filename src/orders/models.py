@@ -38,6 +38,7 @@ class Order(CreateUpdateDateTimeFieldMixin, models.Model):
 
     class Meta:
         verbose_name = _("order")
+        verbose_name_plural = _("orders")
 
     def update_total(self):
         self.total = self.order_items.aggregate(
@@ -78,6 +79,7 @@ class OrderItem(CreateUpdateDateTimeFieldMixin, models.Model):
 
     class Meta:
         verbose_name = _("order item")
+        verbose_name_plural = _("order items")
 
     def increase_quantity_by_one(self):
         if (self.quantity + 1) <= 100:
@@ -108,6 +110,7 @@ class Cart(Order):
     class Meta:
         proxy = True
         verbose_name = _("cart")
+        verbose_name_plural = _("carts")
 
     @classmethod
     def get_user_cart(cls, user):
@@ -132,3 +135,4 @@ class CartItem(OrderItem):
     class Meta:
         proxy = True
         verbose_name = _("cart item")
+        verbose_name_plural = _("cart items")

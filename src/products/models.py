@@ -30,6 +30,7 @@ class Discount(CreateUpdateDateTimeFieldMixin, models.Model):
 
     class Meta:
         verbose_name = _("Discount")
+        verbose_name_plural = _("Discounts")
 
     def get_cash_discount(self, price=0):
         final_cash_discount = self.cash_discount or round((self.percentage_discount / 100) * price)
@@ -65,6 +66,7 @@ class StoreDiscount(Discount):
 
     class Meta:
         verbose_name = _("Store Discount")
+        verbose_name_plural = _("Store Discounts")
 
 
 class Coupon(models.Model):
@@ -83,6 +85,7 @@ class Coupon(models.Model):
 
     class Meta:
         verbose_name = _("Coupon")
+        verbose_name_plural = _("Coupons")
         unique_together = ("discount", "customer")
 
     def get_final_cash_discount(self, price):
@@ -178,6 +181,7 @@ class Product(CreateUpdateDateTimeFieldMixin, RatingFieldsAndMethodsMixin, model
 
     class Meta:
         verbose_name = _("Product")
+        verbose_name_plural = _("Products")
 
     def get_default_image(self):
         default_product_image = self.images.filter(is_default=True).first() or self.images.all().first()
@@ -212,6 +216,7 @@ class ProductImage(models.Model):
 
     class Meta:
         verbose_name = _("Product Image")
+        verbose_name_plural = _("Products Images")
 
     def set_default(self):
         if default_product_image := self.product.images.filter(is_default=True).first():
@@ -262,6 +267,7 @@ class StoreProduct(CreateUpdateDateTimeFieldMixin, RatingFieldsAndMethodsMixin, 
 
     class Meta:
         verbose_name = _("Store Product")
+        verbose_name_plural = _("Store Products")
 
     def get_discounted_price(self):
         return self.store_discount.get_discounted_price(self.price) if self.store_discount else None
@@ -288,6 +294,7 @@ class Color(models.Model):
 
     class Meta:
         verbose_name = _("Color")
+        verbose_name_plural = _("Colors")
 
     def __str__(self):
         return self.value
@@ -309,6 +316,7 @@ class ProductColor(models.Model):
 
     class Meta:
         verbose_name = _("Product Color")
+        verbose_name_plural = _("Product Colors")
         unique_together = ("product", "color")
 
     def __str__(self):
@@ -340,6 +348,7 @@ class Comment(CreateUpdateDateTimeFieldMixin, models.Model):
 
     class Meta:
         verbose_name = _("Comment")
+        verbose_name_plural = _("Comments")
 
     def __str__(self):
         return self.title
@@ -370,6 +379,7 @@ class Rating(CreateUpdateDateTimeFieldMixin, models.Model):
 
     class Meta:
         verbose_name = _("Rating")
+        verbose_name_plural = _("Ratings")
         unique_together = ("customer", "store_product")
 
     def add_rating(self, related_obj):

@@ -1,6 +1,6 @@
 {% extends 'website/base.html' %}
 {% load i18n %}
-{% load static %}
+{% load static i18n template_filters %}
 
 {% block css %}
 
@@ -10,7 +10,7 @@
 
     <div id="products-container" class="container">
         <div class="row border rounded-3 mx-auto mt-5 pt-3 bg-white">
-            <h2 class="text-center">{% trans "All Stores" %}</h2>
+            <h2 class="text-center">{% trans "All Products" %}</h2>
             <!-- filtering -->
             <div class="row">
                 <div class="d-flex ">
@@ -95,17 +95,17 @@
                                         <!-- discount -->
                                         <div>
                                             <p class="card-text text-center text-muted">
-                                                <del>{{ store_product.price }} {% trans "Toman" %}</del>
+                                                <del>{{ store_product.price|format_number }} {% trans "Toman" %}</del>
                                             </p>
                                         </div>
                                         <div>
-                                            <p class="card-text text-center fw-bold">{{ store_product.get_discounted_price }}
+                                            <p class="card-text text-center fw-bold">{{ store_product.get_discounted_price|format_number }}
                                                 {% trans "Toman" %}</p>
                                         </div>
                                         <!-- discount -->
                                     {% else %}
                                         <div>
-                                            <p class="card-text text-center">{{ store_product.price }} تومان</p>
+                                            <p class="card-text text-center">{{ store_product.price|format_number }} {% trans "Toman" %}</p>
                                         </div>
                                     {% endif %}
 

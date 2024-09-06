@@ -8,15 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-05 02:18+0330\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2024-09-06 19:59+0330\n"
+"PO-Revision-Date: 2024-09-06 20:01+0330\n"
+"Last-Translator:   <super@g.com>\n"
 "Language-Team: Persian <LL@li.org>\n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Translated-Using: django-rosetta 0.10.0\n"
 
 #: .\accounts\admin.py:23 .\customers\admin.py:15 .\vendors\admin.py:29
 msgid "Account Info"
@@ -63,7 +64,7 @@ msgstr "کد تأیید منقضی شده است."
 msgid "The verification code is incorrect"
 msgstr "کد تأیید نادرست است"
 
-#: .\accounts\managers.py:12 .\accounts\models.py:137
+#: .\accounts\managers.py:12 .\accounts\models.py:138
 msgid "Either email or phone must be set"
 msgstr "ایمیل یا شماره تلفن باید وارد شود"
 
@@ -127,9 +128,11 @@ msgstr "فعال است"
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
-msgstr "مشخص می‌کند که آیا این کاربر به عنوان فعال در نظر گرفته شود. به جای حذف حساب، این گزینه را لغو کنید."
+msgstr ""
+"مشخص می‌کند که آیا این کاربر به عنوان فعال در نظر گرفته شود. به جای حذف "
+"حساب، این گزینه را لغو کنید."
 
-#: .\accounts\models.py:75 .\products\models.py:258
+#: .\accounts\models.py:75 .\products\models.py:267
 msgid "Designates whether this user has deleted its account."
 msgstr "مشخص می‌کند که آیا این کاربر حساب خود را حذف کرده است."
 
@@ -145,27 +148,32 @@ msgstr "تاریخ عضویت"
 msgid "date modified"
 msgstr "تاریخ ویرایش"
 
-#: .\accounts\models.py:79 .\products\models.py:128 .\products\models.py:209
+#: .\accounts\models.py:79 .\products\models.py:133 .\products\models.py:216
 msgid "image"
 msgstr "تصویر"
 
-#: .\accounts\models.py:87 .\accounts\models.py:158
+#: .\accounts\models.py:87 .\accounts\models.py:159
 msgid "user"
 msgstr "کاربر"
 
-#: .\accounts\models.py:159
+#: .\accounts\models.py:88
+#| msgid "user"
+msgid "users"
+msgstr "کاربران"
+
+#: .\accounts\models.py:160
 msgid "label"
 msgstr "برچسب"
 
-#: .\accounts\models.py:161
+#: .\accounts\models.py:162
 msgid "is_default"
 msgstr "پیش‌فرض است"
 
-#: .\accounts\models.py:167
+#: .\accounts\models.py:168
 msgid "user address"
 msgstr "آدرس کاربر"
 
-#: .\accounts\models.py:168
+#: .\accounts\models.py:169
 msgid "user addresses"
 msgstr "آدرس‌های کاربر"
 
@@ -183,11 +191,11 @@ msgstr "شماره تلفن شما به `{phone}` تغییر یافته است."
 msgid "You've successfully logged in `{phone}`"
 msgstr "شما با موفقیت وارد `{phone}` شدید."
 
-#: .\config\settings.py:143
+#: .\config\settings.py:144
 msgid "English"
 msgstr "انگلیسی"
 
-#: .\config\settings.py:144
+#: .\config\settings.py:145
 msgid "Farsi"
 msgstr "فارسی"
 
@@ -199,10 +207,15 @@ msgstr "اطلاعات مالی"
 msgid "Customer Management"
 msgstr "مدیریت مشتریان"
 
-#: .\customers\models.py:15 .\orders\models.py:33 .\products\models.py:82
-#: .\products\models.py:332 .\products\models.py:353
+#: .\customers\models.py:15 .\orders\models.py:33 .\products\models.py:86
+#: .\products\models.py:345 .\products\models.py:367
 msgid "customer"
 msgstr "مشتری"
+
+#: .\customers\models.py:16
+#| msgid "customer"
+msgid "customers"
+msgstr "مشتریان"
 
 #: .\customers\views.py:35
 msgid "Your account has been created successfully!"
@@ -228,7 +241,7 @@ msgstr "شماره سفارش"
 msgid "is paid"
 msgstr "پرداخت شده است"
 
-#: .\orders\models.py:20 .\orders\models.py:63
+#: .\orders\models.py:20 .\orders\models.py:65
 msgid "total"
 msgstr "مجموع"
 
@@ -236,68 +249,88 @@ msgstr "مجموع"
 msgid "address"
 msgstr "آدرس"
 
-#: .\orders\models.py:35 .\orders\models.py:76
+#: .\orders\models.py:35 .\orders\models.py:78
 msgid "Date of submitting"
 msgstr "تاریخ ارسال"
 
-#: .\orders\models.py:40 .\orders\models.py:74
+#: .\orders\models.py:40 .\orders\models.py:76
 msgid "order"
 msgstr "سفارش"
 
-#: .\orders\models.py:53 .\templates\accounts\dashboard\dashboard.html:202
+#: .\orders\models.py:41
+#| msgid "order"
+msgid "orders"
+msgstr "سفارشات"
+
+#: .\orders\models.py:55 .\templates\accounts\dashboard\dashboard.html:202
 msgid "Active"
 msgstr "فعال"
 
-#: .\orders\models.py:54 .\templates\accounts\dashboard\dashboard.html:206
+#: .\orders\models.py:56 .\templates\accounts\dashboard\dashboard.html:206
 msgid "Delivered"
 msgstr "تحویل داده شده"
 
-#: .\orders\models.py:55 .\templates\accounts\dashboard\dashboard.html:210
+#: .\orders\models.py:57 .\templates\accounts\dashboard\dashboard.html:210
 msgid "Returned"
 msgstr "برگشت داده شده"
 
-#: .\orders\models.py:56 .\templates\accounts\dashboard\dashboard.html:214
+#: .\orders\models.py:58 .\templates\accounts\dashboard\dashboard.html:214
 msgid "Canceled"
 msgstr "لغو شده"
 
-#: .\orders\models.py:58 .\products\models.py:327
+#: .\orders\models.py:60 .\products\models.py:340
 msgid "status"
 msgstr "وضعیت"
 
-#: .\orders\models.py:59 .\products\models.py:243
+#: .\orders\models.py:61 .\products\models.py:252
 msgid "price"
 msgstr "قیمت"
 
-#: .\orders\models.py:60
+#: .\orders\models.py:62
 msgid "discount (Toman)"
 msgstr "تخفیف (تومان)"
 
-#: .\orders\models.py:61
+#: .\orders\models.py:63
 msgid "quantity"
 msgstr "تعداد"
 
-#: .\orders\models.py:68
+#: .\orders\models.py:70
 msgid "store product"
 msgstr "محصول فروشگاه"
 
-#: .\orders\models.py:80
+#: .\orders\models.py:82
 msgid "order item"
 msgstr "آیتم سفارش"
 
-#: .\orders\models.py:110
+#: .\orders\models.py:83
+#| msgid "order item"
+msgid "order items"
+msgstr "آیتم های سفارش"
+
+#: .\orders\models.py:114
 msgid "cart"
 msgstr "سبد خرید"
 
-#: .\orders\models.py:134
+#: .\orders\models.py:115
+#| msgid "cart"
+msgid "carts"
+msgstr "سبدهای خرید"
+
+#: .\orders\models.py:140
 msgid "cart item"
 msgstr "آیتم سبد خرید"
+
+#: .\orders\models.py:141
+#| msgid "cart item"
+msgid "cart items"
+msgstr "آیتم های سبد خرید"
 
 #: .\products\apps.py:8
 msgid "Product Management"
 msgstr "مدیریت محصولات"
 
-#: .\products\forms.py:84 .\products\models.py:208 .\products\models.py:233
-#: .\products\models.py:301 .\products\models.py:338
+#: .\products\forms.py:84 .\products\models.py:215 .\products\models.py:242
+#: .\products\models.py:313 .\products\models.py:351
 msgid "product"
 msgstr "محصول"
 
@@ -317,159 +350,212 @@ msgstr "عدد وارد شده باید بین 0 و 100 باشد."
 msgid "expiration date"
 msgstr "تاریخ انقضا"
 
-#: .\products\models.py:32 .\templates\customers\dashboard\order_detail.html:16
+#: .\products\models.py:32
+#: .\templates\customers\dashboard\order_detail.html:16
 msgid "Discount"
 msgstr "تخفیف"
 
-#: .\products\models.py:63 .\vendors\models.py:68
+#: .\products\models.py:33 .\templates\accounts\dashboard\dashboard.html:69
+msgid "Discounts"
+msgstr "تخفیف‌ها"
+
+#: .\products\models.py:65 .\vendors\models.py:69
 msgid "store"
 msgstr "فروشگاه"
 
-#: .\products\models.py:67
+#: .\products\models.py:69
 msgid "Store Discount"
 msgstr "تخفیف فروشگاه"
 
-#: .\products\models.py:72 .\products\models.py:85
+#: .\products\models.py:70
+#| msgid "Store Discount"
+msgid "Store Discounts"
+msgstr "تخفیف های فروشگاه"
+
+#: .\products\models.py:76 .\products\models.py:89
 msgid "Coupon"
 msgstr "کوپن"
 
-#: .\products\models.py:77
+#: .\products\models.py:81
 msgid ""
 "This discount code must be unique and if it is considered empty, the system "
 "will create a random code"
-msgstr "این کد تخفیف باید یکتا باشد و اگر خالی در نظر گرفته شود، سیستم یک کد تصادفی ایجاد خواهد کرد."
+msgstr ""
+"این کد تخفیف باید یکتا باشد و اگر خالی در نظر گرفته شود، سیستم یک کد تصادفی "
+"ایجاد خواهد کرد."
 
-#: .\products\models.py:81
+#: .\products\models.py:85
 msgid "discount"
 msgstr "تخفیف"
 
-#: .\products\models.py:118
+#: .\products\models.py:90
+#| msgid "Coupon"
+msgid "Coupons"
+msgstr "کوپن ها"
+
+#: .\products\models.py:123
 msgid "category name"
 msgstr "نام دسته‌بندی"
 
-#: .\products\models.py:120 .\products\models.py:176 .\vendors\models.py:19
+#: .\products\models.py:125 .\products\models.py:181 .\vendors\models.py:19
 msgid "description"
 msgstr "توضیحات"
 
-#: .\products\models.py:126
+#: .\products\models.py:131
 msgid "parent category"
 msgstr "دسته‌بندی والد"
 
-#: .\products\models.py:131
+#: .\products\models.py:136
 msgid "Category"
 msgstr "دسته‌بندی"
 
-#: .\products\models.py:132 .\templates\website\index.html:51
+#: .\products\models.py:137 .\templates\website\index.html:51
 #: .\templates\website\sections\header.html:39
 msgid "Categories"
 msgstr "دسته‌بندی‌ها"
 
-#: .\products\models.py:164
+#: .\products\models.py:169
 msgid "category"
 msgstr "دسته‌بندی"
 
-#: .\products\models.py:170
+#: .\products\models.py:175
 msgid "colors"
 msgstr "رنگ‌ها"
 
-#: .\products\models.py:174
+#: .\products\models.py:179
 msgid "product name"
 msgstr "نام محصول"
 
-#: .\products\models.py:177 .\products\models.py:244
+#: .\products\models.py:182 .\products\models.py:253
 msgid "is available"
 msgstr "موجود است"
 
-#: .\products\models.py:180
+#: .\products\models.py:185
 #: .\templates\customers\dashboard\order_detail.html:12
 #: .\templates\products\comment_list.html:16
 msgid "Product"
 msgstr "محصول"
 
-#: .\products\models.py:210
+#: .\products\models.py:186 .\templates\accounts\dashboard\dashboard.html:61
+#: .\templates\website\index.html:11 .\templates\website\search_result.html:69
+#: .\templates\website\sections\header.html:36
+msgid "Products"
+msgstr "محصولات"
+
+#: .\products\models.py:217
 msgid "is default"
 msgstr "پیش‌فرض است"
 
-#: .\products\models.py:214
+#: .\products\models.py:221
 msgid "Product Image"
 msgstr "تصویر محصول"
 
-#: .\products\models.py:234
+#: .\products\models.py:222
+#| msgid "Product Image"
+msgid "Products Images"
+msgstr "تصاویر محصول"
+
+#: .\products\models.py:243
 msgid "فروشگاه"
 msgstr "Store"
 
-#: .\products\models.py:241
+#: .\products\models.py:250
 msgid "store discount"
 msgstr "تخفیف فروشگاه"
 
-#: .\products\models.py:245
+#: .\products\models.py:254
 msgid "inventory"
 msgstr "موجودی"
 
-#: .\products\models.py:254
+#: .\products\models.py:263
 msgid "product color"
 msgstr "رنگ محصول"
 
-#: .\products\models.py:264
+#: .\products\models.py:273
 msgid "Store Product"
 msgstr "محصول فروشگاه"
 
-#: .\products\models.py:287
+#: .\products\models.py:274
+#| msgid "Store Product"
+msgid "Store Products"
+msgstr "محصولات فروشگاه"
+
+#: .\products\models.py:298
 msgid "color name"
 msgstr "نام رنگ"
 
-#: .\products\models.py:290
+#: .\products\models.py:301
 #: .\templates\vendors\dashboard\store_product_list.html:9
 msgid "Color"
 msgstr "رنگ"
 
-#: .\products\models.py:307
+#: .\products\models.py:302
+#| msgid "Color"
+msgid "Colors"
+msgstr "رنگ ها"
+
+#: .\products\models.py:319
 msgid "color"
 msgstr "رنگ"
 
-#: .\products\models.py:311
+#: .\products\models.py:323
 msgid "Product Color"
 msgstr "رنگ محصول"
 
-#: .\products\models.py:320
+#: .\products\models.py:324
+#| msgid "Product Color"
+msgid "Product Colors"
+msgstr "رنگ های محصول"
+
+#: .\products\models.py:333
 msgid "submitted"
 msgstr "ارسال شده"
 
-#: .\products\models.py:321 .\products\models.py:322
+#: .\products\models.py:334 .\products\models.py:335
 msgid "under review"
 msgstr "در حال بررسی"
 
-#: .\products\models.py:323
+#: .\products\models.py:336
 msgid "rejected"
 msgstr "رد شده"
 
-#: .\products\models.py:325
+#: .\products\models.py:338
 msgid "title"
 msgstr "عنوان"
 
-#: .\products\models.py:326
+#: .\products\models.py:339
 msgid "text"
 msgstr "متن"
 
-#: .\products\models.py:342
+#: .\products\models.py:355
 msgid "Comment"
 msgstr "نظر"
 
-#: .\products\models.py:359
+#: .\products\models.py:356 .\templates\products\comment_list.html:4
+msgid "Comments"
+msgstr "نظرات"
+
+#: .\products\models.py:373
 msgid "محصول فروشگاهی"
 msgstr "Store Product"
 
-#: .\products\models.py:362
+#: .\products\models.py:376
 msgid "score"
 msgstr "امتیاز"
 
-#: .\products\models.py:372
+#: .\products\models.py:386
 msgid "Rating"
 msgstr "رتبه‌بندی"
+
+#: .\products\models.py:387
+#| msgid "Rating"
+msgid "Ratings"
+msgstr "رتبه‌بندی ها"
 
 #: .\templates\accounts\dashboard\dashboard.html:20
 msgid "account info"
 msgstr "اطلاعات حساب"
+
 #: .\templates\accounts\dashboard\dashboard.html:28 .\website\models.py:33
 msgid "Addresses"
 msgstr "آدرس‌ها"
@@ -482,17 +568,6 @@ msgstr "فروشگاه"
 #: .\templates\accounts\dashboard\dashboard.html:53
 msgid "Orders"
 msgstr "سفارشات"
-
-#: .\templates\accounts\dashboard\dashboard.html:61
-#: .\templates\products\store_product_list_in_store.html:11
-#: .\templates\website\index.html:11 .\templates\website\search_result.html:69
-#: .\templates\website\sections\header.html:36
-msgid "Products"
-msgstr "محصولات"
-
-#: .\templates\accounts\dashboard\dashboard.html:69
-msgid "Discounts"
-msgstr "تخفیف‌ها"
 
 #: .\templates\accounts\dashboard\dashboard.html:77
 msgid "Comments and Ratings"
@@ -515,7 +590,7 @@ msgstr "ایمیل و رمز عبور"
 msgid "Store Info"
 msgstr "اطلاعات فروشگاه"
 
-#: .\templates\accounts\dashboard\dashboard.html:154 .\vendors\models.py:71
+#: .\templates\accounts\dashboard\dashboard.html:154 .\vendors\models.py:72
 msgid "Staff"
 msgstr "پرسنل"
 
@@ -698,6 +773,7 @@ msgstr "ثبت‌نام مالکین"
 #: .\templates\accounts\register.html:12
 msgid "Customers Registration"
 msgstr "ثبت‌نام مشتریان"
+
 #: .\templates\accounts\register.html:22
 msgid "By Email"
 msgstr "با ایمیل"
@@ -799,6 +875,7 @@ msgstr "قیمت کالا"
 #: .\templates\orders\cart.html:142
 #: .\templates\products\store_product_list.html:98
 #: .\templates\products\store_product_list.html:103
+#: .\templates\products\store_product_list.html:108
 msgid "Toman"
 msgstr "تومان"
 
@@ -822,10 +899,6 @@ msgstr "آیا مطمئن هستید؟"
 msgid "Yes"
 msgstr "بله"
 
-#: .\templates\products\comment_list.html:4
-msgid "Comments"
-msgstr "نظرات"
-
 #: .\templates\products\product_detail.html:76
 #: .\templates\vendors\dashboard\store_detail.html:15
 msgid "Description"
@@ -845,7 +918,7 @@ msgstr "ارسال"
 #: .\templates\products\product_detail.html:137
 #: .\templates\products\store_product_list.html:131
 #: .\templates\products\store_product_list.html:132
-#: .\templates\products\store_product_list_in_store.html:53
+#: .\templates\products\store_product_list_in_store.html:52
 msgid "Previous"
 msgstr "قبلی"
 
@@ -862,17 +935,16 @@ msgstr "از"
 #: .\templates\products\product_detail.html:155
 #: .\templates\products\store_product_list.html:148
 #: .\templates\products\store_product_list.html:150
-#: .\templates\products\store_product_list_in_store.html:58
+#: .\templates\products\store_product_list_in_store.html:57
 msgid "Next"
 msgstr "بعدی"
 
 #: .\templates\products\store_product_list.html:13
-#: .\templates\vendors\store_list.html:10
-msgid "All Stores"
-msgstr "تمام فروشگاه‌ها"
+msgid "All Products"
+msgstr "همه محصولات"
 
 #: .\templates\products\store_product_list.html:17
-#: .\templates\products\store_product_list_in_store.html:15
+#: .\templates\products\store_product_list_in_store.html:14
 #: .\templates\vendors\store_list.html:14
 #: .\templates\website\search_result.html:14
 #: .\templates\website\search_result.html:73
@@ -880,7 +952,7 @@ msgid "Order By"
 msgstr "مرتب‌سازی بر اساس"
 
 #: .\templates\products\store_product_list.html:23
-#: .\templates\products\store_product_list_in_store.html:21
+#: .\templates\products\store_product_list_in_store.html:20
 #: .\templates\vendors\store_list.html:20
 #: .\templates\website\search_result.html:20
 #: .\templates\website\search_result.html:79
@@ -888,7 +960,7 @@ msgid "Best Seller"
 msgstr "پرفروش‌ترین"
 
 #: .\templates\products\store_product_list.html:30
-#: .\templates\products\store_product_list_in_store.html:28
+#: .\templates\products\store_product_list_in_store.html:27
 #: .\templates\vendors\store_list.html:27
 #: .\templates\website\search_result.html:27
 #: .\templates\website\search_result.html:86
@@ -896,7 +968,7 @@ msgid "Highest Rating"
 msgstr "بالاترین امتیاز"
 
 #: .\templates\products\store_product_list.html:37
-#: .\templates\products\store_product_list_in_store.html:35
+#: .\templates\products\store_product_list_in_store.html:34
 #: .\templates\website\search_result.html:93
 msgid "Most Expensive"
 msgstr "گران‌ترین"
@@ -904,6 +976,10 @@ msgstr "گران‌ترین"
 #: .\templates\products\store_product_list.html:140
 msgid "of"
 msgstr "از"
+
+#: .\templates\products\store_product_list_in_store.html:10
+msgid "Products of"
+msgstr "محصولات"
 
 #: .\templates\vendors\dashboard\category_select.html:2
 msgid "Choose Category"
@@ -938,6 +1014,7 @@ msgstr "تلفن"
 #: .\templates\vendors\dashboard\staff_list.html:11
 msgid "Role"
 msgstr "نقش"
+
 #: .\templates\vendors\dashboard\staff_list.html:12
 #: .\templates\vendors\dashboard\store_discount_list.html:10
 msgid "Is Active"
@@ -985,6 +1062,10 @@ msgstr "در دسترس است"
 msgid "New Product"
 msgstr "محصول جدید"
 
+#: .\templates\vendors\store_list.html:10
+msgid "All Stores"
+msgstr "تمام فروشگاه‌ها"
+
 #: .\templates\vendors\store_list.html:34
 #: .\templates\website\search_result.html:34
 msgid "Newest"
@@ -995,7 +1076,7 @@ msgid "View All"
 msgstr "مشاهده همه"
 
 #: .\templates\website\search_result.html:10
-#: .\templates\website\sections\header.html:33
+#: .\templates\website\sections\header.html:33 .\vendors\models.py:31
 msgid "Stores"
 msgstr "فروشگاه‌ها"
 
@@ -1028,11 +1109,11 @@ msgstr "اطلاعات پرسنل"
 msgid "Store Owner"
 msgstr "مالک فروشگاه"
 
-#: .\vendors\admin.py:114 .\vendors\models.py:64 .\vendors\models.py:122
+#: .\vendors\admin.py:114 .\vendors\models.py:65 .\vendors\models.py:125
 msgid "Product Manager"
 msgstr "مدیر محصول"
 
-#: .\vendors\admin.py:119 .\vendors\models.py:65 .\vendors\models.py:142
+#: .\vendors\admin.py:119 .\vendors\models.py:66 .\vendors\models.py:146
 msgid "Operator"
 msgstr "اپراتور"
 
@@ -1049,13 +1130,33 @@ msgstr "نام فروشگاه"
 msgid " This name already is submitted «{store_name}»"
 msgstr " این نام قبلاً ثبت شده است «{store_name}»"
 
-#: .\vendors\forms.py:40 .\vendors\forms.py:53 .\vendors\models.py:67
+#: .\vendors\forms.py:40 .\vendors\forms.py:53 .\vendors\models.py:68
 msgid "role"
 msgstr "نقش"
 
-#: .\vendors\models.py:63 .\vendors\models.py:102
+#: .\vendors\models.py:64 .\vendors\models.py:104
 msgid "Owner"
 msgstr "مالک"
+
+#: .\vendors\models.py:73
+#| msgid "Staff"
+msgid "Staffs"
+msgstr "پرسنل ها"
+
+#: .\vendors\models.py:105
+#| msgid "Owner"
+msgid "Owners"
+msgstr "مالکان"
+
+#: .\vendors\models.py:126
+#| msgid "Product Manager"
+msgid "Product Managers"
+msgstr "مدیران محصول"
+
+#: .\vendors\models.py:147
+#| msgid "Operator"
+msgid "Operators"
+msgstr "اپراتورها"
 
 #: .\vendors\views.py:38
 msgid "Continue"

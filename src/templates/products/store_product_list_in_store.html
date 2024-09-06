@@ -1,6 +1,5 @@
 {% extends 'website/base.html' %}
-{% load i18n %}
-{% load static %}
+{% load static i18n%}
 
 {% block css %}
 {% endblock %}
@@ -8,11 +7,11 @@
 {% block content %}
     <div id="store-product-container" class="container">
         <div class="row border rounded-3 mx-auto mt-5 pt-3 bg-white">
-            <h2 class="text-center">{% trans "Products" %} <span id="store-name"></span></h2>
+            <h2 class="text-center">{% trans "Products of" %} <span id="store-name" class="text-primary"></span></h2>
             <!-- filtering -->
             <div class="row">
                 <div class="d-flex ">
-                    <h6 class="my-auto">{% trans "Order By" %}: </h6>
+                    <h6 class="my-auto me-4">{% trans "Order By" %}: </h6>
                     <ul class="nav nav-underline">
                         <li class="nav-item">
                             <a id="best-seller-link" class="nav-link"

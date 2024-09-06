@@ -25,7 +25,8 @@ let paginationCurrentPageNumberStoresElem = document.getElementById('pagination-
 
 
 // urls
-let baseURL = `${window.location.protocol}//${window.location.host}/en/`
+let language = window.location.pathname.split('/')[1]
+let baseURL = `${window.location.protocol}//${window.location.host}/${language}/`
 let queryParams = window.location.search
 
 let storeProductsURL = baseURL + `products/api/v1/store-product/${queryParams}`

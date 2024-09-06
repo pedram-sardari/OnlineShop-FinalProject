@@ -22,7 +22,8 @@ let finalAmountElem = document.getElementById('final-amount')
 let cart;
 
 // urls
-let baseURL = `${window.location.protocol}//${window.location.host}/en/`
+let language = window.location.pathname.split('/')[1]
+let baseURL = `${window.location.protocol}//${window.location.host}/${language}/`
 let cartURL = baseURL + 'orders/api/v1/cart/'
 let authenticationStatusURL = baseURL + 'accounts/api/v1/is-authenticated/'
 let submitOrderURL = baseURL + 'orders/api/v1/submit-order/'

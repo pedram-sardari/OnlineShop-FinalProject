@@ -13,7 +13,8 @@ let cardGroupStoreProducts = document.getElementById('card-group-store-products'
 
 
 // urls
-let baseURL = `${window.location.protocol}//${window.location.host}/en/`
+let language = window.location.pathname.split('/')[1]
+let baseURL = `${window.location.protocol}//${window.location.host}/${language}/`
 let storesURL = baseURL + `products/api/v1/store/?page_size=${pageSize}`
 let storeDefaultImage = `${window.location.protocol}//${window.location.host}/static/products/img/product-default-image.png`
 let storeProductsURL = baseURL + `products/api/v1/store-product/index-page/?page_size=${pageSize}`

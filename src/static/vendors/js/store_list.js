@@ -16,7 +16,8 @@ let paginationNextBtnStores = document.getElementById('pagination-next-btn-store
 let paginationCurrentPageNumberStoresElem = document.getElementById('pagination-current-page-number-stores')
 
 // urls
-let baseURL = `${window.location.protocol}//${window.location.host}/en/`
+let language = window.location.pathname.split('/')[1]
+let baseURL = `${window.location.protocol}//${window.location.host}/${language}/`
 let storesURL = baseURL + 'products/api/v1/store/'
 let bestSellerStoresURL = storesURL + '?ordering=-orders_count'
 let recentlyCreatedStoresURL = storesURL + '?ordering=-created_at'

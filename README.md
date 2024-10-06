@@ -41,8 +41,11 @@ number, with SMS verification for phone-based accounts.
 1. Clone the repository:
 
 ```markdown
-   git clone https://github.com/pedram-sardari/OnlineShop-FinalProject.git
-cd project_directory
+    git clone https://github.com/pedram-sardari/OnlineShop-FinalProject.git
+```
+
+```markdown
+    cd project_directory
 ```
 
 
@@ -68,19 +71,19 @@ cd project_directory
 5. Run migrations:
 
 ```markdown
-python manage.py migrate
+    python manage.py migrate
 ```
 
 6. Create a superuser for the admin panel:
 
 ```markdown
-python manage.py createsuperuser
+    python manage.py createsuperuser
 ```
 
 7. Run the development server:
 
 ```markdown
-python manage.py runserver
+    python manage.py runserver
 ```
 
 ## Usage
